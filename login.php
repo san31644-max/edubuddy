@@ -96,7 +96,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
     </div>
 </div>
 <div class="login-panel"><div class="login-box">
-    <span class="welcome-badge">👋 WELCOME BACK, STUDENT!-TEST RUN</span>
+    <span class="welcome-badge">👋 WELCOME BACK, STUDENT!</span>
     <h2><?=tr('login')?></h2><p class="muted">Continue your learning journey today.</p>
     <?php if($error):?><div class="alert error" role="alert"><?=e($error)?></div><?php endif;?>
     <form method="post"><?=csrf_field()?>
