@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);require_once __DIR__.'/../includes/db.php';require_once __DIR__.'/../includes/helpers.php';
+$row=query_one("SELECT l.id,CHAR_LENGTH(l.content_si) note_chars,(SELECT COUNT(*) FROM quiz_questions qq JOIN quizzes q ON q.id=qq.quiz_id WHERE q.lesson_id=l.id AND qq.status='active') questions FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN subjects s ON s.id=l.subject_id JOIN units u ON u.id=l.unit_id WHERE g.grade_number=8 AND l.medium='Sinhala' AND s.name_en='Science' AND u.unit_number=1 AND l.status='active' LIMIT 1");
+if(!$row||(int)$row['note_chars']<1000||(int)$row['questions']!==10){fwrite(STDERR,'Grade 8 Science short-note import verification failed.'.PHP_EOL);exit(1);}echo "Grade 8 Science lesson {$row['id']}: {$row['note_chars']} note characters, {$row['questions']} Practice Lab questions.\n";

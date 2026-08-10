@@ -1,5 +1,5 @@
 </main>
-<?php if (function_exists('user') && user()): ?>
+<?php if (!$isAdminPage && function_exists('user') && user()): ?>
 <nav class="bottom" aria-label="Student navigation">
 <?php foreach ([['student/dashboard.php','🏠',tr('home')],['student/subjects.php','📚',tr('learn')],['chatbot/chat.php','🤖',tr('chat')],['student/progress.php','📈',tr('progress')],['profile.php','👤',tr('profile')]] as $nav): $active=str_ends_with($currentPath,'/'.basename($nav[0])); ?>
 <a class="<?= $active?'active':'' ?>" href="<?= url($nav[0]) ?>"><b><?= $nav[1] ?></b><?= e($nav[2]) ?></a>

@@ -13,8 +13,9 @@ function gemini_http_json(string $url, array $headers, string $payload): array
     foreach ($headers as $header) $config .= 'header = '.$quote($header)."\n";
     $config .= 'data-binary = '.$quote('@'.$payloadFile)."\nconnect-timeout = 10\nmax-time = 45\nipv4\nsilent\nshow-error\n";
     $pipes = [];
+    $curlBinary = PHP_OS_FAMILY === 'Windows' ? 'curl.exe' : 'curl';
     $process = proc_open(
-        ['curl.exe','--config','-','--write-out',"\nEDUBUDDY_HTTP_STATUS:%{http_code}"],
+        [$curlBinary,'--config','-','--write-out',"\nEDUBUDDY_HTTP_STATUS:%{http_code}"],
         [['pipe','r'],['pipe','w'],['pipe','w']], $pipes, null, null,
         ['bypass_shell'=>true]
     );
