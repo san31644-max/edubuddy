@@ -11,6 +11,7 @@ backups/
 *.log
 
 # Local deployment and packaged artifacts
+.deploy/
 cloudflared.exe
 K-Education-Share-Package.zip
 
