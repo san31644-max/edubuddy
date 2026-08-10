@@ -5,12 +5,19 @@ require_admin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $action = (string)($_POST['action'] ?? '');
-    $sub = $id ? query_one("SELECT * FROM subscriptions WHERE id=? AND status='pending'", 'i', [$id]) : null;
-
-    if (!$sub || !in_array($action, ['approve', 'reject'], true)) {
-        flash('error', 'This payment is no longer pending. Refresh the page and try again.');
+    $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT, ['options'=>['min_range'=>1]]);
+    $action = trim((string)($_POST['action'] ?? ''));
+    if (!$id || !in_array($action, ['approve', 'reject'], true)) {
+        flash('error', 'Invalid payment action. Refresh the page and try again.');
+        redirect('admin/subscriptions.php');
+    }
+    $sub = query_one('SELECT * FROM subscriptions WHERE id=?', 'i', [(int)$id]);
+    if (!$sub) {
+        flash('error', 'Payment record was not found.');
+        redirect('admin/subscriptions.php');
+    }
+    if ($sub['status'] !== 'pending') {
+        flash('warning', 'This payment was already '.($sub['status']==='active'?'approved':$sub['status']).'.');
         redirect('admin/subscriptions.php');
     }
 
