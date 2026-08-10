@@ -15,7 +15,7 @@ jobs:
     environment: production
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check PHP syntax
         run: |
@@ -68,8 +68,10 @@ jobs:
             echo "GEMINI_API_KEY is missing from the production environment secrets." >&2
             exit 1
           fi
-          printf '%s' "$GEMINI_API_KEY" | ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" \
-            "set -eu; key_file=\$(dirname '$REMOTE_PATH')/.educhat-gemini-key; umask 077; cat > \"\$key_file\"; if chgrp www-data \"\$key_file\" 2>/dev/null; then chmod 640 \"\$key_file\"; else chmod 644 \"\$key_file\"; fi"
+          encoded_key="$(printf '%s' "$GEMINI_API_KEY" | base64 | tr -d '\n')"
+          printf "<?php\nreturn base64_decode('%s');\n" "$encoded_key" | \
+            ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" \
+            "set -eu; secret_dir='$REMOTE_PATH/includes/runtime'; mkdir -p \"\$secret_dir\"; key_file=\"\$secret_dir/gemini-secret.php\"; umask 077; cat > \"\$key_file\"; if chgrp www-data \"\$key_file\" 2>/dev/null; then chmod 640 \"\$key_file\"; else chmod 644 \"\$key_file\"; fi"
 
       - name: Install PDF reader dependencies
         env:

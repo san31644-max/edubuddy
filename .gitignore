@@ -4,6 +4,7 @@
 !.env.example
 includes/config.production.php
 *secrets*.php
+includes/runtime/gemini-secret.php
 
 # Runtime/user-generated and large curriculum data (persistent on the server)
 # Keep user uploads and large source PDFs off Git, but version the compact
