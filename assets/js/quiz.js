@@ -1,0 +1,1 @@
+(()=>{const t=document.querySelector('#timer');if(!t)return;let s=Number(t.dataset.minutes)*60,f=document.querySelector('#quizForm');const tick=()=>{t.textContent='Time: '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0');if(s--<=0)f.submit();else setTimeout(tick,1000)};tick()})();

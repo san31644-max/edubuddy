@@ -1,0 +1,26 @@
+# Local and production secrets
+.env
+.env.*
+!.env.example
+includes/config.production.php
+*secrets*.php
+
+# Runtime/user-generated and large curriculum data (persistent on the server)
+uploads/
+backups/
+*.log
+
+# Local deployment and packaged artifacts
+cloudflared.exe
+K-Education-Share-Package.zip
+
+# Editor and operating-system files
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
+# Separate third-party working tree
+tools/AnyTaFont2UTF8/

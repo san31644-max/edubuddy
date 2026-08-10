@@ -1,0 +1,4 @@
+<?php
+require_once __DIR__.'/../includes/db.php';$expected=['English'=>[7,72],'Sinhala'=>[10,99],'Tamil'=>[7,86]];$failed=false;
+foreach($expected as $medium=>[$subjects,$lessons]){$s=db()->prepare("SELECT COUNT(DISTINCT subject_id) subjects,COUNT(*) lessons FROM lessons WHERE content_source='textbook' AND status='active' AND medium=?");$s->bind_param('s',$medium);$s->execute();$row=$s->get_result()->fetch_assoc();$actual=[(int)$row['subjects'],(int)$row['lessons']];echo $medium.': '.$actual[0].' subjects, '.$actual[1].' lessons'.PHP_EOL;if($actual!==[$subjects,$lessons])$failed=true;}
+$row=db()->query("SELECT COUNT(*) n FROM users WHERE preferred_language<>CASE medium WHEN 'Sinhala' THEN 'si' WHEN 'Tamil' THEN 'ta' ELSE 'en' END")->fetch_assoc();echo 'Account medium/language mismatches: '.(int)$row['n'].PHP_EOL;if((int)$row['n']!==0)$failed=true;exit($failed?1:0);
