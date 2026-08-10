@@ -2,13 +2,12 @@
 declare(strict_types=1);
 require_once __DIR__.'/../includes/auth.php';
 require_login();
-$lessonId=filter_input(INPUT_GET,'lesson_id',FILTER_VALIDATE_INT);$mode=(string)($_GET['mode']??'');$allowed=['challenge','missing','matching'];
+$lessonId=filter_input(INPUT_GET,'lesson_id',FILTER_VALIDATE_INT);$mode=(string)($_GET['mode']??'');$allowed=['challenge','missing','matching'];$names=['challenge'=>'Quick Challenge','missing'=>'Fill the Missing Answer','matching'=>'Matching Mission'];
 $lesson=$lessonId?query_one("SELECT l.*,s.name_en,s.name_si,s.name_ta FROM lessons l JOIN subjects s ON s.id=l.subject_id WHERE l.id=? AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)",'iis',[$lessonId,user()['grade_id'],user()['medium']]):null;
 if(!$lesson){flash('error','Choose a valid textbook lesson.');redirect('student/subjects.php');}
 $quiz=query_one("SELECT id FROM quizzes WHERE lesson_id=? AND status='active' ORDER BY id LIMIT 1",'i',[$lessonId]);$questions=[];
-if($quiz){$s=db()->prepare("SELECT * FROM quiz_questions WHERE quiz_id=? AND status='active' ORDER BY display_order,id");$s->bind_param('i',$quiz['id']);$s->execute();$questions=$s->get_result()->fetch_all(MYSQLI_ASSOC);}
-if(!$questions){flash('warning','Practice activities are not available for this lesson yet.');redirect('student/lesson.php?id='.$lessonId);}
-$names=['challenge'=>'Quick Challenge','missing'=>'Fill the Missing Answer','matching'=>'Matching Mission'];
+if($quiz&&in_array($mode,$allowed,true)){$s=db()->prepare("SELECT * FROM quiz_questions WHERE quiz_id=? AND activity_type=? AND status='active' ORDER BY display_order,id");$s->bind_param('is',$quiz['id'],$mode);$s->execute();$questions=$s->get_result()->fetch_all(MYSQLI_ASSOC);}
+if(in_array($mode,$allowed,true)&&!$questions){flash('warning',$names[$mode].' questions are not available for this lesson yet.');redirect('student/activities.php?lesson_id='.$lessonId);}
 if(!in_array($mode,$allowed,true)){$pageTitle='Practice Lab';include __DIR__.'/../includes/header.php';?>
 <p><a href="lesson.php?id=<?=$lessonId?>">&larr; <?=e(locale_value($lesson,'title'))?></a></p><section class="card"><span class="badge"><?=e(locale_value($lesson,'name'))?></span><h1>🎮 Practice Lab</h1><p class="muted">Choose an activity. Each one uses this lesson's textbook revision content and gives immediate feedback.</p></section>
 <div class="grid activity-grid"><a class="card activity-choice" href="?lesson_id=<?=$lessonId?>&amp;mode=challenge"><b>⚡</b><h2>Quick Challenge</h2><p>Answer five questions and see your score.</p></a><a class="card activity-choice" href="?lesson_id=<?=$lessonId?>&amp;mode=missing"><b>✍️</b><h2>Missing Answer</h2><p>Complete each idea with the correct answer.</p></a><a class="card activity-choice" href="?lesson_id=<?=$lessonId?>&amp;mode=matching"><b>🧩</b><h2>Matching Mission</h2><p>Match each lesson question to its answer.</p></a></div><style>.activity-choice{text-decoration:none;color:inherit}.activity-choice>b{font-size:2.5rem}.activity-choice h2{margin:.35rem 0}.activity-choice p{color:var(--muted)}</style>

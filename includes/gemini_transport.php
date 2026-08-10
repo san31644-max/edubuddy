@@ -11,7 +11,7 @@ function gemini_http_json(string $url, array $headers, string $payload): array
     $quote = static fn(string $value): string => '"' . str_replace(['\\','"'], ['\\\\','\\"'], $value) . '"';
     $config = 'url = '.$quote($url)."\nrequest = \"POST\"\n";
     foreach ($headers as $header) $config .= 'header = '.$quote($header)."\n";
-    $config .= 'data-binary = '.$quote('@'.$payloadFile)."\nconnect-timeout = 10\nmax-time = 45\nipv4\nsilent\nshow-error\n";
+    $config .= 'data-binary = '.$quote('@'.$payloadFile)."\nconnect-timeout = 10\nmax-time = 120\nipv4\nsilent\nshow-error\n";
     $pipes = [];
     $curlBinary = PHP_OS_FAMILY === 'Windows' ? 'curl.exe' : 'curl';
     $process = proc_open(
