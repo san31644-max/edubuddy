@@ -32,5 +32,13 @@ function gemini_http_json(string $url, array $headers, string $payload): array
         $status = (int)$match[1];
         $output = preg_replace('/\nEDUBUDDY_HTTP_STATUS:\d{3}\s*$/', '', $output) ?? '';
     }
+    if (($status < 200 || $status >= 300) && $error === '') {
+        $apiError = json_decode($output, true);
+        $error = trim((string)($apiError['error']['message'] ?? ''));
+        if ($error === '') $error = $status === 0
+            ? 'The Gemini service could not be reached from this server.'
+            : 'Gemini rejected the request with HTTP '.$status.'.';
+        $error = mb_strimwidth($error, 0, 500, '…');
+    }
     return ['status'=>$status, 'body'=>$output, 'error'=>$error];
 }
