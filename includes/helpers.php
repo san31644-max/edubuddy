@@ -10,7 +10,22 @@ function verify_csrf():void{if(!hash_equals($_SESSION['csrf']??'',(string)($_POS
 function flash(string $type,string $msg):void{$_SESSION['flash']=[$type,$msg];}
 function take_flash():?array{$f=$_SESSION['flash']??null;unset($_SESSION['flash']);return $f;}
 function selected(string $a,string $b):string{return $a===$b?' selected':'';}
-function is_premium(?array $u=null):bool{$u=$u??($_SESSION['user']??null);return $u && !empty($u['subscription_expires_at']) && strtotime($u['subscription_expires_at'])>time();}
+function is_premium(?array $u=null):bool
+{
+    if ($u === null) {
+        $u = $_SESSION['user'] ?? null;
+        static $refreshed = false;
+        if ($u && !$refreshed) {
+            $refreshed = true;
+            $row = query_one('SELECT subscription_expires_at FROM users WHERE id=?', 'i', [(int)$u['id']]);
+            if ($row) {
+                $u['subscription_expires_at'] = $row['subscription_expires_at'];
+                $_SESSION['user']['subscription_expires_at'] = $row['subscription_expires_at'];
+            }
+        }
+    }
+    return $u && !empty($u['subscription_expires_at']) && strtotime((string)$u['subscription_expires_at']) > time();
+}
 function require_premium():void{if(!is_premium()){flash('warning','This feature needs K Education Premium.');redirect('subscription.php');}}
 function query_one(string $sql,string $types='',array $args=[]):?array{$s=db()->prepare($sql);if(!$s)return null;if($types)$s->bind_param($types,...$args);$s->execute();return $s->get_result()->fetch_assoc()?:null;}
 function repair_legacy_text(string $value):string{
