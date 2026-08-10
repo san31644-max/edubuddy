@@ -6,7 +6,17 @@ includes/config.production.php
 *secrets*.php
 
 # Runtime/user-generated and large curriculum data (persistent on the server)
-uploads/
+# Keep user uploads and large source PDFs off Git, but version the compact
+# generated Grade 8 Sinhala curriculum cache required by deployments.
+uploads/*
+!uploads/syllabus/
+uploads/syllabus/*
+!uploads/syllabus/textbook-cache/
+uploads/syllabus/textbook-cache/*
+!uploads/syllabus/textbook-cache/grade-8/
+uploads/syllabus/textbook-cache/grade-8/*
+!uploads/syllabus/textbook-cache/grade-8/si/
+!uploads/syllabus/textbook-cache/grade-8/si/**
 backups/
 *.log
 

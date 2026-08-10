@@ -5,7 +5,7 @@ $subjectTranslations=[
  'Second Language Tamil'=>['දෙවන භාෂාව - දෙමළ','இரண்டாம் மொழி தமிழ்'],
 ];
 foreach([[7,'si','Sinhala'],[7,'ta','Tamil'],[8,'en','English'],[8,'si','Sinhala'],[9,'en','English']] as [$gradeNumber,$language,$medium]){
- $catalogFile=__DIR__."/../uploads/syllabus/textbook-cache/grade-$gradeNumber/$language/catalog.json";if(!is_file($catalogFile))throw new RuntimeException("Missing catalog for Grade $gradeNumber $medium");
+ $catalogFile=__DIR__."/../uploads/syllabus/textbook-cache/grade-$gradeNumber/$language/catalog.json";if(!is_file($catalogFile)){echo "Skipping Grade $gradeNumber $medium: cache is not installed.\n";continue;}
  $db->query("INSERT INTO grades(grade_number,name,status) SELECT $gradeNumber,'Grade $gradeNumber','active' WHERE NOT EXISTS(SELECT 1 FROM grades WHERE grade_number=$gradeNumber)");$grade=(int)query_one('SELECT id FROM grades WHERE grade_number=?','i',[$gradeNumber])['id'];$catalog=json_decode((string)file_get_contents($catalogFile),true,512,JSON_THROW_ON_ERROR);
  $s=$db->prepare("UPDATE lessons SET status='inactive' WHERE grade_id=? AND medium=? AND content_source='textbook'");$s->bind_param('is',$grade,$medium);$s->execute();
  foreach($catalog as $slug=>$book){$name=(string)$book['subject'];$subject=query_one('SELECT id FROM subjects WHERE grade_id=? AND name_en=?','is',[$grade,$name]);
