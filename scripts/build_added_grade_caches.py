@@ -4,9 +4,9 @@ from pathlib import Path
 from pypdf import PdfReader
 from pandukabhaya import Converter
 ROOT=Path(__file__).resolve().parents[1];BASE=ROOT/'uploads'/'syllabus';TARGET=BASE/'textbook-cache';SINHALA=Converter('fm_abhaya')
-CONFIG=[(7,'si','GRADE 7 SINHALA MEDIUM'),(8,'en','grade 8 english medium'),(9,'en','GRADE 9 ENGLISH MEDIUM')]
+CONFIG=[(7,'si','GRADE 7 SINHALA MEDIUM'),(7,'ta','GRADE 7 TAMIL MEDIUM'),(8,'en','grade 8 english medium'),(9,'en','GRADE 9 ENGLISH MEDIUM')]
 def details(name):
- n=name.lower();rules=[('math','mathematics','Mathematics'),('science','science','Science'),('history','history','History'),('his ','history','History'),('geo','geography','Geography'),('civic','civic','Civic Education'),('health','health','Health and Physical Education'),('ict','ict','ICT'),('book','ict','ICT'),('english','english','English'),('en pb','english','English'),('sinhala','sinhala','Sinhala'),('bud','buddhism','Buddhism'),('pts','pts','Practical and Technical Skills')]
+ n=name.lower();rules=[('math','mathematics','Mathematics'),('science','science','Science'),('history','history','History'),('his ','history','History'),('geo','geography','Geography'),('civic','civic','Civic Education'),('health','health','Health and Physical Education'),('ict','ict','ICT'),('information communication','ict','ICT'),('english','english','English'),('en pb','english','English'),('sinhala','sinhala','Sinhala'),('second la','second-sinhala','Second Language Sinhala'),('bud','buddhism','Buddhism'),('pts','pts','Practical and Technical Skills')]
  for token,slug,subject in rules:
   if token in n:
    part=''
@@ -20,7 +20,14 @@ def clean(text):
 for grade,language,folder in CONFIG:
  catalog={};counters={}
  for pdf in sorted((BASE/folder).glob('*.pdf')):
-  info=details(pdf.name)
+  overrides={
+   (7,'book (1).pdf'):('ict','ICT','ICT Activity Book'),
+   (7,'book.pdf'):('ict','ICT','ICT Textbook'),
+   (7,'book (2).pdf'):('civic','Civic Education','Civic Education'),
+   (7,'book (3).pdf'):('health','Health and Physical Education','Health and Physical Education'),
+   (8,'book.pdf'):('second-tamil','Second Language Tamil','Second Language Tamil'),
+  }
+  info=overrides.get((grade,pdf.name),details(pdf.name))
   if not info:print('Skipping unrecognized PDF:',pdf.name);continue
   slug,subject,title=info;counters[slug]=counters.get(slug,0)+1;number=counters[slug];reader=PdfReader(pdf);chunks=[]
   for page_number,page in enumerate(reader.pages,1):
