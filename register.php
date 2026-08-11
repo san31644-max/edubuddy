@@ -23,8 +23,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if(!$s){$errors[]='Registration is temporarily unavailable. Please try again.';}else{
         $hash=password_hash($p,PASSWORD_DEFAULT);
         $gradeId=(int)$v['grade_id'];$s->bind_param('sssssiss',$v['full_name'],$v['username'],$v['email'],$v['school_name'],$hash,$gradeId,$v['medium'],$language);
-        if($s->execute()){$_SESSION['onboarding_user_id']=(int)db()->insert_id;flash('success','Account created. Please log in.');redirect('login.php');}
-        $errors[]=($s->errno===1062||db()->errno===1062)?'That username or email is already registered. You can log in instead.':'Account could not be created. Please try another username and email.';
+        $saved=$s->execute();
+        if(!$saved&&in_array($s->errno,[1205,1213],true)){usleep(150000);$saved=$s->execute();}
+        if($saved){$_SESSION['onboarding_user_id']=(int)db()->insert_id;flash('success','Account created. Please log in.');redirect('login.php');}
+        $errorNumber=$s->errno?:db()->errno;$errorText=trim($s->error?:db()->error);error_log('K Education registration failed ['.$errorNumber.'] '.$errorText);
+        $errors[]=$errorNumber===1062?'That username or email is already registered. You can log in instead.':'Registration database error '.$errorNumber.'. Please retry once. If it continues, give this number to the administrator.';
         }
     }
 }
