@@ -19,13 +19,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if(!$errors&&query_one('SELECT id FROM users WHERE username=? OR email=? LIMIT 1','ss',[$v['username'],$v['email']]))$errors[]='That username or email is already registered. You can log in instead.';
     if(!$errors){
         $language=medium_language($v['medium']);
-        $s=db()->prepare("INSERT INTO users(full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,NULL,NULL,'active',NOW(),NOW())");
+        $newId=(int)(query_one('SELECT COALESCE(MAX(id),0)+1 next_id FROM users','')['next_id']??1);
+        $s=db()->prepare("INSERT INTO users(id,full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,NULL,NULL,'active',NOW(),NOW())");
         if(!$s){$errors[]='Registration is temporarily unavailable. Please try again.';}else{
         $hash=password_hash($p,PASSWORD_DEFAULT);
-        $gradeId=(int)$v['grade_id'];$fullName=(string)$v['full_name'];$username=(string)$v['username'];$email=(string)$v['email'];$schoolName=(string)$v['school_name'];$medium=(string)$v['medium'];$s->bind_param('sssssiss',$fullName,$username,$email,$schoolName,$hash,$gradeId,$medium,$language);
+        $gradeId=(int)$v['grade_id'];$fullName=(string)$v['full_name'];$username=(string)$v['username'];$email=(string)$v['email'];$schoolName=(string)$v['school_name'];$medium=(string)$v['medium'];$s->bind_param('isssssiss',$newId,$fullName,$username,$email,$schoolName,$hash,$gradeId,$medium,$language);
         $saved=$s->execute();
         if(!$saved&&in_array($s->errno,[1205,1213],true)){usleep(150000);$saved=$s->execute();}
-        if($saved){$_SESSION['onboarding_user_id']=(int)db()->insert_id;flash('success','Account created. Please log in.');redirect('login.php');}
+        if($saved){$_SESSION['onboarding_user_id']=$newId;flash('success','Account created. Please log in.');redirect('login.php');}
         $errorNumber=$s->errno?:db()->errno;$errorText=trim($s->error?:db()->error);error_log('K Education registration failed ['.$errorNumber.'] '.$errorText);
         $errors[]=$errorNumber===1062?'That username or email is already registered. You can log in instead.':'Registration database error '.$errorNumber.($errorText!==''?' · '.$errorText:'').'.';
         }
