@@ -26,6 +26,6 @@ foreach($iterator as $file){
 }
 $linked=0;
 foreach($groups as $key=>$fallback){[$grade,$medium,$subjectId]=explode('|',$key);$q=$db->prepare("SELECT id,display_order FROM lessons WHERE grade_id=? AND medium=? AND subject_id=? AND content_source='textbook' ORDER BY display_order,id");$q->bind_param('isi',$grade,$medium,$subjectId);$q->execute();
- foreach($q->get_result()->fetch_all(MYSQLI_ASSOC) as $lesson){$order=(int)$lesson['display_order'];$file=$explicit[$key][$order]??$fallback['file'];$id=(int)$lesson['id'];$start=1;$save=$db->prepare('INSERT INTO lesson_source_pdfs(lesson_id,local_file,start_page) VALUES(?,?,?) ON DUPLICATE KEY UPDATE local_file=VALUES(local_file),start_page=IF(local_file=VALUES(local_file),start_page,VALUES(start_page))');$save->bind_param('isi',$id,$file,$start);$save->execute();$linked++;}
+ foreach($q->get_result()->fetch_all(MYSQLI_ASSOC) as $lesson){$order=(int)$lesson['display_order'];$file=$explicit[$key][$order]??$fallback['file'];$id=(int)$lesson['id'];$start=1;$save=$db->prepare('INSERT INTO lesson_source_pdfs(lesson_id,local_file,start_page) VALUES(?,?,?) ON DUPLICATE KEY UPDATE lesson_id=VALUES(lesson_id)');$save->bind_param('isi',$id,$file,$start);$save->execute();$linked++;}
 }
 echo "$linked lesson preview links are ready.\n";
