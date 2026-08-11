@@ -8,14 +8,24 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     foreach($v as $k=>$x)$v[$k]=trim((string)($_POST[$k]??$x));
     $p=(string)($_POST['password']??'');
     $grade=query_one("SELECT id FROM grades WHERE id=? AND status='active'",'i',[(int)$v['grade_id']]);
-    if(mb_strlen($v['full_name'])<2||mb_strlen($v['school_name'])<2||!preg_match('/^[A-Za-z0-9_.]{3,30}$/',$v['username'])||!filter_var($v['email'],FILTER_VALIDATE_EMAIL)||strlen($p)<8||$p!==($_POST['confirm_password']??'')||!$grade||!in_array($v['medium'],['Sinhala','Tamil','English'],true))$errors[]=tr('invalid');
+    if(mb_strlen($v['full_name'])<2)$errors[]='Enter your full name.';
+    if(mb_strlen($v['school_name'])<2)$errors[]='Enter your school name.';
+    if(!preg_match('/^[A-Za-z0-9_.]{3,30}$/',$v['username']))$errors[]='Username must be 3–30 characters using letters, numbers, dots or underscores.';
+    if(!filter_var($v['email'],FILTER_VALIDATE_EMAIL))$errors[]='Enter a valid email address.';
+    if(strlen($p)<8)$errors[]='Password must contain at least 8 characters.';
+    if($p!==($_POST['confirm_password']??''))$errors[]='The password confirmation does not match.';
+    if(!$grade)$errors[]='Choose a valid active grade.';
+    if(!in_array($v['medium'],['Sinhala','Tamil','English'],true))$errors[]='Choose a valid medium.';
+    if(!$errors&&query_one('SELECT id FROM users WHERE username=? OR email=? LIMIT 1','ss',[$v['username'],$v['email']]))$errors[]='That username or email is already registered. You can log in instead.';
     if(!$errors){
         $language=medium_language($v['medium']);
         $s=db()->prepare('INSERT INTO users(full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language) VALUES(?,?,?,?,?,?,?,?)');
+        if(!$s){$errors[]='Registration is temporarily unavailable. Please try again.';}else{
         $hash=password_hash($p,PASSWORD_DEFAULT);
         $gradeId=(int)$v['grade_id'];$s->bind_param('sssssiss',$v['full_name'],$v['username'],$v['email'],$v['school_name'],$hash,$gradeId,$v['medium'],$language);
         if($s->execute()){$_SESSION['onboarding_user_id']=(int)db()->insert_id;flash('success','Account created. Please log in.');redirect('login.php');}
-        $errors[]=$s->errno===1062?'That username or email is already registered.':'Account could not be created.';
+        $errors[]=($s->errno===1062||db()->errno===1062)?'That username or email is already registered. You can log in instead.':'Account could not be created. Please try another username and email.';
+        }
     }
 }
 $grades=[];foreach(db()->query("SELECT id,grade_number FROM grades WHERE status='active' ORDER BY grade_number") as $g)$grades[]=$g;$pageTitle=tr('register');include __DIR__.'/includes/header.php';
