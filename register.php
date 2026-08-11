@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if(!$errors&&query_one('SELECT id FROM users WHERE username=? OR email=? LIMIT 1','ss',[$v['username'],$v['email']]))$errors[]='That username or email is already registered. You can log in instead.';
     if(!$errors){
         $language=medium_language($v['medium']);
-        $s=db()->prepare('INSERT INTO users(full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language) VALUES(?,?,?,?,?,?,?,?)');
+        $s=db()->prepare("INSERT INTO users(id,full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status,created_at,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,NULL,NULL,'active',NOW(),NOW())");
         if(!$s){$errors[]='Registration is temporarily unavailable. Please try again.';}else{
         $hash=password_hash($p,PASSWORD_DEFAULT);
         $gradeId=(int)$v['grade_id'];$s->bind_param('sssssiss',$v['full_name'],$v['username'],$v['email'],$v['school_name'],$hash,$gradeId,$v['medium'],$language);
