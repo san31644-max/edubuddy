@@ -1,6 +1,23 @@
 # EduBuddy Sri Lanka
 
-Mobile-first PHP/MySQL Grade 6 learning application with English, Sinhala and Tamil interfaces. The seeded lessons are **sample curriculum content**, not an official complete Sri Lankan government syllabus.
+Mobile-first PHP/MySQL Grade 6–10 learning application with English, Sinhala and Tamil interfaces. The seeded lessons are **sample curriculum content**, not an official complete Sri Lankan government syllabus.
+
+## Grade 10 curriculum
+
+After MySQL is writable, create Grade 10 and its core multilingual subjects:
+
+```powershell
+C:\xampp\php\php.exe database\add_grade10.php
+```
+
+Download official Grade 10 resources from the Sinhala, Tamil and English e-Thaksalawa categories, then import their searchable textbook chunks:
+
+```powershell
+py scripts\download_curriculum.py --grade 10
+C:\xampp\php\php.exe database\import_curriculum.php --grade=10
+```
+
+Use **Admin → Catalog** to create Grade 10 units and textbook lessons for the downloaded books. Set each lesson medium to `Sinhala`, `Tamil`, `English`, or `All`. Then use **Admin → Curriculum** and **Assessments** to import lesson notes, papers, quizzes and Practice Lab questions.
 
 ## 1. Requirements
 

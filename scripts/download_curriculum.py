@@ -1,5 +1,5 @@
 from __future__ import annotations
-import hashlib, json, re, sys, time
+import argparse, hashlib, json, re, sys, time
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 import requests
@@ -7,10 +7,16 @@ from bs4 import BeautifulSoup
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "uploads" / "syllabus"
+parser=argparse.ArgumentParser(description="Download official e-Thaksalawa textbook resources")
+parser.add_argument("--grade",type=int,default=6,choices=range(1,14))
+parser.add_argument("--categories",help="Comma-separated e-Thaksalawa category IDs")
+args=parser.parse_args();GRADE=args.grade
+DEFAULT_CATEGORIES={6:[30],10:[47,17,35]}
+CATEGORIES=[int(x) for x in args.categories.split(',')] if args.categories else DEFAULT_CATEGORIES.get(GRADE,[])
+if not CATEGORIES:raise SystemExit("Supply --categories for this grade, for example --categories 47,17,35")
+OUT = ROOT / "uploads" / "syllabus" / f"grade-{GRADE}"
 OUT.mkdir(parents=True, exist_ok=True)
 BASE = "https://e-thaksalawa.moe.gov.lk/lcms/"
-CATEGORY = BASE + "course/index.php?categoryid=30"
 MATCH = re.compile(r"text\s*book|work\s*book|syllabus|teacher.?s?\s*(instructional\s*)?(manual|guide)|පෙළ\s*පොත|විෂය\s*නිර්දේශ|ගුරු\s*මාර්ගෝපදේශ|பாடப்புத்தகம்|பாடநூல்|பாடத்திட்டம்|ஆசிரியர்\s*வழிகாட்டி", re.I)
 session = requests.Session()
 session.headers["User-Agent"] = "EduBuddySriLanka/1.0 educational importer; official sources only"
@@ -26,14 +32,17 @@ def language(text: str) -> str:
 
 def safe_name(text: str) -> str:
     value = re.sub(r"[^A-Za-z0-9._-]+", "-", text).strip("-")[:90]
-    return value or "grade6-resource"
+    return value or f"grade{GRADE}-resource"
 
-category = soup(CATEGORY)
 courses = []
-for a in category.select('a[href*="course/view.php?id="]'):
-    name = " ".join(a.get_text(" ", strip=True).split())
-    href = urljoin(BASE, a.get("href"))
-    if name and (name, href) not in courses: courses.append((name, href))
+for category_id in CATEGORIES:
+    for page_no in range(10):
+        category=soup(BASE+f"course/index.php?categoryid={category_id}&page={page_no}");found=0
+        for a in category.select('a[href*="course/view.php?id="]'):
+            name=" ".join(a.get_text(" ",strip=True).split());href=urljoin(BASE,a.get("href"))
+            grade_match=re.search(rf"(?:grade\s*[-–:]?\s*0?{GRADE}\b|0?{GRADE}\s*ශ්‍රේණිය|தரம்\s*[-–:]?\s*0?{GRADE}\b)",name,re.I)
+            if name and grade_match and (name,href) not in courses:courses.append((name,href));found+=1
+        if page_no>0 and found==0:break
 
 resources = []
 for subject, course_url in courses:
@@ -84,9 +93,9 @@ for number,(subject,title,url) in enumerate(resources,1):
                 part=text[start:end].strip()
                 if len(part)>80:chunks.append({"page":page_no,"index":index,"text":part});index+=1
                 start=end
-        items.append({"subject":subject[:180],"language":language(subject+" "+title+(chunks[0]['text'] if chunks else '')),"title":title[:255],"url":r.url,"file":"uploads/syllabus/"+filename,"sha256":digest,"chunks":chunks})
+        items.append({"subject":subject[:180],"language":language(subject+" "+title+(chunks[0]['text'] if chunks else '')),"title":title[:255],"url":r.url,"file":f"uploads/syllabus/grade-{GRADE}/"+filename,"sha256":digest,"chunks":chunks})
         print(f"[{number}/{len(resources)}] {filename}: {len(chunks)} chunks")
         time.sleep(.15)
     except Exception as exc: print(f"Resource skipped {url}: {exc}",file=sys.stderr)
 (OUT/"curriculum.json").write_text(json.dumps(items,ensure_ascii=False),encoding="utf-8")
-print(json.dumps({"courses":len(courses),"candidate_resources":len(resources),"pdfs":len(items),"chunks":sum(len(x['chunks']) for x in items)}))
+print(json.dumps({"grade":GRADE,"categories":CATEGORIES,"courses":len(courses),"candidate_resources":len(resources),"pdfs":len(items),"chunks":sum(len(x['chunks']) for x in items)}))

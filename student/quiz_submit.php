@@ -11,7 +11,13 @@ try{
     $s=$db->prepare('INSERT INTO quiz_attempts(user_id,quiz_id,score,total_questions,percentage,passed,completed_at) VALUES(?,?,?,?,?,?,NOW())');$uid=(int)user()['id'];$s->bind_param('iiiiii',$uid,$qid,$score,$total,$percent,$passed);$s->execute();$aid=(int)$db->insert_id;
     $a=$db->prepare('INSERT INTO quiz_answers(attempt_id,question_id,selected_option,is_correct) VALUES(?,?,?,?)');
     foreach($qs as $x){$sel=in_array(($answers[$x['id']]??''),['a','b','c','d'],true)?$answers[$x['id']]:null;$ok=$sel===$x['correct_option']?1:0;$a->bind_param('iisi',$aid,$x['id'],$sel,$ok);$a->execute();}
-    $earned=reward_quiz_attempt($uid,$q,$percent);record_student_activity($uid,'quiz_completed','Scored '.$percent.'% · '.($percent>=(int)$q['pass_mark']?'Passed':'Needs practice'),(int)$q['subject_id'],isset($q['lesson_id'])?(int)$q['lesson_id']:null,$qid);$db->commit();
+    $perfect=$total>0&&$score===$total;$earned=reward_quiz_attempt($uid,$q,$percent);record_student_activity($uid,'quiz_completed','Scored '.$percent.'% · '.($perfect?'Perfect score':'Retry needed'),(int)$q['subject_id'],isset($q['lesson_id'])?(int)$q['lesson_id']:null,$qid);
+    if($perfect&&!empty($q['lesson_id'])){
+        $lessonId=(int)$q['lesson_id'];$wasDone=query_one('SELECT id FROM lesson_progress WHERE user_id=? AND lesson_id=? AND completed_at IS NOT NULL','ii',[$uid,$lessonId]);
+        $p=$db->prepare('INSERT INTO lesson_progress(user_id,lesson_id,opened_at,last_opened_at,completed_at) VALUES(?,?,NOW(),NOW(),NOW()) ON DUPLICATE KEY UPDATE last_opened_at=NOW(),completed_at=COALESCE(completed_at,NOW())');$p->bind_param('ii',$uid,$lessonId);$p->execute();
+        if(!$wasDone){$lessonData=['id'=>$lessonId,'grade_id'=>(int)$q['grade_id'],'subject_id'=>(int)$q['subject_id']];$earned+=reward_lesson_completion($uid,$lessonData);record_student_activity($uid,'lesson_completed','Completed with a perfect quiz score',(int)$q['subject_id'],$lessonId,$qid);}
+    }
+    $db->commit();
     if($earned)flash('success','Quiz saved! +'.$earned.' new points earned.');
     redirect('student/results.php?id='.$aid);
 }catch(Throwable $e){$db->rollback();error_log('Quiz save error: '.$e->getMessage());flash('error','Quiz result could not be saved.');redirect('student/quiz.php?id='.$qid);}

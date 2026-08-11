@@ -102,7 +102,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
     <form method="post"><?=csrf_field()?>
         <label class="field"><?=tr('username')?> / <?=tr('email')?><span class="field-icon">👤</span><input name="identity" autocomplete="username" placeholder="Enter username or email" value="<?=e((string)($_POST['identity']??''))?>" required autofocus></label>
         <label class="field password-field"><?=tr('password')?><span class="field-icon">🔒</span><input id="loginPassword" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button class="show-password" type="button" id="showPassword" aria-label="Show password" title="Show password">👁️</button></label>
-        <div class="login-options"><label class="remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label><span class="badge">🎓 Grades 6–7</span></div>
+        <div class="login-options"><label class="remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label><span class="badge">🎓 Grades 6–10</span></div>
         <button class="login-button" type="submit">🚀 <?=tr('login')?> <span>→</span></button>
     </form>
     <div class="join-card"><p>New to K Education? Create your student account and select your learning medium.</p><a class="btn" href="register.php">✨ <?=tr('register')?></a></div>

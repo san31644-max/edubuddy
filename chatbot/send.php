@@ -312,7 +312,7 @@ if (GEMINI_API_KEY !== '') {
         }
         $answer = trim($answer);
         if ($answer === '' && !empty($decoded['promptFeedback']['blockReason'])) {
-            $answer = 'I cannot help with that request, but I can help with a safe Grade 6 learning question.';
+            $answer = 'I cannot help with that request, but I can help with a safe Grade '.$gradeNumber.' learning question.';
         }
     } else {
         $apiProblem = $decoded['error']['message'] ?? $curlError ?: 'Gemini request failed.';
@@ -373,7 +373,7 @@ if ($answer === '') {
         if (GEMINI_API_KEY === '' && AI_API_KEY === '') {
             $answer = $languageCode === 'si'
                 ? '6 ශ්‍රේණියේ විද්‍යා පෙළපොත සම්බන්ධ කර ඇත. නමුත් AI සේවාවක් සකසා නොමැත. කරුණාකර පරිපාලක අමතන්න.'
-                : 'The selected Grade 6 textbook is connected, but no AI provider is configured. Please ask the administrator to configure an AI provider.';
+                : 'The selected Grade '.$gradeNumber.' textbook is connected, but no AI provider is configured. Please ask the administrator to configure an AI provider.';
         } else {
             $answer = $languageCode === 'si'
                 ? 'AI සේවාව මේ මොහොතේ කාර්යබහුලයි. ඔබ තෝරාගත් පෙළපොත් පාඩම ආරක්ෂිතව සම්බන්ධ කර ඇත. කරුණාකර මිනිත්තුවකින් නැවත උත්සාහ කරන්න.'

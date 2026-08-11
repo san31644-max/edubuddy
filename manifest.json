@@ -1,7 +1,7 @@
 {
   "name": "K Education",
   "short_name": "K Education",
-  "description": "Multilingual Grade 6 learning assistant for Sri Lankan students",
+  "description": "Multilingual Grade 6–10 learning assistant for Sri Lankan students",
   "start_url": "/educhat/index.php",
   "scope": "/educhat/",
   "display": "standalone",

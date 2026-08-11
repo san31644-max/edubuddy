@@ -25,7 +25,7 @@ $isAdminPage = str_contains($currentPath, '/admin/');
 <body>
 <?php if(!$isAdminPage):?><header class="top"><div class="topin">
 <a class="brand" href="<?= url(user() ? 'student/dashboard.php' : 'home.php') ?>"><img class="brandmark logo-image" src="<?= url('logo/k-transparent.png') ?>" alt="K Education logo"><span class="brandtext"><?= e(APP_NAME) ?><small><?=($_SESSION['lang']??'en')==='si'?'අලුත් සර්':'Your AI learning companion'?></small></span></a>
-<span class="status-pill"><i class="status-dot"></i><?= is_premium() ? '⭐ ' . tr('premium') : (user()?'Grade '.user_grade_number():(function_exists('parent_user')&&parent_user()?'Parent portal':'Grades 6–9')) ?></span>
+<span class="status-pill"><i class="status-dot"></i><?= is_premium() ? '⭐ ' . tr('premium') : (user()?'Grade '.user_grade_number():(function_exists('parent_user')&&parent_user()?'Parent portal':'Grades 6–10')) ?></span>
 </div></header><?php endif;?>
 <main class="wrap">
 <?php if ($f): ?><div class="alert <?= e($f[0]) ?>"><?= e($f[1]) ?></div><?php endif; ?>
