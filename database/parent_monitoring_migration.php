@@ -9,6 +9,8 @@ $sql=[
 foreach($sql as $q)if(!$db->query($q))throw new RuntimeException($db->error);
 // Older production imports created the primary key without AUTO_INCREMENT,
 // causing every parent registration to fail with MySQL error 1364.
+$idIndexed=false;foreach($db->query('SHOW INDEX FROM parents') as $index)if($index['Column_name']==='id'){$idIndexed=true;break;}
+if(!$idIndexed&&!$db->query('ALTER TABLE parents ADD UNIQUE KEY parents_id_unique (id)'))throw new RuntimeException($db->error);
 if(!$db->query('ALTER TABLE parents MODIFY id INT NOT NULL AUTO_INCREMENT'))throw new RuntimeException($db->error);
 $db->begin_transaction();
 $test=$db->prepare("INSERT INTO parents(full_name,email,password_hash,status) VALUES('Deployment Test','deployment-test@keducation.invalid','not-a-login','active')");
