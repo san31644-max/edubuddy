@@ -14,7 +14,28 @@ if (!is_array($serverSecrets)) $serverSecrets = [];
 define('AI_API_KEY', getenv('OPENAI_API_KEY') ?: ($serverSecrets['OPENAI_API_KEY'] ?? ''));
 define('AI_API_ENDPOINT', getenv('OPENAI_API_ENDPOINT') ?: 'https://api.openai.com/v1/responses');
 define('AI_MODEL', getenv('OPENAI_MODEL') ?: 'gpt-5.6');
-define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: ($serverSecrets['GEMINI_API_KEY'] ?? ''));
+$geminiKeyCandidates = [];
+$addGeminiKeys = static function (mixed $value) use (&$geminiKeyCandidates): void {
+    if (is_string($value)) {
+        $decoded = json_decode($value, true);
+        $value = is_array($decoded) ? $decoded : preg_split('/[\r\n,;]+/', $value);
+    }
+    if (!is_array($value)) $value = [$value];
+    foreach ($value as $key) {
+        $key = trim((string)$key);
+        if ($key !== '' && !in_array($key, $geminiKeyCandidates, true)) $geminiKeyCandidates[] = $key;
+    }
+};
+$addGeminiKeys(getenv('GEMINI_API_KEYS') ?: []);
+$addGeminiKeys($serverSecrets['GEMINI_API_KEYS'] ?? []);
+for ($geminiKeyIndex = 1; $geminiKeyIndex <= 10; $geminiKeyIndex++) {
+    $addGeminiKeys(getenv('GEMINI_API_KEY_'.$geminiKeyIndex) ?: []);
+    $addGeminiKeys($serverSecrets['GEMINI_API_KEY_'.$geminiKeyIndex] ?? []);
+}
+$addGeminiKeys(getenv('GEMINI_API_KEY') ?: []);
+$addGeminiKeys($serverSecrets['GEMINI_API_KEY'] ?? []);
+define('GEMINI_API_KEYS', $geminiKeyCandidates);
+define('GEMINI_API_KEY', $geminiKeyCandidates[0] ?? '');
 define('GEMINI_MODEL', getenv('GEMINI_MODEL') ?: ($serverSecrets['GEMINI_MODEL'] ?? 'gemini-3.6-flash'));
 define('GEMINI_API_BASE', 'https://generativelanguage.googleapis.com/v1beta/models/');
 define('TEXTLK_API_TOKEN', getenv('TEXTLK_API_TOKEN') ?: ($serverSecrets['TEXTLK_API_TOKEN'] ?? ''));

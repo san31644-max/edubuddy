@@ -8,6 +8,17 @@ if (is_readable($keyFile)) {
     $secret = require $keyFile;
     $key = trim((string)(is_array($secret) ? ($secret['GEMINI_API_KEY'] ?? '') : $secret));
     if ($key !== '') putenv('GEMINI_API_KEY=' . $key);
+    if (is_array($secret) && !empty($secret['GEMINI_API_KEYS'])) {
+        $keys = is_array($secret['GEMINI_API_KEYS'])
+            ? $secret['GEMINI_API_KEYS']
+            : preg_split('/[\r\n,;]+/', (string)$secret['GEMINI_API_KEYS']);
+        $keys = array_values(array_filter(array_map(static fn($value) => trim((string)$value), $keys)));
+        if ($keys) putenv('GEMINI_API_KEYS=' . json_encode($keys, JSON_UNESCAPED_SLASHES));
+    }
+    if (is_array($secret)) for ($index = 1; $index <= 10; $index++) {
+        $name = 'GEMINI_API_KEY_'.$index;
+        if (!empty($secret[$name])) putenv($name.'='.trim((string)$secret[$name]));
+    }
     if (is_array($secret) && !empty($secret['GEMINI_MODEL'])) putenv('GEMINI_MODEL=' . trim((string)$secret['GEMINI_MODEL']));
 }
 $textlkFile=__DIR__.'/runtime/textlk-secret.php';
