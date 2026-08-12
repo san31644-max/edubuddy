@@ -41,7 +41,8 @@ define('GEMINI_API_BASE', 'https://generativelanguage.googleapis.com/v1beta/mode
 define('TEXTLK_API_TOKEN', getenv('TEXTLK_API_TOKEN') ?: ($serverSecrets['TEXTLK_API_TOKEN'] ?? ''));
 define('TEXTLK_API_ENDPOINT', getenv('TEXTLK_API_ENDPOINT') ?: ($serverSecrets['TEXTLK_API_ENDPOINT'] ?? 'https://app.text.lk/api/v3/sms/send'));
 define('TEXTLK_SENDER_ID', getenv('TEXTLK_SENDER_ID') ?: ($serverSecrets['TEXTLK_SENDER_ID'] ?? 'TextLKDemo'));
-const PREMIUM_PRICE_LKR = 250;
+const PREMIUM_PRICE_LKR = 300;
+const REFERRAL_DISCOUNT_LKR = 20;
 const PREMIUM_DAYS = 30;
 const MAX_CHAT_LENGTH = 1000;
 const MAX_PROFILE_IMAGE_BYTES = 2097152;

@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if($tries['n']>=5&&time()-$tries['at']<300)$error='Too many attempts. Try again in five minutes.';
     else{
         $phone=preg_replace('/\D+/','',$key)??$key;if(str_starts_with($phone,'0'))$phone='94'.substr($phone,1);
-        $u=query_one('SELECT id,full_name,username,email,phone,phone_verified_at,school_name,district,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status FROM users WHERE (username=? OR email=? OR phone=?) LIMIT 1','sss',[$key,$key,$phone]);
+        $u=query_one('SELECT id,full_name,username,email,phone,phone_verified_at,school_name,district,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,referral_promoter_id,referral_code_used,status FROM users WHERE (username=? OR email=? OR phone=?) LIMIT 1','sss',[$key,$key,$phone]);
         if($u&&$u['status']==='active'&&password_verify((string)($_POST['password']??''),$u['password_hash'])){
             unset($u['password_hash'],$_SESSION[$bucket]);session_regenerate_id(true);$u['preferred_language']=medium_language((string)$u['medium']);$_SESSION['user']=$u;$_SESSION['lang']=$u['preferred_language'];if((int)($_SESSION['onboarding_user_id']??0)===(int)$u['id'])$_SESSION['new_student_onboarding']=true;unset($_SESSION['onboarding_user_id']);redirect('student/dashboard.php');
         }

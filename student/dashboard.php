@@ -23,7 +23,7 @@ $showOnboarding=!empty($_SESSION['new_student_onboarding'])||filter_input(INPUT_
 </style>
 <section class="card hero">
 <span class="sparkle" style="right:12%;top:22%"></span><span class="sparkle" style="right:29%;top:14%;animation-delay:.8s"></span>
-<div class="row" style="justify-content:space-between;position:relative;z-index:2"><div><span class="badge">🎒 Grade <?=$gradeNumber?> · <?=e(user()['medium'])?></span><h1><?=tr('welcome')?>, <?=e(user()['full_name'])?>! 👋</h1><p>Your next little win starts right here.</p></div><a class="btn warn" href="<?=url('subscription.php')?>"><?=is_premium()?'⭐ Premium active':'✨ Unlock Premium · Rs. 250 / 30 days'?></a></div>
+<?php $dashboardOffer=premium_offer_for_user((int)user()['id']);?><div class="row" style="justify-content:space-between;position:relative;z-index:2"><div><span class="badge">🎒 Grade <?=$gradeNumber?> · <?=e(user()['medium'])?></span><h1><?=tr('welcome')?>, <?=e(user()['full_name'])?>! 👋</h1><p>Your next little win starts right here.</p></div><a class="btn warn" href="<?=url('subscription.php')?>"><?=is_premium()?'⭐ Premium active':'✨ Unlock Premium · Rs. '.number_format($dashboardOffer['total'],0).' / 30 days'?></a></div>
 <form class="hero-search" action="lessons.php" data-tour="search"><span>🔎</span><input name="q" placeholder="<?=e(tr('search'))?>"></form>
 <div class="statbar"><div class="stat"><strong><?=$pct?>%</strong><small><?=tr('progress')?></small></div><div class="stat"><strong><?=$completed?></strong><small>Completed</small></div><div class="stat"><strong><?=$points?></strong><small>Points</small></div><div class="stat"><strong><?=$last?(int)$last['percentage'].'%':'—'?></strong><small>Latest quiz</small></div></div>
 </section>

@@ -1,4 +1,4 @@
-const CACHE='k-education-app-v5';
+const CACHE='k-education-app-v6';
 const ROOT=new URL('./',self.registration.scope);
 const PUBLIC=['','index.php','home.php','login.php','register.php','manifest.json','logo/k-transparent.png','logo/k.png','assets/js/app.js'];
 const urls=PUBLIC.map(path=>new URL(path,ROOT).href);

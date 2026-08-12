@@ -59,10 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Subscriptions';
 include __DIR__.'/_top.php';
-$rows = db()->query('SELECT s.*,u.full_name,u.username,p.name FROM subscriptions s JOIN users u ON u.id=s.user_id JOIN subscription_plans p ON p.id=s.plan_id ORDER BY s.id DESC');
+$rows = db()->query('SELECT s.*,u.full_name,u.username,p.name,r.referral_code FROM subscriptions s JOIN users u ON u.id=s.user_id JOIN subscription_plans p ON p.id=s.plan_id LEFT JOIN referral_promoters r ON r.id=s.referral_promoter_id ORDER BY s.id DESC');
 ?>
 <h1>Subscription requests</h1>
-<section class="card scroll"><table><tr><th>Student</th><th>Reference</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-<?php while($r=$rows->fetch_assoc()):?><tr><td><?=e($r['full_name'])?> (@<?=e($r['username'])?>)</td><td><?=e($r['payment_method'])?><br><?=e($r['payment_reference'])?></td><td>LKR <?=e($r['amount_lkr'])?></td><td><?=e($r['status'])?></td><td><?php if($r['status']==='pending'):?><div class="row"><form method="post"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="approve"><button type="submit" class="good">Approve</button></form><form method="post" onsubmit="return confirm('Reject this payment?')"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="reject"><button type="submit" class="danger">Reject</button></form></div><?php endif;?></td></tr><?php endwhile;?>
+<section class="card scroll"><table><tr><th>Student</th><th>Reference</th><th>Amount</th><th>Referral</th><th>Status</th><th>Action</th></tr>
+<?php while($r=$rows->fetch_assoc()):?><tr><td><?=e($r['full_name'])?> (@<?=e($r['username'])?>)</td><td><?=e($r['payment_method'])?><br><?=e($r['payment_reference'])?></td><td>LKR <?=e($r['amount_lkr'])?><?php if((float)$r['discount_lkr']>0):?><br><small>Rs. <?=e($r['discount_lkr'])?> discount</small><?php endif;?></td><td><?=e($r['referral_code']?:'—')?></td><td><?=e($r['status'])?></td><td><?php if($r['status']==='pending'):?><div class="row"><form method="post"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="approve"><button type="submit" class="good">Approve</button></form><form method="post" onsubmit="return confirm('Reject this payment?')"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="reject"><button type="submit" class="danger">Reject</button></form></div><?php endif;?></td></tr><?php endwhile;?>
 </table></section>
 <?php include __DIR__.'/../includes/footer.php';?>
