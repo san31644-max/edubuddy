@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+// Load deployed/environment secrets before config.php freezes them into
+// constants. This also makes the SMS helper work when it is included directly.
+require_once __DIR__.'/runtime_env.php';
 require_once __DIR__.'/config.php';
 
 function normalize_sri_lankan_phone(string $phone):?string{

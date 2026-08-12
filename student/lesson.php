@@ -22,7 +22,7 @@ $bookUrl='';
 if($bookSource){
  $bookRelative=str_replace('\\','/',trim((string)$bookSource['local_file']));
  if(preg_match('#^uploads/syllabus/.+\.pdf$#i',$bookRelative)&&!preg_match('#(?:^|/)\.\.(?:/|$)#',$bookRelative)){
-  $bookUrl='../'.implode('/',array_map('rawurlencode',explode('/',$bookRelative)));
+  $bookUrl=url('student/lesson_pdf.php?id='.(int)$id);
  }
 }
 function lesson_items(string $text,int $limit=6):array{$parts=preg_split('/(?:\r?\n)+|(?<=[.!?])\s+/u',trim($text))?:[];return array_slice(array_values(array_filter(array_map('trim',$parts),fn($x)=>mb_strlen($x)>2)),0,$limit);}
