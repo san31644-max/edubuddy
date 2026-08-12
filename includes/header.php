@@ -25,6 +25,7 @@ $isAdminPage = str_contains($currentPath, '/admin/');
 @media(min-width:720px){.wrap{padding:30px 20px 105px}.grid{grid-template-columns:repeat(3,1fr)}.card{padding:24px}.brand{font-size:1.08rem}}@media(min-width:1050px){.grid{gap:20px}.top{padding:14px 24px}}@media(max-width:390px){.brandtext small{display:none}.status-pill{font-size:.7rem;padding:8px 9px}.card{border-radius:21px;padding:17px}.bottom a{min-width:49px;padding-inline:4px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 .brandmark.logo-image{display:block;width:50px;height:50px;padding:0;border-radius:15px;object-fit:cover;background:transparent;transform:scale(1.18);transform-origin:center;box-shadow:none}.brand:hover .brandmark.logo-image{transform:scale(1.24)}.brandtext small{text-transform:none;letter-spacing:.04em}
 .pwa-install{position:fixed;z-index:60;right:16px;bottom:92px;min-height:44px;padding:9px 15px;border-radius:999px;background:linear-gradient(135deg,#19aa85,var(--mint));box-shadow:0 12px 30px rgba(25,170,133,.3)}.pwa-install[hidden]{display:none}@media(min-width:720px){.pwa-install{right:24px;bottom:24px}}
+.nav-ai-robot{display:block;width:31px;height:31px;margin:-5px auto -1px;object-fit:contain}
 </style>
 </head>
 <body>

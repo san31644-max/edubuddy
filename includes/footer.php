@@ -2,8 +2,8 @@
 <?php if(!$isAdminPage):?><button type="button" id="pwaInstall" class="pwa-install" hidden>⬇ Install app</button><?php endif;?>
 <?php if (!$isAdminPage && function_exists('user') && user()): ?>
 <nav class="bottom" aria-label="Student navigation">
-<?php foreach ([['student/dashboard.php','🏠',tr('home')],['student/subjects.php','📚',tr('learn')],['chatbot/chat.php','🤖',tr('chat')],['student/progress.php','📈',tr('progress')],['profile.php','👤',tr('profile')]] as $nav): $active=str_ends_with($currentPath,'/'.basename($nav[0])); ?>
-<a class="<?= $active?'active':'' ?>" href="<?= url($nav[0]) ?>"><b><?= $nav[1] ?></b><?= e($nav[2]) ?></a>
+<?php foreach ([['student/dashboard.php','🏠',tr('home')],['student/subjects.php','📚',tr('learn')],['chatbot/chat.php','robot',tr('chat')],['student/progress.php','📈',tr('progress')],['profile.php','👤',tr('profile')]] as $nav): $active=str_ends_with($currentPath,'/'.basename($nav[0])); ?>
+<a class="<?= $active?'active':'' ?>" href="<?= url($nav[0]) ?>"><b><?php if($nav[1]==='robot'):?><img class="nav-ai-robot" src="<?=url('assets/images/ai-robot.png')?>" alt=""><?php else:?><?= $nav[1] ?><?php endif;?></b><?= e($nav[2]) ?></a>
 <?php endforeach; ?>
 </nav>
 <?php endif; ?>

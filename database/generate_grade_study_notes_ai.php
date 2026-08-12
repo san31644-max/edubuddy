@@ -14,6 +14,7 @@ if($gradeNumber<1||!in_array($medium,['Sinhala','Tamil','English'],true))throw n
 if(GEMINI_API_KEY==='')throw new RuntimeException('Gemini API key is not configured.');
 $field=['Sinhala'=>'si','Tamil'=>'ta','English'=>'en'][$medium];
 $language=['Sinhala'=>'Sinhala (Unicode)','Tamil'=>'Tamil (Unicode)','English'=>'English'][$medium];
+if(strcasecmp($subjectFilter,'Second Language Tamil')===0)$language='Tamil (Unicode)';
 $db=db();
 $sql="SELECT l.id,l.display_order,l.title_$field title,l.content_$field content,s.name_en subject FROM lessons l JOIN subjects s ON s.id=l.subject_id JOIN grades g ON g.id=l.grade_id WHERE g.grade_number=? AND l.medium=? AND l.content_source='textbook' AND l.status='active'";
 if($subjectFilter!=='')$sql.=' AND s.name_en=?';
@@ -29,12 +30,12 @@ foreach($lessons as $lesson){
  for($attempt=1;$attempt<=3;$attempt++){
   $r=gemini_http_json(GEMINI_API_BASE.rawurlencode(GEMINI_MODEL).':generateContent?key='.rawurlencode(GEMINI_API_KEY),['Content-Type: application/json'],$payload);
   if($r['status']===200){$body=json_decode($r['body'],true);foreach($body['candidates'][0]['content']['parts']??[] as $part)$notes.=(string)($part['text']??'');if(mb_strlen(trim($notes))>=150)break;}
-  $problem=$r['error']?:('HTTP '.$r['status']);if($attempt<3)sleep($attempt*2);
+  $problem=$r['error']?:('HTTP '.$r['status']);if($attempt<3)sleep(20);
  }
  if(mb_strlen(trim($notes))<150){$failed++;echo "FAILED {$lesson['subject']} / {$lesson['title']}: $problem\n";continue;}
  $notes=trim(preg_replace('/^```(?:markdown)?\s*|\s*```$/iu','',$notes)??$notes);$id=(int)$lesson['id'];$save->bind_param('si',$notes,$id);$save->execute();$done++;
  echo "Updated {$lesson['subject']} / {$lesson['title']}\n";
- usleep(250000);
+ sleep(4);
 }
 echo "Grade $gradeNumber $medium AI notes complete: $done updated, $failed failed.\n";
 exit($failed?2:0);
