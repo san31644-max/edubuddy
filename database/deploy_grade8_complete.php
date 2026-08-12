@@ -2201,6 +2201,12 @@ $json=gzdecode(base64_decode($encoded,true));
 if($json===false)throw new RuntimeException('Could not decode the Grade 8 curriculum deployment payload.');
 $payload=json_decode($json,true,512,JSON_THROW_ON_ERROR);
 if(count($payload['lessons']??[])!==137)throw new RuntimeException('The Grade 8 deployment payload is incomplete.');
+$idIndexed=false;
+foreach($db->query("SHOW INDEX FROM quiz_questions") as $index){
+    if($index['Column_name']==='id'){$idIndexed=true;break;}
+}
+if(!$idIndexed&&!$db->query("ALTER TABLE quiz_questions ADD UNIQUE KEY quiz_questions_id_unique (id)"))throw new RuntimeException('Could not index the legacy quiz question IDs: '.$db->error);
+if(!$db->query("ALTER TABLE quiz_questions MODIFY id INT NOT NULL AUTO_INCREMENT"))throw new RuntimeException('Could not enable quiz question AUTO_INCREMENT: '.$db->error);
 $db->begin_transaction();
 try{
     $findLesson=$db->prepare("SELECT l.id,q.id quiz_id FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN subjects s ON s.id=l.subject_id JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE g.grade_number=8 AND s.subject_code=? AND l.medium=? AND l.display_order=? AND l.status='active' AND l.content_source='textbook' LIMIT 1");
