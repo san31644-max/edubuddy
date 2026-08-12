@@ -7,6 +7,9 @@ $sql=[
 ,"CREATE TABLE IF NOT EXISTS student_activity_events(id BIGINT AUTO_INCREMENT PRIMARY KEY,user_id INT NOT NULL,event_type ENUM('search','lesson_opened','lesson_completed','quiz_completed') NOT NULL,subject_id INT NULL,lesson_id INT NULL,quiz_id INT NULL,detail VARCHAR(500) NOT NULL,event_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,INDEX(user_id,event_time),FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,FOREIGN KEY(subject_id) REFERENCES subjects(id) ON DELETE SET NULL,FOREIGN KEY(lesson_id) REFERENCES lessons(id) ON DELETE SET NULL,FOREIGN KEY(quiz_id) REFERENCES quizzes(id) ON DELETE SET NULL)"
 ];
 foreach($sql as $q)if(!$db->query($q))throw new RuntimeException($db->error);
+// Older production imports created the primary key without AUTO_INCREMENT,
+// causing every parent registration to fail with MySQL error 1364.
+if(!$db->query('ALTER TABLE parents MODIFY id INT NOT NULL AUTO_INCREMENT'))throw new RuntimeException($db->error);
 $db->begin_transaction();
 $test=$db->prepare("INSERT INTO parents(full_name,email,password_hash,status) VALUES('Deployment Test','deployment-test@keducation.invalid','not-a-login','active')");
 if(!$test||!$test->execute()){$message=$test?$test->errno.' '.$test->error:$db->errno.' '.$db->error;$db->rollback();throw new RuntimeException('Parent registration insert test failed: '.$message);}
