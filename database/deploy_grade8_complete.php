@@ -2211,8 +2211,8 @@ $db->begin_transaction();
 try{
     $findLesson=$db->prepare("SELECT l.id,q.id quiz_id FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN subjects s ON s.id=l.subject_id JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE g.grade_number=8 AND s.subject_code=? AND l.medium=? AND l.display_order=? AND l.status='active' AND l.content_source='textbook' LIMIT 1");
     if(!$findLesson)throw new RuntimeException($db->error);
-    $deletePractice=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type IN ('challenge','missing','matching')");
-    if(!$deletePractice)throw new RuntimeException($db->error);
+    $deleteLegacy=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type IN ('missing','matching')");
+    if(!$deleteLegacy)throw new RuntimeException($db->error);
     $lessonCount=0;$questionCount=0;
     foreach($payload['lessons'] as $lesson){
         $subjectCode=(string)$lesson['subject_code'];$medium=(string)$lesson['medium'];$order=(int)$lesson['display_order'];
@@ -2223,11 +2223,15 @@ try{
         $update=$db->prepare($sql);if(!$update)throw new RuntimeException($db->error);$lessonId=(int)$target['id'];
         $update->bind_param('ssssssi',$lesson['description'],$lesson['notes'],$lesson['objectives'],$lesson['terms'],$lesson['examples'],$lesson['summary'],$lessonId);
         if(!$update->execute())throw new RuntimeException($update->error);
-        $quizId=(int)$target['quiz_id'];$deletePractice->bind_param('i',$quizId);if(!$deletePractice->execute())throw new RuntimeException($deletePractice->error);
+        $quizId=(int)$target['quiz_id'];$deleteLegacy->bind_param('i',$quizId);if(!$deleteLegacy->execute())throw new RuntimeException($deleteLegacy->error);
         $insertSql="INSERT INTO quiz_questions(quiz_id,activity_type,question_{$suffix},option_a_{$suffix},option_b_{$suffix},option_c_{$suffix},option_d_{$suffix},correct_option,explanation_{$suffix},display_order,status) VALUES(?,'challenge',?,?,?,?,?,?,?,?,'active')";
         $insert=$db->prepare($insertSql);if(!$insert)throw new RuntimeException($db->error);
+        $updateQuestionSql="UPDATE quiz_questions SET question_{$suffix}=?,option_a_{$suffix}=?,option_b_{$suffix}=?,option_c_{$suffix}=?,option_d_{$suffix}=?,correct_option=?,explanation_{$suffix}=?,display_order=?,status='active' WHERE id=?";
+        $updateQuestion=$db->prepare($updateQuestionSql);if(!$updateQuestion)throw new RuntimeException($db->error);
+        $existingQuestions=$db->query("SELECT id FROM quiz_questions WHERE quiz_id={$quizId} AND activity_type='challenge' ORDER BY display_order,id")->fetch_all(MYSQLI_ASSOC);
+        if(count($existingQuestions)!==0&&count($existingQuestions)!==5)throw new RuntimeException("Unexpected existing challenge count for {$subjectCode} / {$medium} / {$order}");
         if(count($lesson['questions']??[])!==5)throw new RuntimeException("Challenge payload incomplete for {$subjectCode} / {$medium} / {$order}");
-        foreach($lesson['questions'] as $index=>$question){$displayOrder=$index+1;$insert->bind_param('isssssssi',$quizId,$question['question'],$question['a'],$question['b'],$question['c'],$question['d'],$question['correct'],$question['explanation'],$displayOrder);if(!$insert->execute())throw new RuntimeException($insert->error);$questionCount++;}
+        foreach($lesson['questions'] as $index=>$question){$displayOrder=$index+1;if($existingQuestions){$questionId=(int)$existingQuestions[$index]['id'];$updateQuestion->bind_param('sssssssii',$question['question'],$question['a'],$question['b'],$question['c'],$question['d'],$question['correct'],$question['explanation'],$displayOrder,$questionId);if(!$updateQuestion->execute())throw new RuntimeException($updateQuestion->error);}else{$insert->bind_param('isssssssi',$quizId,$question['question'],$question['a'],$question['b'],$question['c'],$question['d'],$question['correct'],$question['explanation'],$displayOrder);if(!$insert->execute())throw new RuntimeException($insert->error);}$questionCount++;}
         $lessonCount++;
     }
     if($lessonCount!==137||$questionCount!==685)throw new RuntimeException("Grade 8 migration count mismatch: {$lessonCount} lessons, {$questionCount} questions.");
