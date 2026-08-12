@@ -7,4 +7,5 @@ $sql=[
 ,"CREATE TABLE IF NOT EXISTS student_activity_events(id BIGINT AUTO_INCREMENT PRIMARY KEY,user_id INT NOT NULL,event_type ENUM('search','lesson_opened','lesson_completed','quiz_completed') NOT NULL,subject_id INT NULL,lesson_id INT NULL,quiz_id INT NULL,detail VARCHAR(500) NOT NULL,event_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,INDEX(user_id,event_time),FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,FOREIGN KEY(subject_id) REFERENCES subjects(id) ON DELETE SET NULL,FOREIGN KEY(lesson_id) REFERENCES lessons(id) ON DELETE SET NULL,FOREIGN KEY(quiz_id) REFERENCES quizzes(id) ON DELETE SET NULL)"
 ];
 foreach($sql as $q)if(!$db->query($q))throw new RuntimeException($db->error);
+foreach($db->query('SHOW COLUMNS FROM parents') as $column)echo 'parents column: '.$column['Field'].' '.$column['Type'].' null='.$column['Null'].' default='.var_export($column['Default'],true).PHP_EOL;
 echo "Parent monitoring tables are ready.\n";
