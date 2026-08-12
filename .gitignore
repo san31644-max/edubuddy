@@ -25,6 +25,13 @@ backups/
 
 # Local deployment and packaged artifacts
 .deploy/
+.bubblewrap-home/
+android-direct/build/
+android-direct/local.properties
+android-direct/signing/
+android-direct/res/drawable/k_education_logo.png
+downloads/*.apk
+!downloads/.gitkeep
 cloudflared.exe
 K-Education-Share-Package.zip
 
