@@ -12,6 +12,10 @@ $isAdminPage = str_contains($currentPath, '/admin/');
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#5b4bdb">
 <link rel="manifest" href="<?= url('manifest.json') ?>">
+<link rel="apple-touch-icon" href="<?= url('logo/k-transparent.png') ?>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="K Education">
 <title><?= e($pageTitle) ?> · <?= e(APP_NAME) ?></title>
 <style>
 :root{--violet:#6554e8;--violet2:#8c52ff;--blue:#2588f6;--cyan:#1cc8d7;--mint:#21c59b;--gold:#ffb638;--rose:#ff6584;--ink:#18233f;--muted:#69758f;--paper:#fff;--line:#dfe6f3;--danger:#d83d55;--shadow:0 18px 55px rgba(45,56,110,.13);--soft-shadow:0 9px 28px rgba(45,56,110,.1)}
@@ -20,6 +24,7 @@ $isAdminPage = str_contains($currentPath, '/admin/');
 .page-loader{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:rgba(245,247,255,.9);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);opacity:0;visibility:hidden;transition:.22s}.page-loader.show{opacity:1;visibility:visible}.loader-box{text-align:center;padding:28px 34px;border-radius:28px;background:#fff;box-shadow:0 24px 70px rgba(38,43,90,.22)}.loader-emoji{display:block;font-size:3.4rem;animation:studyBounce .8s ease-in-out infinite alternate}.loader-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}.loader-dots i{width:8px;height:8px;border-radius:50%;background:var(--violet);animation:dotHop .75s infinite alternate}.loader-dots i:nth-child(2){animation-delay:.18s}.loader-dots i:nth-child(3){animation-delay:.36s}.loader-box strong{display:block;margin-top:10px;color:var(--violet)}@keyframes studyBounce{to{transform:translateY(-12px) rotate(6deg) scale(1.08)}}@keyframes dotHop{to{transform:translateY(-7px);opacity:.35}}
 @media(min-width:720px){.wrap{padding:30px 20px 105px}.grid{grid-template-columns:repeat(3,1fr)}.card{padding:24px}.brand{font-size:1.08rem}}@media(min-width:1050px){.grid{gap:20px}.top{padding:14px 24px}}@media(max-width:390px){.brandtext small{display:none}.status-pill{font-size:.7rem;padding:8px 9px}.card{border-radius:21px;padding:17px}.bottom a{min-width:49px;padding-inline:4px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 .brandmark.logo-image{display:block;width:50px;height:50px;padding:0;border-radius:15px;object-fit:cover;background:transparent;transform:scale(1.18);transform-origin:center;box-shadow:none}.brand:hover .brandmark.logo-image{transform:scale(1.24)}.brandtext small{text-transform:none;letter-spacing:.04em}
+.pwa-install{position:fixed;z-index:60;right:16px;bottom:92px;min-height:44px;padding:9px 15px;border-radius:999px;background:linear-gradient(135deg,#19aa85,var(--mint));box-shadow:0 12px 30px rgba(25,170,133,.3)}.pwa-install[hidden]{display:none}@media(min-width:720px){.pwa-install{right:24px;bottom:24px}}
 </style>
 </head>
 <body>

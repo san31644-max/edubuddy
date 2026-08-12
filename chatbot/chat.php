@@ -6,19 +6,7 @@ $medium=(string)user()['medium'];$s=db()->prepare("SELECT DISTINCT s.id,s.name_e
 $s=db()->prepare("SELECT id,subject_id,title_en,title_si,title_ta FROM lessons WHERE grade_id=? AND status='active' AND content_source='textbook' AND (medium='All' OR medium=?) ORDER BY display_order");if($s){$s->bind_param('is',$gradeId,$medium);if($s->execute())$lessonRows=$s->get_result()->fetch_all(MYSQLI_ASSOC);else$contentError=true;$s->close();}else$contentError=true;
 $selectedLesson=filter_input(INPUT_GET,'lesson_id',FILTER_VALIDATE_INT)?:0;
 $chatLanguage=['Sinhala'=>'si','Tamil'=>'ta','English'=>'en'][user()['medium']]??'en';
-$gradeNumber=user_grade_number();$catalogFile=$gradeNumber===6?__DIR__.'/../uploads/syllabus/textbook-cache/catalog.json':__DIR__.'/../uploads/syllabus/textbook-cache/grade-'.$gradeNumber.'/'.$chatLanguage.'/catalog.json';
-$catalog=is_file($catalogFile)?json_decode((string)file_get_contents($catalogFile),true):[];
-$catalogBooks=$gradeNumber===6?($catalog[$chatLanguage]??[]):$catalog;
-$textbookOptions=[];$textbookSubjectIds=[];
-foreach($catalogBooks as $slug=>$book){
-    $subjectId=0;
-    foreach($subjectRows as $row){if(strcasecmp((string)$row['name_en'],(string)($book['subject']??''))===0){$subjectId=(int)$row['id'];break;}}
-    if(!$subjectId)continue;
-    $textbookSubjectIds[$subjectId]=true;
-    foreach(($book['lessons']??[]) as $topic){
-        $textbookOptions[]=['subject_id'=>$subjectId,'slug'=>$slug,'number'=>(int)$topic['number'],'title'=>(string)$topic['title']];
-    }
-}
+$gradeNumber=user_grade_number();
 $chatText=['en'=>['title'=>'AI Tutor','clear'=>'Clear chat','free'=>'Free: 5 messages per day','paid'=>'Unlimited Premium','error'=>'Lesson choices could not be loaded. You can still send a question.','subjects'=>'All subjects','lesson'=>'Select lesson','typing'=>'EduBuddy is thinking…','simple'=>'Explain more simply','example'=>'Give me an example','quiz'=>'Create a quiz','translate'=>'Translate answer','placeholder'=>'Ask your Grade '.$gradeNumber.' question…','send'=>'Send'],'si'=>['title'=>'අලුත් සර්','clear'=>'සංවාදය මකන්න','free'=>'නොමිලේ: දිනකට පණිවිඩ 5ක්','paid'=>'අසීමිත වාරික සේවාව','error'=>'පාඩම් තේරීම් පූරණය කළ නොහැකි විය. ඔබට තවමත් ප්‍රශ්නයක් යැවිය හැක.','subjects'=>'සියලු විෂයයන්','lesson'=>'පාඩමක් තෝරන්න','typing'=>'EduBuddy සිතමින් සිටී…','simple'=>'තවත් සරලව පැහැදිලි කරන්න','example'=>'උදාහරණයක් දෙන්න','quiz'=>'කෙටි ප්‍රශ්නාවලියක් සාදන්න','translate'=>'පිළිතුර පරිවර්තනය කරන්න','placeholder'=>'ඔබේ '.$gradeNumber.' ශ්‍රේණියේ ප්‍රශ්නය අසන්න…','send'=>'යවන්න'],'ta'=>['title'=>'AI ஆசிரியர்','clear'=>'உரையாடலை அழி','free'=>'இலவசம்: நாளுக்கு 5 செய்திகள்','paid'=>'வரம்பற்ற பிரீமியம்','error'=>'பாடத் தேர்வுகளை ஏற்ற முடியவில்லை. நீங்கள் இன்னும் கேள்வியை அனுப்பலாம்.','subjects'=>'அனைத்து பாடங்களும்','lesson'=>'பாடத்தைத் தேர்ந்தெடுக்கவும்','typing'=>'EduBuddy சிந்திக்கிறது…','simple'=>'இன்னும் எளிமையாக விளக்கவும்','example'=>'ஓர் உதாரணம் தரவும்','quiz'=>'சிறு வினாடி வினா உருவாக்கவும்','translate'=>'பதிலை மொழிபெயர்க்கவும்','placeholder'=>'உங்கள் தரம் '.$gradeNumber.' கேள்வியைக் கேளுங்கள்…','send'=>'அனுப்பு']][$chatLanguage];
 $chatText['typing']=str_replace('EduBuddy','K Education',$chatText['typing']);
 if($chatLanguage==='en')$chatText['placeholder']='Ask your Grade '.$gradeNumber.' question…';
@@ -45,7 +33,7 @@ $pageTitle=$chatText['title'];include __DIR__.'/../includes/header.php';
   <div class="tutor-brand"><div class="tutor-avatar">🎓</div><div><span class="online">ONLINE</span><h1><?=e($chatText['title'])?></h1><p>Grade <?=$gradeNumber?> · <?=e(user()['medium'])?> medium</p></div></div><button class="mobile-context-toggle" id="mobileContextToggle" type="button" aria-expanded="false" aria-label="Choose lesson">📚</button>
   <div class="picker"><h2 class="picker-title">📚 Study context</h2>
    <label>Subject<select id="subject" required><option value=""><?=e($chatText['subjects'])?></option><?php foreach($subjectRows as $subject):?><option value="<?=(int)$subject['id']?>"><?=e(locale_value($subject,'name'))?></option><?php endforeach;?></select></label>
-   <label>Textbook lesson<select id="lesson" required><option value=""><?=e($chatText['lesson'])?></option><?php foreach($textbookOptions as $topic):?><option data-subject="<?=(int)$topic['subject_id']?>" data-textbook-subject="<?=e($topic['slug'])?>" data-textbook-lesson="<?=(int)$topic['number']?>" value="textbook-<?=e($topic['slug'])?>-<?=(int)$topic['number']?>"><?=e($chatLanguage==='si'?'පාඩම':'Lesson')?> <?=(int)$topic['number']?>: <?=e($topic['title'])?></option><?php endforeach;?><?php foreach($lessonRows as $lesson):if(!isset($textbookSubjectIds[(int)$lesson['subject_id']])):?><option data-subject="<?=(int)$lesson['subject_id']?>" data-lesson-id="<?=(int)$lesson['id']?>" value="lesson-<?=(int)$lesson['id']?>"><?=e(locale_value($lesson,'title'))?></option><?php endif;endforeach;?></select></label>
+   <label>Textbook lesson<select id="lesson" required><option value=""><?=e($chatText['lesson'])?></option><?php foreach($lessonRows as $lesson):?><option data-subject="<?=(int)$lesson['subject_id']?>" data-lesson-id="<?=(int)$lesson['id']?>" value="lesson-<?=(int)$lesson['id']?>"<?=$selectedLesson===(int)$lesson['id']?' selected':''?>><?=e(locale_value($lesson,'title'))?></option><?php endforeach;?></select></label>
    <div class="selection-note"><span>🛡️</span><span><b>Textbook-grounded answers</b>Select a lesson and the tutor will answer from that exact Grade <?=$gradeNumber?> book.</span></div>
   </div>
   <div class="side-actions"><button class="clear-chat" id="clearChat" type="button">🗑️ <?=e($chatText['clear'])?></button></div>

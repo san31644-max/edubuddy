@@ -1,13 +1,23 @@
 {
+  "id": "./",
   "name": "K Education",
   "short_name": "K Education",
-  "description": "Multilingual Grade 6–10 learning assistant for Sri Lankan students",
-  "start_url": "/educhat/index.php",
-  "scope": "/educhat/",
+  "description": "Sinhala, Tamil and English learning companion for Grades 6–11",
+  "start_url": "./index.php",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
   "background_color": "#f3f7ff",
-  "theme_color": "#1456d8",
+  "theme_color": "#6554e8",
+  "categories": ["education"],
   "icons": [
-    {"src":"/educhat/logo/k-transparent.png","sizes":"1254x1254","type":"image/png","purpose":"any"}
+    {"src":"logo/k-transparent.png","sizes":"1254x1254","type":"image/png","purpose":"any"},
+    {"src":"logo/k.png","sizes":"1254x1254","type":"image/png","purpose":"maskable"}
+  ],
+  "shortcuts": [
+    {"name":"Learn","url":"student/subjects.php"},
+    {"name":"AI Tutor","url":"chatbot/chat.php"},
+    {"name":"Progress","url":"student/progress.php"}
   ]
 }

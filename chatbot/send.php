@@ -177,9 +177,10 @@ if ($lessonId && !$textbookLesson) {
     $context = query_one(
         "SELECT l.*,s.name_en,s.name_si,s.name_ta
          FROM lessons l JOIN subjects s ON s.id=l.subject_id
-         WHERE l.id=? AND l.subject_id=? AND l.grade_id=? AND l.status='active'",
-        'iii',
-        [$lessonId, $subjectId, (int) user()['grade_id']]
+         WHERE l.id=? AND l.subject_id=? AND l.grade_id=? AND l.status='active'
+           AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)",
+        'iiis',
+        [$lessonId, $subjectId, (int) user()['grade_id'], $studentMedium]
     );
 }
 
@@ -230,6 +231,7 @@ if ($context && !$textbookLesson) {
     $instructions .= "\nLesson content:\n" . mb_substr(locale_value($context, 'content'), 0, 8000);
     $instructions .= "\nSummary:\n" . mb_substr(locale_value($context, 'summary'), 0, 2500);
     $instructions .= "\nExamples:\n" . mb_substr(locale_value($context, 'examples'), 0, 2500);
+    $instructions .= "\nThe selected lesson is mandatory context. If the prompt is generic (such as 'teach me something', 'short notes', or 'create a quiz'), respond ONLY about this selected lesson. Never switch to an unrelated subject or topic.";
 }
 
 $modelQuestion = $question;
@@ -300,6 +302,12 @@ if (GEMINI_API_KEY !== '') {
         'x-goog-api-key: ' . GEMINI_API_KEY,
         'Content-Type: application/json'
     ], (string)$payload);
+    if(in_array((int)$geminiRequest['status'],[429,503],true)){
+        foreach(['gemini-3.5-flash-lite','gemini-3.1-flash-lite'] as $fallbackModel){
+            $fallbackRequest=gemini_http_json(GEMINI_API_BASE.rawurlencode($fallbackModel).':generateContent',['x-goog-api-key: '.GEMINI_API_KEY,'Content-Type: application/json'],(string)$payload);
+            if((int)$fallbackRequest['status']>=200&&(int)$fallbackRequest['status']<300){$geminiRequest=$fallbackRequest;$provider='Gemini '.$fallbackModel;break;}
+        }
+    }
     $raw = $geminiRequest['body'];
     $status = (int)$geminiRequest['status'];
     $curlError = (string)$geminiRequest['error'];

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 const APP_NAME = 'K Education';
-const APP_URL = '/educhat';
-const DB_HOST = 'localhost';
-const DB_NAME = 'educhat';
-const DB_USER = 'root';
-const DB_PASS = '';
+define('APP_URL',getenv('EDUCHAT_APP_URL')!==false?(string)getenv('EDUCHAT_APP_URL'):(PHP_OS_FAMILY==='Windows'?'/educhat':''));
+define('DB_HOST',getenv('EDUCHAT_DB_HOST')?:'localhost');
+define('DB_NAME',getenv('EDUCHAT_DB_NAME')?:'educhat');
+define('DB_USER',getenv('EDUCHAT_DB_USER')?:'root');
+define('DB_PASS',getenv('EDUCHAT_DB_PASS')?:'');
 $serverSecretsFile = 'C:/xampp/edubuddy-secrets.php';
 $serverSecrets = is_file($serverSecretsFile) ? require $serverSecretsFile : [];
 if (!is_array($serverSecrets)) $serverSecrets = [];
@@ -17,6 +17,9 @@ define('AI_MODEL', getenv('OPENAI_MODEL') ?: 'gpt-5.6');
 define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: ($serverSecrets['GEMINI_API_KEY'] ?? ''));
 define('GEMINI_MODEL', getenv('GEMINI_MODEL') ?: ($serverSecrets['GEMINI_MODEL'] ?? 'gemini-3.6-flash'));
 define('GEMINI_API_BASE', 'https://generativelanguage.googleapis.com/v1beta/models/');
+define('TEXTLK_API_TOKEN', getenv('TEXTLK_API_TOKEN') ?: ($serverSecrets['TEXTLK_API_TOKEN'] ?? ''));
+define('TEXTLK_API_ENDPOINT', getenv('TEXTLK_API_ENDPOINT') ?: ($serverSecrets['TEXTLK_API_ENDPOINT'] ?? 'https://app.text.lk/api/v3/sms/send'));
+define('TEXTLK_SENDER_ID', getenv('TEXTLK_SENDER_ID') ?: ($serverSecrets['TEXTLK_SENDER_ID'] ?? 'TextLKDemo'));
 const PREMIUM_PRICE_LKR = 250;
 const PREMIUM_DAYS = 30;
 const MAX_CHAT_LENGTH = 1000;

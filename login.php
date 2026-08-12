@@ -1,19 +1,23 @@
 <?php
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 require_once __DIR__.'/includes/auth.php';require_guest();$error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
     verify_csrf();$key=strtolower(trim((string)($_POST['identity']??'')));
     $bucket='login_'.hash('sha256',($_SERVER['REMOTE_ADDR']??'local').$key);$tries=$_SESSION[$bucket]??['n'=>0,'at'=>0];
     if($tries['n']>=5&&time()-$tries['at']<300)$error='Too many attempts. Try again in five minutes.';
     else{
-        $u=query_one('SELECT id,full_name,username,email,school_name,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status FROM users WHERE (username=? OR email=?) LIMIT 1','ss',[$key,$key]);
+        $phone=preg_replace('/\D+/','',$key)??$key;if(str_starts_with($phone,'0'))$phone='94'.substr($phone,1);
+        $u=query_one('SELECT id,full_name,username,email,phone,phone_verified_at,school_name,district,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,status FROM users WHERE (username=? OR email=? OR phone=?) LIMIT 1','sss',[$key,$key,$phone]);
         if($u&&$u['status']==='active'&&password_verify((string)($_POST['password']??''),$u['password_hash'])){
             unset($u['password_hash'],$_SESSION[$bucket]);session_regenerate_id(true);$u['preferred_language']=medium_language((string)$u['medium']);$_SESSION['user']=$u;$_SESSION['lang']=$u['preferred_language'];if((int)($_SESSION['onboarding_user_id']??0)===(int)$u['id'])$_SESSION['new_student_onboarding']=true;unset($_SESSION['onboarding_user_id']);redirect('student/dashboard.php');
         }
-        $tries=['n'=>$tries['n']+1,'at'=>time()];$_SESSION[$bucket]=$tries;$error='Incorrect username, email or password.';
+        $tries=['n'=>$tries['n']+1,'at'=>time()];$_SESSION[$bucket]=$tries;$error='Incorrect phone number or password.';
     }
 }
 $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 .wrap{width:min(1160px,100%);padding-top:18px}.login-shell{position:relative;display:grid;overflow:hidden;min-height:650px;border:1px solid rgba(255,255,255,.9);border-radius:34px;background:#fff;box-shadow:0 30px 90px rgba(48,46,116,.19)}
 .login-art{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;padding:42px 34px;color:#fff;background:linear-gradient(145deg,#5140ce 0%,#7454ec 44%,#158ecc 100%);overflow:hidden}.login-art:before,.login-art:after{content:"";position:absolute;z-index:-1;border-radius:50%;background:rgba(255,255,255,.11)}.login-art:before{width:330px;height:330px;right:-135px;top:-130px}.login-art:after{width:270px;height:270px;left:-120px;bottom:-115px}.art-logo{width:112px;height:112px;border:7px solid rgba(255,255,255,.22);border-radius:29px;object-fit:cover;box-shadow:0 19px 45px rgba(30,25,92,.28);transform:rotate(-3deg)}.login-art h1{max-width:540px;margin:24px 0 8px;font-size:clamp(2.3rem,6vw,4.25rem);color:#fff}.login-art .lead{max-width:510px;margin:0;color:rgba(255,255,255,.85);font-size:1.05rem}.subject-pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:27px}.subject-pills span{padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:99px;background:rgba(255,255,255,.12);font-size:.79rem;font-weight:850;backdrop-filter:blur(8px)}.fun-icon{position:absolute;display:grid;place-items:center;width:55px;height:55px;border-radius:19px;background:#fff;box-shadow:0 15px 30px rgba(29,26,92,.22);font-size:1.65rem;animation:loginFloat 4s ease-in-out infinite}.fun-one{right:9%;top:24%}.fun-two{right:23%;bottom:14%;animation-delay:-1.7s}.fun-three{left:7%;top:10%;animation-delay:-.8s}
 .login-panel{display:flex;align-items:center;padding:35px 25px;background:linear-gradient(160deg,#fff,#fbfaff)}.login-box{width:min(100%,430px);margin:auto}.welcome-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:99px;background:#efedff;color:var(--violet);font-size:.76rem;font-weight:900}.login-box h2{margin:15px 0 7px;font-size:clamp(1.9rem,5vw,2.55rem)}.login-box>.muted{margin:0 0 24px}.field{position:relative}.field .field-icon{position:absolute;left:15px;top:42px;z-index:2}.field input{padding-left:45px;background:#f8f9ff}.field input:focus{background:#fff}.password-field input{padding-right:52px}.show-password{position:absolute;right:8px;top:34px;width:42px;min-height:42px;padding:0;border-radius:12px;background:transparent;color:#68738c;box-shadow:none;font-size:1.1rem}.show-password:hover{transform:none;background:#efedff;box-shadow:none}.login-options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-2px 0 20px}.remember{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.82rem;font-weight:750}.remember input{width:18px;min-height:18px;margin:0;accent-color:var(--violet)}.login-button{width:100%;min-height:55px;font-size:1.03rem}.login-button span{transition:.2s}.login-button:hover span{transform:translateX(4px)}.join-card{margin-top:20px;padding:17px;border:1px dashed #c9c3fa;border-radius:19px;background:linear-gradient(135deg,#f5f3ff,#eefaff);text-align:center}.join-card p{margin:0 0 10px;color:var(--muted);font-size:.88rem}.join-card .btn{width:100%;background:#fff;color:var(--violet);border:1px solid #ded9ff;box-shadow:0 7px 20px rgba(101,84,232,.1)}.mediums{display:flex;justify-content:center;gap:7px;margin-top:17px;color:#7a849a;font-size:.7rem;font-weight:800}.mediums span{padding:5px 8px;border-radius:99px;background:#f4f5fa}
@@ -47,7 +51,8 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
 @media(max-width:819px){.art-logo{width:138px;height:138px;border-radius:23px}}
 @media(max-width:420px){.art-logo{width:122px;height:122px}}
 .login-art .art-logo{width:165px;height:165px}
-.login-art h1{margin-top:17px}
+.login-art h1{margin-top:17px;font-family:"Great Vibes","Brush Script MT","Segoe Script",cursive;font-size:clamp(3.25rem,7vw,5.6rem);font-weight:500;line-height:.95;letter-spacing:.025em;text-shadow:0 3px 0 rgba(0,0,0,.16),0 8px 24px rgba(0,0,0,.28),0 0 28px rgba(255,173,34,.3);transform:none}
+.login-art h1 .education-word{display:inline-block;margin-left:.42em}
 .knowledge-intro{margin:0 0 12px;color:rgba(255,255,255,.82);font-size:.85rem;font-weight:750;letter-spacing:.04em}
 .knowledge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,560px)}
 .knowledge-item{display:flex;align-items:center;gap:8px;min-width:0;padding:8px 10px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.1);box-shadow:0 8px 22px rgba(0,0,0,.1);backdrop-filter:blur(8px);opacity:0;transform:translateY(12px) scale(.96);animation:knowledgeReveal .55s cubic-bezier(.2,.8,.2,1) forwards,knowledgePulse 9s ease-in-out infinite;animation-delay:calc(var(--i)*.11s),calc(1.3s + var(--i)*1s)}
@@ -56,7 +61,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
 @keyframes knowledgeReveal{to{opacity:1;transform:none}}
 @keyframes knowledgePulse{0%,11%{border-color:rgba(255,173,34,.95);background:rgba(255,90,22,.25);transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,90,22,.22)}18%,100%{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.1);transform:none;box-shadow:0 8px 22px rgba(0,0,0,.1)}}
 @media(max-width:819px){.login-art .art-logo{width:112px;height:112px}.knowledge-grid{gap:6px}.knowledge-item{padding:6px 7px;border-radius:11px}.knowledge-item b{flex-basis:25px;width:25px;height:25px;border-radius:7px;font-size:.86rem}.knowledge-item span{font-size:.65rem}}
-@media(max-width:420px){.login-art{min-height:440px}.login-art .art-logo{width:98px;height:98px}.login-art h1{font-size:2rem}.knowledge-item{gap:5px;padding:5px}.knowledge-item span{font-size:.59rem}}
+@media(max-width:420px){.login-art{min-height:440px}.login-art .art-logo{width:98px;height:98px}.login-art h1{font-size:3rem;word-spacing:.16em}.knowledge-item{gap:5px;padding:5px}.knowledge-item span{font-size:.59rem}}
 @media(prefers-reduced-motion:reduce){.knowledge-item{opacity:1;transform:none}}
 .knowledge-stage{position:relative;width:min(100%,560px);height:92px;margin-top:4px;overflow:hidden;border:1px solid rgba(255,255,255,.2);border-radius:22px;background:rgba(5,24,49,.3);box-shadow:inset 0 1px rgba(255,255,255,.12),0 15px 35px rgba(0,0,0,.16);backdrop-filter:blur(10px)}
 .knowledge-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:15px;padding:15px;opacity:0;transform:translateY(24px) scale(.94);filter:blur(7px);transition:opacity .42s ease,transform .55s cubic-bezier(.2,.9,.2,1),filter .42s ease;pointer-events:none}
@@ -77,7 +82,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
 <div class="login-art">
     <span class="fun-icon fun-one">🧪</span><span class="fun-icon fun-two">📐</span><span class="fun-icon fun-three">💡</span>
     <img class="art-logo" src="<?=url('logo/k-transparent.png')?>" alt="K Education logo">
-    <h1>K Education</h1>
+    <h1>K<span class="education-word">Education</span></h1>
     <p class="knowledge-intro">🇱🇰 Empowering Sri Lanka's next generation through KNOWLEDGE</p>
     <div class="knowledge-stage" id="knowledgeStage" aria-label="KNOWLEDGE values">
         <div class="knowledge-slide active"><b class="value-letter">K</b><span class="value-word">Knowledge</span></div>
@@ -100,7 +105,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
     <h2><?=tr('login')?></h2><p class="muted">Continue your learning journey today.</p>
     <?php if($error):?><div class="alert error" role="alert"><?=e($error)?></div><?php endif;?>
     <form method="post"><?=csrf_field()?>
-        <label class="field"><?=tr('username')?> / <?=tr('email')?><span class="field-icon">👤</span><input name="identity" autocomplete="username" placeholder="Enter username or email" value="<?=e((string)($_POST['identity']??''))?>" required autofocus></label>
+        <label class="field">Phone number<span class="field-icon">📱</span><input name="identity" autocomplete="username" inputmode="tel" placeholder="Enter your phone number" value="<?=e((string)($_POST['identity']??''))?>" required autofocus></label>
         <label class="field password-field"><?=tr('password')?><span class="field-icon">🔒</span><input id="loginPassword" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button class="show-password" type="button" id="showPassword" aria-label="Show password" title="Show password">👁️</button></label>
         <div class="login-options"><label class="remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label><span class="badge">🎓 Grades 6–10</span></div>
         <button class="login-button" type="submit">🚀 <?=tr('login')?> <span>→</span></button>
