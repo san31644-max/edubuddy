@@ -30,13 +30,12 @@ foreach ($accounts as $gradeNumber => $number) {
     }
     $name = "Sinhala Grade $gradeNumber Demo Student";
     $hash = password_hash($number, PASSWORD_DEFAULT);
-    $statement = $db->prepare("INSERT INTO users(full_name,username,email,phone,phone_verified_at,password_hash,grade_id,medium,preferred_language,status) VALUES(?,?,NULL,?,NOW(),?,?,?,'Sinhala','si','active')");
+    $statement = $db->prepare("INSERT INTO users(full_name,username,email,phone,phone_verified_at,password_hash,grade_id,medium,preferred_language,status) VALUES(?,?,NULL,?,NOW(),?,?,'Sinhala','si','active')");
     if (!$statement) {
         throw new RuntimeException($db->error);
     }
     $gradeId = (int)$grade['id'];
-    $language = 'si';
-    $statement->bind_param('ssssis', $name, $number, $phone, $hash, $gradeId, $language);
+    $statement->bind_param('ssssi', $name, $number, $phone, $hash, $gradeId);
     if (!$statement->execute()) {
         throw new RuntimeException($statement->error);
     }
