@@ -119,7 +119,7 @@ jobs:
         run: |
           ssh_options=(-i ~/.ssh/deploy_key -p "$SERVER_PORT" -o ServerAliveInterval=10 -o ServerAliveCountMax=30)
           ssh "${ssh_options[@]}" "$SERVER_USER@$SERVER_HOST" \
-            "cd '$REMOTE_PATH' && php database/parent_monitoring_migration.php && php database/separate_assessment_questions.php && php database/core_schema_integrity_migration.php && php database/referral_program_migration.php && php database/deploy_grade8_complete.php && php database/fix_grade8_math_parimithiya_symbols.php"
+            "cd '$REMOTE_PATH' && php database/parent_monitoring_migration.php && php database/separate_assessment_questions.php && php database/core_schema_integrity_migration.php && php database/referral_program_migration.php && php database/deploy_grade8_complete.php && php database/fix_grade8_math_parimithiya_symbols.php && php database/seed_sinhala_demo_users.php"
           for grade in 6 7 9 10; do
             ssh "${ssh_options[@]}" "$SERVER_USER@$SERVER_HOST" \
               "cd '$REMOTE_PATH' && php database/deploy_grades_quick_learning_local.php '$grade'"
