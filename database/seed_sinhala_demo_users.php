@@ -27,18 +27,18 @@ foreach ($accounts as $gradeNumber => $number) {
     $gradeId = (int)$grade['id'];
     $name = "Sinhala Grade $gradeNumber Demo Student";
     $hash = password_hash($number, PASSWORD_DEFAULT);
-    $existing = query_one('SELECT id FROM users WHERE username=? OR phone=? LIMIT 1', 'ss', [$number, $phone]);
+    $existing = query_one('SELECT id FROM users WHERE phone=? LIMIT 1', 's', [$phone]);
     if ($existing) {
         $userId = (int)$existing['id'];
-        $update = $db->prepare("UPDATE users SET full_name=?,phone=?,phone_verified_at=NOW(),password_hash=?,grade_id=?,medium='Sinhala',preferred_language='si',status='active' WHERE id=?");
-        if (!$update) {
-            throw new RuntimeException($db->error);
-        }
-        $update->bind_param('sssii', $name, $phone, $hash, $gradeId, $userId);
-        if (!$update->execute()) {
-            throw new RuntimeException($update->error);
-        }
-        echo "Updated Sinhala Grade $gradeNumber demo account: $number\n";
+        $update = $db->prepare("UPDATE users SET full_name=?,phone_verified_at=NOW(),password_hash=?,grade_id=?,medium='Sinhala',preferred_language='si',status='active' WHERE id=?");
+        if (!$update) throw new RuntimeException($db->error);
+        $update->bind_param('ssii', $name, $hash, $gradeId, $userId);
+        if (!$update->execute()) throw new RuntimeException($update->error);
+        echo "Created or reset Sinhala Grade $gradeNumber demo account: $number\n";
+        continue;
+    }
+    if (query_one('SELECT id FROM users WHERE username=? LIMIT 1', 's', [$number])) {
+        echo "Grade $gradeNumber username conflict; skipped without changing the account.\n";
         continue;
     }
     $statement = $db->prepare("INSERT INTO users(full_name,username,email,phone,phone_verified_at,password_hash,grade_id,medium,preferred_language,status) VALUES(?,?,NULL,?,NOW(),?,?,'Sinhala','si','active')");
@@ -49,5 +49,5 @@ foreach ($accounts as $gradeNumber => $number) {
     if (!$statement->execute()) {
         throw new RuntimeException($statement->error);
     }
-    echo "Created Sinhala Grade $gradeNumber demo account: $number\n";
+    echo "Created or reset Sinhala Grade $gradeNumber demo account: $number\n";
 }
