@@ -18,7 +18,7 @@ $accounts = [
 
 $db = db();
 foreach ($accounts as $gradeNumber => $number) {
-    $grade = query_one("SELECT id FROM grades WHERE grade_number=? AND status='active' LIMIT 1", 'i', [$gradeNumber]);
+    $grade = query_one('SELECT id FROM grades WHERE grade_number=? LIMIT 1', 'i', [$gradeNumber]);
     if (!$grade) {
         echo "Grade $gradeNumber is not available; skipped.\n";
         continue;
