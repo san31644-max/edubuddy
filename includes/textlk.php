@@ -9,6 +9,9 @@ function normalize_sri_lankan_phone(string $phone):?string{
     $digits=preg_replace('/\D+/','',$phone)??'';
     if(str_starts_with($digits,'0'))$digits='94'.substr($digits,1);
     elseif(strlen($digits)===9&&str_starts_with($digits,'7'))$digits='94'.$digits;
+    // Allow the documented Sinhala demo accounts to use their intentionally fake numbers.
+    $demoNumbers=['94666666666','94777777777','94888888888','94999999999','94000000000'];
+    if(in_array($digits,$demoNumbers,true))return $digits;
     return preg_match('/^947\d{8}$/',$digits)?$digits:null;
 }
 function send_textlk_otp(string $phone,string $code):array{
