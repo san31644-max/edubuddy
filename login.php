@@ -1,13 +1,13 @@
 <?php
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
-require_once __DIR__.'/includes/auth.php';require_guest();$error='';
+require_once __DIR__.'/includes/auth.php';require_once __DIR__.'/includes/textlk.php';require_guest();$error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
     verify_csrf();$key=strtolower(trim((string)($_POST['identity']??'')));
     $bucket='login_'.hash('sha256',($_SERVER['REMOTE_ADDR']??'local').$key);$tries=$_SESSION[$bucket]??['n'=>0,'at'=>0];
     if($tries['n']>=5&&time()-$tries['at']<300)$error='Too many attempts. Try again in five minutes.';
     else{
-        $phone=preg_replace('/\D+/','',$key)??$key;if(str_starts_with($phone,'0'))$phone='94'.substr($phone,1);
+        $phone=normalize_sri_lankan_phone($key)??$key;
         $u=query_one('SELECT id,full_name,username,email,phone,phone_verified_at,school_name,district,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,referral_promoter_id,referral_code_used,status FROM users WHERE (username=? OR email=? OR phone=?) LIMIT 1','sss',[$key,$key,$phone]);
         if($u&&$u['status']==='active'&&password_verify((string)($_POST['password']??''),$u['password_hash'])){
             unset($u['password_hash'],$_SESSION[$bucket]);session_regenerate_id(true);$u['preferred_language']=medium_language((string)$u['medium']);$_SESSION['user']=$u;$_SESSION['lang']=$u['preferred_language'];if((int)($_SESSION['onboarding_user_id']??0)===(int)$u['id'])$_SESSION['new_student_onboarding']=true;unset($_SESSION['onboarding_user_id']);redirect('student/dashboard.php');
@@ -108,7 +108,7 @@ $pageTitle='Student Login';include __DIR__.'/includes/header.php';?>
     <form method="post"><?=csrf_field()?>
         <label class="field">Phone number<span class="field-icon">📱</span><input name="identity" autocomplete="username" inputmode="tel" placeholder="Enter your phone number" value="<?=e((string)($_POST['identity']??''))?>" required autofocus></label>
         <label class="field password-field"><?=tr('password')?><span class="field-icon">🔒</span><input id="loginPassword" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button class="show-password" type="button" id="showPassword" aria-label="Show password" title="Show password">👁️</button></label>
-        <div class="login-options"><label class="remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label><span class="badge">🎓 Grades 6–10</span></div>
+        <div class="login-options"><label class="remember"><input type="checkbox" name="remember" value="1"> Keep me signed in</label><a href="forgot-password.php">Forgot password?</a></div>
         <button class="login-button" type="submit">🚀 <?=tr('login')?> <span>→</span></button>
     </form>
     <div class="join-card"><p>New to K Education? Create your student account and select your learning medium.</p><a class="btn" href="register.php">✨ <?=tr('register')?></a></div>
