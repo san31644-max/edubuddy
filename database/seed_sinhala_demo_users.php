@@ -30,11 +30,11 @@ foreach ($accounts as $gradeNumber => $number) {
     $existing = query_one('SELECT id FROM users WHERE username=? OR phone=? LIMIT 1', 'ss', [$number, $phone]);
     if ($existing) {
         $userId = (int)$existing['id'];
-        $update = $db->prepare("UPDATE users SET full_name=?,username=?,phone=?,phone_verified_at=NOW(),password_hash=?,grade_id=?,medium='Sinhala',preferred_language='si',status='active' WHERE id=?");
+        $update = $db->prepare("UPDATE users SET full_name=?,phone=?,phone_verified_at=NOW(),password_hash=?,grade_id=?,medium='Sinhala',preferred_language='si',status='active' WHERE id=?");
         if (!$update) {
             throw new RuntimeException($db->error);
         }
-        $update->bind_param('ssssii', $name, $number, $phone, $hash, $gradeId, $userId);
+        $update->bind_param('sssii', $name, $phone, $hash, $gradeId, $userId);
         if (!$update->execute()) {
             throw new RuntimeException($update->error);
         }
