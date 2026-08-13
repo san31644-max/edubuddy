@@ -24,17 +24,27 @@ foreach ($accounts as $gradeNumber => $number) {
         continue;
     }
     $phone = '94'.substr($number, 1);
-    if (query_one('SELECT id FROM users WHERE username=? OR phone=? LIMIT 1', 'ss', [$number, $phone])) {
-        echo "Grade $gradeNumber account already exists; skipped.\n";
-        continue;
-    }
+    $gradeId = (int)$grade['id'];
     $name = "Sinhala Grade $gradeNumber Demo Student";
     $hash = password_hash($number, PASSWORD_DEFAULT);
+    $existing = query_one('SELECT id FROM users WHERE username=? OR phone=? LIMIT 1', 'ss', [$number, $phone]);
+    if ($existing) {
+        $userId = (int)$existing['id'];
+        $update = $db->prepare("UPDATE users SET full_name=?,username=?,phone=?,phone_verified_at=NOW(),password_hash=?,grade_id=?,medium='Sinhala',preferred_language='si',status='active' WHERE id=?");
+        if (!$update) {
+            throw new RuntimeException($db->error);
+        }
+        $update->bind_param('ssssii', $name, $number, $phone, $hash, $gradeId, $userId);
+        if (!$update->execute()) {
+            throw new RuntimeException($update->error);
+        }
+        echo "Updated Sinhala Grade $gradeNumber demo account: $number\n";
+        continue;
+    }
     $statement = $db->prepare("INSERT INTO users(full_name,username,email,phone,phone_verified_at,password_hash,grade_id,medium,preferred_language,status) VALUES(?,?,NULL,?,NOW(),?,?,'Sinhala','si','active')");
     if (!$statement) {
         throw new RuntimeException($db->error);
     }
-    $gradeId = (int)$grade['id'];
     $statement->bind_param('ssssi', $name, $number, $phone, $hash, $gradeId);
     if (!$statement->execute()) {
         throw new RuntimeException($statement->error);
