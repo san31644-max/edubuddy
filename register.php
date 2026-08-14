@@ -9,11 +9,11 @@ $errors=[];$notice='';$referralPromoter=null;
 $v=['full_name'=>'','school_name'=>'','district'=>'','phone'=>'','referral_code'=>(string)($_GET['ref']??''),'grade_id'=>'','medium'=>'English'];
 foreach($v as $k=>$default)$v[$k]=trim((string)($_POST[$k]??$default));
 $v['referral_code']=normalize_referral_code($v['referral_code']);
-if($_SERVER['REQUEST_METHOD']!=='POST'&&$v['referral_code']!==''){$referralPromoter=active_referral_promoter($v['referral_code']);if(!$referralPromoter)$errors[]='That referral code is not valid or is no longer active.';}
+if($_SERVER['REQUEST_METHOD']!=='POST'&&$v['referral_code']!==''){$referralPromoter=active_referral_promoter($v['referral_code']);if(!$referralPromoter)$errors[]='That referral code is not valid or is no longer active.';elseif(!referral_promoter_has_capacity($referralPromoter)){$errors[]='This referral code has reached its registration limit and has expired.';$referralPromoter=null;}}
 $action=(string)($_POST['action']??'');
 if($_SERVER['REQUEST_METHOD']==='POST'){
     verify_csrf();
-    if($v['referral_code']!==''){$referralPromoter=active_referral_promoter($v['referral_code']);if(!$referralPromoter)$errors[]='That referral code is not valid or is no longer active.';}
+    if($v['referral_code']!==''){$referralPromoter=active_referral_promoter($v['referral_code']);if(!$referralPromoter)$errors[]='That referral code is not valid or is no longer active.';elseif(!referral_promoter_has_capacity($referralPromoter)){$errors[]='This referral code has reached its registration limit and has expired.';$referralPromoter=null;}}
     $phone=normalize_sri_lankan_phone($v['phone']);
     if(!$phone)$errors[]='Enter a valid Sri Lankan mobile number, for example 0712345678.';
     if($action==='send_otp'&&!$errors){

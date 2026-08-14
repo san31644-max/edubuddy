@@ -18,10 +18,15 @@ function active_referral_promoter(string $code): ?array
     $code = normalize_referral_code($code);
     if (!referral_code_is_valid_format($code)) return null;
     return query_one(
-        "SELECT id,full_name,referral_code FROM referral_promoters WHERE referral_code=? AND status='active' LIMIT 1",
+        "SELECT r.id,r.full_name,r.referral_code,r.registration_limit,(SELECT COUNT(*) FROM users u WHERE u.referral_promoter_id=r.id) registrations FROM referral_promoters r WHERE r.referral_code=? AND r.status='active' LIMIT 1",
         's',
         [$code]
     );
+}
+
+function referral_promoter_has_capacity(?array $promoter): bool
+{
+    return $promoter !== null && (int)$promoter['registrations'] < (int)$promoter['registration_limit'];
 }
 
 function premium_base_price_lkr(): float
@@ -71,7 +76,7 @@ function require_referral_promoter(): void
         redirect('referral/login.php');
     }
     $fresh = query_one(
-        "SELECT id,full_name,email,phone,referral_code,status,created_at FROM referral_promoters WHERE id=? AND status='active'",
+        "SELECT id,full_name,email,phone,referral_code,registration_limit,status,created_at FROM referral_promoters WHERE id=? AND status='active'",
         'i',
         [(int)$promoter['id']]
     );

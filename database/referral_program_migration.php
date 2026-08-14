@@ -45,6 +45,7 @@ $queries = [
         phone VARCHAR(15) NULL,
         referral_code VARCHAR(24) NOT NULL UNIQUE,
         password_hash VARCHAR(255) NOT NULL,
+        registration_limit INT UNSIGNED NOT NULL DEFAULT 50,
         status ENUM('active','inactive') NOT NULL DEFAULT 'active',
         last_login_at DATETIME NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -54,6 +55,8 @@ $queries = [
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 ];
 foreach ($queries as $sql) if (!$db->query($sql)) throw new RuntimeException($db->error);
+
+if (!referral_column_exists($db, 'referral_promoters', 'registration_limit') && !$db->query('ALTER TABLE referral_promoters ADD registration_limit INT UNSIGNED NOT NULL DEFAULT 50 AFTER password_hash')) throw new RuntimeException($db->error);
 
 if (!referral_column_exists($db, 'users', 'referral_promoter_id') && !$db->query('ALTER TABLE users ADD referral_promoter_id INT NULL AFTER subscription_expires_at')) throw new RuntimeException($db->error);
 if (!referral_column_exists($db, 'users', 'referral_code_used') && !$db->query('ALTER TABLE users ADD referral_code_used VARCHAR(24) NULL AFTER referral_promoter_id')) throw new RuntimeException($db->error);
