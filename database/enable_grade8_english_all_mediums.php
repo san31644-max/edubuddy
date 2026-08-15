@@ -20,7 +20,15 @@ $db=db();$subject=$db->query("SELECT s.id FROM subjects s JOIN grades g ON g.id=
 if(!$subject)throw new RuntimeException('Active Grade 8 English subject was not found.');$subjectId=(int)$subject['id'];
 $lessonRows=$db->query("SELECT l.id,l.unit_id,q.id quiz_id FROM lessons l JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE l.subject_id={$subjectId} ORDER BY l.display_order,l.id LIMIT 10")->fetch_all(MYSQLI_ASSOC);
 if(count($lessonRows)!==10)throw new RuntimeException('The ten Grade 8 English lesson records were not found.');
-$pageText=[];foreach($chunks as $chunk)$pageText[(int)$chunk['page']]=trim((string)$chunk['text']);
+function clean_english_textbook_page(string $text):string{
+ $artifacts=['a','A','b','C c','Z d','D','e','E','fK gG','aM bB','cI dD x','R','LT Y','U','U N I T','For free distribution'];$clean=[];
+ foreach(preg_split('/\R/u',$text)?:[] as $line){$line=trim(preg_replace('/\s+/u',' ',$line)??'');if($line===''||in_array($line,$artifacts,true)||preg_match('/^\d{1,3}$/',$line)||substr_count(strtolower($line),'unit ')>=2)continue;
+  $newBlock=preg_match('/^(Activity\s|LEARNING POINT|U N I T|UNIT\s|[A-Z][A-Za-z .’\'-]{1,25}:|\(?[A-Za-z0-9]+[.)]\s|[•*-]\s)/u',$line)||preg_match('/^[A-Z][A-Z\s,\'’-]{5,}$/u',$line);
+  $last=count($clean)-1;if(!$newBlock&&$last>=0&&!preg_match('/[.!?:;”’)]$/u',$clean[$last]))$clean[$last].=' '.$line;else $clean[]=$line;
+ }
+ return trim(implode("\n",$clean));
+}
+$pageText=[];foreach($chunks as $chunk)$pageText[(int)$chunk['page']]=clean_english_textbook_page((string)$chunk['text']);
 $lessonUpdate=$db->prepare("UPDATE lessons SET medium='All',title_en=?,short_description_en=?,short_notes_en=?,content_en=?,learning_objectives_en=?,key_terms_en=?,examples_en=?,summary_en=?,display_order=?,status='active' WHERE id=?");
 $unitUpdate=$db->prepare("UPDATE units SET unit_number=?,name_en=?,description_en=?,display_order=?,status='active' WHERE id=?");$quizUpdate=$db->prepare("UPDATE quizzes SET title_en=?,timer_minutes=10,pass_mark=50,status='active' WHERE id=?");
 $deleteAnswers=$db->prepare("DELETE qa FROM quiz_answers qa JOIN quiz_questions qq ON qq.id=qa.question_id WHERE qq.quiz_id=? AND qq.activity_type='challenge'");$deleteQuestions=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type='challenge'");
