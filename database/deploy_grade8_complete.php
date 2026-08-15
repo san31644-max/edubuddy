@@ -2236,7 +2236,7 @@ try{
     }
     if($lessonCount!==137||$questionCount!==685)throw new RuntimeException("Grade 8 migration count mismatch: {$lessonCount} lessons, {$questionCount} questions.");
     $audit=$db->query("SELECT COUNT(*) lessons,SUM(challenges=5) ready FROM (SELECT l.id,COUNT(qq.id) challenges FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' LEFT JOIN quiz_questions qq ON qq.quiz_id=q.id AND qq.activity_type='challenge' AND qq.status='active' WHERE g.grade_number=8 AND l.status='active' AND l.content_source='textbook' GROUP BY l.id) x")->fetch_assoc();
-    if((int)$audit['lessons']!==137||(int)$audit['ready']!==137)throw new RuntimeException('Post-migration Grade 8 audit failed.');
+    if((int)$audit['lessons']!==145||(int)$audit['ready']!==145)throw new RuntimeException('Post-migration Grade 8 audit failed.');
     $legacy=$db->query("SELECT COUNT(*) total FROM quiz_questions qq JOIN quizzes q ON q.id=qq.quiz_id JOIN lessons l ON l.id=q.lesson_id JOIN grades g ON g.id=l.grade_id WHERE g.grade_number=8 AND qq.activity_type IN ('missing','matching')")->fetch_assoc();
     if((int)$legacy['total']!==0)throw new RuntimeException('Post-migration Grade 8 activity cleanup failed.');
     $db->commit();

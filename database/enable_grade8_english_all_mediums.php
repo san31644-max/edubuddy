@@ -1,24 +1,32 @@
 <?php
 declare(strict_types=1);
-
 require_once __DIR__.'/../includes/db.php';
-
-$db = db();
-$subject = $db->query("SELECT s.id FROM subjects s JOIN grades g ON g.id=s.grade_id WHERE g.grade_number=8 AND s.subject_code='ENGLI8' AND s.name_en='English' AND s.status='active' LIMIT 1")->fetch_assoc();
-if (!$subject) {
-    throw new RuntimeException('Active Grade 8 English subject was not found.');
-}
-
-$subjectId = (int)$subject['id'];
-$update = $db->prepare("UPDATE lessons SET medium='All' WHERE subject_id=? AND status='active' AND content_source='textbook' AND medium='English'");
-$update->bind_param('i', $subjectId);
-if (!$update->execute()) {
-    throw new RuntimeException($update->error);
-}
-
-$audit = $db->query("SELECT COUNT(*) lessons,SUM(COALESCE(challenges,0)=5) quiz_ready FROM (SELECT l.id,COUNT(qq.id) challenges FROM lessons l LEFT JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' LEFT JOIN quiz_questions qq ON qq.quiz_id=q.id AND qq.activity_type='challenge' AND qq.status='active' WHERE l.subject_id={$subjectId} AND l.medium='All' AND l.status='active' AND l.content_source='textbook' GROUP BY l.id) ready")->fetch_assoc();
-if ((int)$audit['lessons'] < 1 || (int)$audit['quiz_ready'] !== (int)$audit['lessons']) {
-    throw new RuntimeException('Grade 8 English lesson or Quick Challenge verification failed.');
-}
-
-echo "Grade 8 English enabled for every learning medium: {$audit['lessons']} lessons, {$audit['quiz_ready']} quizzes ready.\n";
+$sourceFile=__DIR__.'/../uploads/syllabus/textbook-cache/grade-8/en/english/lesson-1.json';
+if(!is_file($sourceFile))throw new RuntimeException('Grade 8 English pupil book cache is missing.');
+$book=json_decode((string)file_get_contents($sourceFile),true,512,JSON_THROW_ON_ERROR);$chunks=$book['chunks']??[];
+if(count($chunks)<100)throw new RuntimeException('Grade 8 English pupil book cache is incomplete.');
+$units=[
+1=>['title'=>'Plan the Work, Work the Plan','start'=>15,'end'=>25,'page'=>1,'focus'=>'planning and organizing an English camp','grammar'=>'reflexive pronouns','context'=>'Saranga and the organizing committee'],
+2=>['title'=>'Winged Friends','start'=>26,'end'=>36,'page'=>12,'focus'=>'birds, their qualities and being content with oneself','grammar'=>'must, should and have to','context'=>'the peacock, the nightingale and the fox'],
+3=>['title'=>"Let's Be Considerate",'start'=>37,'end'=>48,'page'=>23,'focus'=>'courtesy, kindness and consideration for others','grammar'=>'conjunctions: as, since and so','context'=>'Rusiru, his mother and the old lady'],
+4=>['title'=>'Mother Nature','start'=>49,'end'=>63,'page'=>34,'focus'=>'protecting nature and responsible environmental action','grammar'=>'countable and uncountable nouns','context'=>'composting and caring for the environment'],
+5=>['title'=>'Between the Miles','start'=>64,'end'=>76,'page'=>49,'focus'=>'travel, distance and comparing places','grammar'=>'comparative and superlative adjectives','context'=>'journeys, places and travel information'],
+6=>['title'=>'When We Are Together','start'=>77,'end'=>85,'page'=>62,'focus'=>'cooperation, food preparation and shared work','grammar'=>'the passive voice','context'=>'people working together'],
+7=>['title'=>'The World of Children','start'=>86,'end'=>100,'page'=>71,'focus'=>'children, communication and life in different places','grammar'=>'formal and informal writing','context'=>'children, news and letters'],
+8=>['title'=>"It's a Small World",'start'=>101,'end'=>111,'page'=>86,'focus'=>'places, travel and cultural connections','grammar'=>'sentence order and descriptive language','context'=>'tourist attractions and experiences'],
+9=>['title'=>'On Top of the World','start'=>112,'end'=>118,'page'=>97,'focus'=>'achievement, habits and reaching goals','grammar'=>'adverbs of frequency','context'=>'Jayanthi Kuru-Utumpala and Mount Everest'],
+10=>['title'=>'Beyond the Classroom','start'=>119,'end'=>123,'page'=>104,'focus'=>'learning through experiences beyond normal lessons','grammar'=>'past simple and past perfect','context'=>'events and experiences outside the classroom']];
+$db=db();$subject=$db->query("SELECT s.id FROM subjects s JOIN grades g ON g.id=s.grade_id WHERE g.grade_number=8 AND s.subject_code='ENGLI8' AND s.name_en='English' AND s.status='active' LIMIT 1")->fetch_assoc();
+if(!$subject)throw new RuntimeException('Active Grade 8 English subject was not found.');$subjectId=(int)$subject['id'];
+$lessonRows=$db->query("SELECT l.id,l.unit_id,q.id quiz_id FROM lessons l JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE l.subject_id={$subjectId} ORDER BY l.display_order,l.id LIMIT 10")->fetch_all(MYSQLI_ASSOC);
+if(count($lessonRows)!==10)throw new RuntimeException('The ten Grade 8 English lesson records were not found.');
+$pageText=[];foreach($chunks as $chunk)$pageText[(int)$chunk['page']]=trim((string)$chunk['text']);
+$lessonUpdate=$db->prepare("UPDATE lessons SET medium='All',title_en=?,short_description_en=?,short_notes_en=?,content_en=?,learning_objectives_en=?,key_terms_en=?,examples_en=?,summary_en=?,display_order=?,status='active' WHERE id=?");
+$unitUpdate=$db->prepare("UPDATE units SET unit_number=?,name_en=?,description_en=?,display_order=?,status='active' WHERE id=?");$quizUpdate=$db->prepare("UPDATE quizzes SET title_en=?,timer_minutes=10,pass_mark=50,status='active' WHERE id=?");
+$deleteAnswers=$db->prepare("DELETE qa FROM quiz_answers qa JOIN quiz_questions qq ON qq.id=qa.question_id WHERE qq.quiz_id=? AND qq.activity_type='challenge'");$deleteQuestions=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type='challenge'");
+$insertQuestion=$db->prepare("INSERT INTO quiz_questions(quiz_id,activity_type,question_en,option_a_en,option_b_en,option_c_en,option_d_en,correct_option,explanation_en,display_order,status) VALUES(?,'challenge',?,?,?,?,?,?,?,?,'active')");
+$db->begin_transaction();try{foreach($units as $number=>$meta){$row=$lessonRows[$number-1];$parts=[];for($page=$meta['start'];$page<=$meta['end'];$page++)if(!empty($pageText[$page]))$parts[]=$pageText[$page];$content=implode("\n\n",$parts);if(mb_strlen($content)<3000)throw new RuntimeException("Textbook content for English unit {$number} is incomplete.");
+$description="Official Grade 8 English Unit {$number}, focusing on {$meta['focus']} and {$meta['grammar']}.";$notes="UNIT {$number}: {$meta['title']}\n\nMain focus\n• ".ucfirst($meta['focus']).".\n• Main language point: {$meta['grammar']}.\n• Textbook context: {$meta['context']}.\n\nStudy method\n• Read the dialogues and passages aloud.\n• Complete the vocabulary and comprehension activities.\n• Practise the language point using your own sentences.\n• Review the pupil-book activities beginning on page {$meta['page']}.";$objectives="Understand the main texts in {$meta['title']}.\nUse {$meta['grammar']} correctly.\nApply the unit vocabulary in reading, speaking and writing.";$terms=implode(', ',array_unique(array_filter(preg_split('/[^A-Za-z]+/',strtolower($meta['focus'].' '.$meta['grammar'].' '.$meta['context'])))));$examples="Textbook unit context: {$meta['context']}.\nLanguage practice: {$meta['grammar']}.";$summary="Unit {$number}, {$meta['title']}, begins on pupil-book page {$meta['page']}. It develops {$meta['focus']} while practising {$meta['grammar']}.";
+$title=$meta['title'];$lessonId=(int)$row['id'];$lessonUpdate->bind_param('ssssssssii',$title,$description,$notes,$content,$objectives,$terms,$examples,$summary,$number,$lessonId);if(!$lessonUpdate->execute())throw new RuntimeException($lessonUpdate->error);$unitId=(int)$row['unit_id'];$unitUpdate->bind_param('issii',$number,$title,$description,$number,$unitId);if(!$unitUpdate->execute())throw new RuntimeException($unitUpdate->error);$quizTitle=$title.' Quick Challenge';$quizId=(int)$row['quiz_id'];$quizUpdate->bind_param('si',$quizTitle,$quizId);if(!$quizUpdate->execute())throw new RuntimeException($quizUpdate->error);$deleteAnswers->bind_param('i',$quizId);$deleteAnswers->execute();$deleteQuestions->bind_param('i',$quizId);$deleteQuestions->execute();
+$other=array_values(array_filter($units,fn($key)=>$key!==$number,ARRAY_FILTER_USE_KEY));$questions=[["What is the title of Unit {$number}?",$title,$other[0]['title'],$other[1]['title'],$other[2]['title'],'a',"Unit {$number} is titled {$title}."],["On which pupil-book page does Unit {$number} begin?",(string)$meta['page'],(string)max(1,$meta['page']-1),(string)($meta['page']+5),(string)($meta['page']+10),'a',"The contents page lists Unit {$number} on page {$meta['page']}."],["What is a main focus of {$title}?",$meta['focus'],$other[0]['focus'],$other[1]['focus'],$other[2]['focus'],'a',"The unit develops {$meta['focus']}."],["Which language point is practised in this unit?",$meta['grammar'],$other[0]['grammar'],$other[1]['grammar'],$other[2]['grammar'],'a',"A key language point is {$meta['grammar']}."],["Which context belongs to {$title}?",$meta['context'],$other[0]['context'],$other[1]['context'],$other[2]['context'],'a',"The textbook activities use {$meta['context']}."]];foreach($questions as $index=>$question){[$text,$a,$b,$c,$d,$correct,$explanation]=$question;$order=$index+1;$insertQuestion->bind_param('isssssssi',$quizId,$text,$a,$b,$c,$d,$correct,$explanation,$order);if(!$insertQuestion->execute())throw new RuntimeException($insertQuestion->error);}}
+$audit=$db->query("SELECT COUNT(*) lessons,SUM(challenges=5) ready FROM (SELECT l.id,COUNT(qq.id) challenges FROM lessons l LEFT JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' LEFT JOIN quiz_questions qq ON qq.quiz_id=q.id AND qq.activity_type='challenge' AND qq.status='active' WHERE l.subject_id={$subjectId} AND l.medium='All' AND l.status='active' GROUP BY l.id) x")->fetch_assoc();if((int)$audit['lessons']!==10||(int)$audit['ready']!==10)throw new RuntimeException('Grade 8 English verification failed.');$db->commit();echo "Grade 8 English rebuilt from the pupil book: 10 units and 50 Quick Challenge questions.\n";}catch(Throwable $error){$db->rollback();throw $error;}
