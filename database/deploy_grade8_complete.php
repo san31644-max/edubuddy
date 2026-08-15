@@ -2209,14 +2209,14 @@ if(!$idIndexed&&!$db->query("ALTER TABLE quiz_questions ADD UNIQUE KEY quiz_ques
 if(!$db->query("ALTER TABLE quiz_questions MODIFY id INT NOT NULL AUTO_INCREMENT"))throw new RuntimeException('Could not enable quiz question AUTO_INCREMENT: '.$db->error);
 $db->begin_transaction();
 try{
-    $findLesson=$db->prepare("SELECT l.id,q.id quiz_id FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN subjects s ON s.id=l.subject_id JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE g.grade_number=8 AND s.subject_code=? AND l.medium=? AND l.display_order=? AND l.status='active' AND l.content_source='textbook' LIMIT 1");
+    $findLesson=$db->prepare("SELECT l.id,q.id quiz_id FROM lessons l JOIN grades g ON g.id=l.grade_id JOIN subjects s ON s.id=l.subject_id JOIN quizzes q ON q.lesson_id=l.id AND q.status='active' WHERE g.grade_number=8 AND s.subject_code=? AND (l.medium=? OR (s.subject_code='ENGLI8' AND ?='English' AND l.medium='All')) AND l.display_order=? AND l.status='active' AND l.content_source='textbook' LIMIT 1");
     if(!$findLesson)throw new RuntimeException($db->error);
     $deleteLegacy=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type IN ('missing','matching')");
     if(!$deleteLegacy)throw new RuntimeException($db->error);
     $lessonCount=0;$questionCount=0;
     foreach($payload['lessons'] as $lesson){
         $subjectCode=(string)$lesson['subject_code'];$medium=(string)$lesson['medium'];$order=(int)$lesson['display_order'];
-        $findLesson->bind_param('ssi',$subjectCode,$medium,$order);$findLesson->execute();$target=$findLesson->get_result()->fetch_assoc();
+        $findLesson->bind_param('sssi',$subjectCode,$medium,$medium,$order);$findLesson->execute();$target=$findLesson->get_result()->fetch_assoc();
         if(!$target)throw new RuntimeException("Production lesson missing: {$subjectCode} / {$medium} / {$order}");
         $suffix=(string)$lesson['suffix'];if(!in_array($suffix,['en','si','ta'],true))throw new RuntimeException('Invalid lesson language suffix.');
         $sql="UPDATE lessons SET short_description_{$suffix}=?,short_notes_{$suffix}=?,learning_objectives_{$suffix}=?,key_terms_{$suffix}=?,examples_{$suffix}=?,summary_{$suffix}=? WHERE id=?";
