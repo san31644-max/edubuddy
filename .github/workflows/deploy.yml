@@ -149,3 +149,16 @@ jobs:
             "cd '$REMOTE_PATH' && php database/replace_grade8_buddhism_lessons4_10.php"
           ssh "${ssh_options[@]}" "$SERVER_USER@$SERVER_HOST" \
             "cd '$REMOTE_PATH' && php database/verify_grades_quick_learning.php && php database/replace_grade6_buddhism_selected_mcq.php && php database/replace_grade6_civic_lessons1_3_mcq.php && php database/replace_grade6_geography_lesson1_mcq.php && php database/replace_grade6_geography_lessons2_4_mcq.php && php database/replace_grade6_history_lessons1_3_5_mcq.php && php database/replace_grade10_buddhism_lesson1_mcq.php && php database/replace_grade10_buddhism_lesson2_mcq.php && php database/replace_grade10_buddhism_lesson3_mcq.php && php database/replace_grade10_buddhism_lesson4_mcq.php && php database/replace_grade10_buddhism_lesson5_mcq.php && php database/replace_grade10_buddhism_lesson7_mcq.php && php database/replace_grade10_buddhism_lessons9_10_mcq.php && php database/replace_grade10_buddhism_lessons11_13_mcq.php && php database/replace_grade10_buddhism_lessons16_18_mcq.php && php database/replace_grade10_buddhism_lessons22_23_mcq.php && php database/replace_grade10_agriculture_lessons3_4_mcq.php && php database/replace_grade10_agriculture_lesson5_mcq.php && php database/replace_grade10_agriculture_lessons8_10_mcq.php && php database/replace_grade10_civic_lessons3_5_mcq.php && php database/verify_referral_program.php"
+
+      - name: Ensure exact Grade 6 History MCQs after imports
+        if: always()
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+          REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
+            -o ServerAliveInterval=10 -o ServerAliveCountMax=30 \
+            "$SERVER_USER@$SERVER_HOST" \
+            "cd '$REMOTE_PATH' && php database/replace_grade6_history_lessons1_3_5_mcq.php"
