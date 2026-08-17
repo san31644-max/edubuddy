@@ -43,7 +43,8 @@ function markdown_plain_text(string $value):string{
  $value=preg_replace('/```.*?```/su',' ',$value)??$value;
  $value=preg_replace('/!?\[([^\]]*)\]\([^)]*\)/u','$1',$value)??$value;
  $value=preg_replace('/^\s{0,3}#{1,6}\s*/mu','',$value)??$value;
- $value=preg_replace('/^\s*(?:[-*+]\s+|\d+[.)]\s+)/mu','',$value)??$value;
+ $value=preg_replace('/^\s*(?:[-*+•✓]\s+|\d+[.)]\s+)/mu','',$value)??$value;
+ $value=preg_replace('/(^|\s)#{1,6}\s+/u','$1',$value)??$value;
  $value=str_replace(['**','__','~~','`'],'',$value);
  $value=preg_replace('/(?<!\*)\*(?!\*)/u','',$value)??$value;
  return trim(preg_replace('/\s+/u',' ',$value)??$value);
@@ -58,8 +59,11 @@ function markdown_safe_html(string $value):string{
  $html=preg_replace('/^###\s+(.+)$/mu','<h3>$1</h3>',$html)??$html;
  $html=preg_replace('/^##\s+(.+)$/mu','<h2>$1</h2>',$html)??$html;
  $html=preg_replace('/^#\s+(.+)$/mu','<h1>$1</h1>',$html)??$html;
+ $html=preg_replace('/(^|\s)#{1,6}\s+/u','$1',$html)??$html;
  $html=preg_replace('/\*\*(.+?)\*\*/su','<strong>$1</strong>',$html)??$html;
  $html=preg_replace('/^\s*[*+-]\s+(.+)$/mu','<div class="markdown-list-item">• $1</div>',$html)??$html;
+ $html=preg_replace('/^\s*•\s*(.+)$/mu','<div class="markdown-list-item">• $1</div>',$html)??$html;
+ $html=preg_replace('/^\s*✓\s*(.+)$/mu','<div class="markdown-list-item">✓ $1</div>',$html)??$html;
  $html=preg_replace('/^\s*(\d+)[.)]\s+(.+)$/mu','<div class="markdown-list-item">$1. $2</div>',$html)??$html;
  $html=nl2br($html,false);
  $html=preg_replace('#(?:<br>\s*)+(?=<h[1-6]>|<div class="markdown-list-item">)#u','',$html)??$html;
