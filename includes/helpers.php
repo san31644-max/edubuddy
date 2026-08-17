@@ -37,4 +37,14 @@ function repair_legacy_text(string $value):string{
     if($fixed!==false&&mb_check_encoding($fixed,'UTF-8')&&preg_match('/[\x{0D80}-\x{0DFF}\x{0B80}-\x{0BFF}]/u',$fixed))return $fixed;
     return $value;
 }
-function locale_value(array $row,string $base):string{return repair_legacy_text((string)($row[$base.'_'.($_SESSION['lang']??'en')]??$row[$base.'_en']??''));}
+function locale_value(array $row,string $base):string{$value=repair_legacy_text((string)($row[$base.'_'.($_SESSION['lang']??'en')]??$row[$base.'_en']??''));return $base==='short_description'?markdown_plain_text($value):$value;}
+function markdown_plain_text(string $value):string{
+ $value=repair_legacy_text($value);
+ $value=preg_replace('/```.*?```/su',' ',$value)??$value;
+ $value=preg_replace('/!?\[([^\]]*)\]\([^)]*\)/u','$1',$value)??$value;
+ $value=preg_replace('/^\s{0,3}#{1,6}\s*/mu','',$value)??$value;
+ $value=preg_replace('/^\s*(?:[-*+]\s+|\d+[.)]\s+)/mu','',$value)??$value;
+ $value=str_replace(['**','__','~~','`'],'',$value);
+ $value=preg_replace('/(?<!\*)\*(?!\*)/u','',$value)??$value;
+ return trim(preg_replace('/\s+/u',' ',$value)??$value);
+}
