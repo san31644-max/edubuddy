@@ -54,7 +54,7 @@ $subjectId = (int) $subjectRow['id'];
 
 $findLesson = $db->prepare("SELECT id,unit_id FROM lessons WHERE grade_id=? AND subject_id=? AND medium IN ('English','All') AND display_order=? ORDER BY (medium='English') DESC,id LIMIT 1");
 $updateUnit = $db->prepare("UPDATE units SET name_en=?,description_en=?,display_order=?,status='active' WHERE id=?");
-$updateLesson = $db->prepare("UPDATE lessons SET medium='English',content_source='textbook',title_en=?,short_description_en=?,content_en=?,short_notes_en=?,learning_objectives_en=?,key_terms_en=?,examples_en=?,summary_en=?,display_order=?,status='active' WHERE id=?");
+$updateLesson = $db->prepare("UPDATE lessons SET medium='All',content_source='textbook',title_en=?,short_description_en=?,content_en=?,short_notes_en=?,learning_objectives_en=?,key_terms_en=?,examples_en=?,summary_en=?,display_order=?,status='active' WHERE id=?");
 $findQuiz = $db->prepare('SELECT id FROM quizzes WHERE lesson_id=? ORDER BY id LIMIT 1');
 $addQuiz = $db->prepare("INSERT INTO quizzes(grade_id,subject_id,unit_id,lesson_id,title_en,timer_minutes,pass_mark,status) VALUES(?,?,?,?,?,15,50,'active')");
 $updateQuiz = $db->prepare("UPDATE quizzes SET title_en=?,timer_minutes=15,pass_mark=50,status='active' WHERE id=?");
