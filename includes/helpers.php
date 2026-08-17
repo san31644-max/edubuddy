@@ -48,3 +48,17 @@ function markdown_plain_text(string $value):string{
  $value=preg_replace('/(?<!\*)\*(?!\*)/u','',$value)??$value;
  return trim(preg_replace('/\s+/u',' ',$value)??$value);
 }
+function markdown_safe_html(string $value):string{
+ $value=repair_legacy_text($value);
+ $html=e($value);
+ $html=preg_replace('/^######\s+(.+)$/mu','<h6>$1</h6>',$html)??$html;
+ $html=preg_replace('/^#####\s+(.+)$/mu','<h5>$1</h5>',$html)??$html;
+ $html=preg_replace('/^####\s+(.+)$/mu','<h4>$1</h4>',$html)??$html;
+ $html=preg_replace('/^###\s+(.+)$/mu','<h3>$1</h3>',$html)??$html;
+ $html=preg_replace('/^##\s+(.+)$/mu','<h2>$1</h2>',$html)??$html;
+ $html=preg_replace('/^#\s+(.+)$/mu','<h1>$1</h1>',$html)??$html;
+ $html=preg_replace('/\*\*(.+?)\*\*/su','<strong>$1</strong>',$html)??$html;
+ $html=preg_replace('/^\s*[*+-]\s+(.+)$/mu','<div class="markdown-list-item">• $1</div>',$html)??$html;
+ $html=preg_replace('/^\s*(\d+)[.)]\s+(.+)$/mu','<div class="markdown-list-item">$1. $2</div>',$html)??$html;
+ return nl2br($html,false);
+}
