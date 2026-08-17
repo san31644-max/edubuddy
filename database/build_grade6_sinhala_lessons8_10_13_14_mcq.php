@@ -1,0 +1,6 @@
+<?php
+declare(strict_types=1);
+$source=$argv[1]??'';$target=$argv[2]??'';if(!is_file($source)||$target==='')throw new RuntimeException('Source and target required.');$text=(string)file_get_contents($source);$sets=[];
+preg_match_all('/^6 ශ්‍රේණිය\s*–\s*සිංහල භාෂාව හා සාහිත්‍යය\R(.*?)(?=^6 ශ්‍රේණිය\s*–\s*සිංහල භාෂාව හා සාහිත්‍යය|\z)/msu',$text,$chunks);
+foreach($chunks[1] as $chunk){if(!preg_match('/^(\d+) වන පාඩම\s*–\s*(.+)$/mu',$chunk,$head))continue;$lesson=(int)$head[1];if(!in_array($lesson,[8,9,10,13,14],true))continue;preg_match_all('/^(\d+)\.\s*(.+?)\R\s*\R?A\)\s*(.+?)\R\s*B\)\s*(.+?)\R\s*C\)\s*(.+?)\R\s*D\)\s*(.+?)\R\s*\R?පිළිතුර:\s*([ABCD])/msu',$chunk,$matches,PREG_SET_ORDER);$questions=[];foreach($matches as $m)$questions[]=['question'=>trim($m[2]),'a'=>trim($m[3]),'b'=>trim($m[4]),'c'=>trim($m[5]),'d'=>trim($m[6]),'correct'=>strtolower($m[7])];if(count($questions)!==30)throw new RuntimeException("Lesson $lesson parsed ".count($questions).' questions.');$sets[(string)$lesson]=['title'=>trim($head[2]),'questions'=>$questions];}
+if(array_map('intval',array_keys($sets))!==[8,9,10,13,14])throw new RuntimeException('Expected lessons 8,9,10,13,14; found '.implode(',',array_keys($sets)));file_put_contents($target,json_encode($sets,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR));echo "Built 5 lessons and 150 exact MCQs.\n";
