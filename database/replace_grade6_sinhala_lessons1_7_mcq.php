@@ -31,9 +31,9 @@ try {
 
     $findLesson = $db->prepare("SELECT id,unit_id FROM lessons WHERE grade_id=? AND subject_id=? AND medium IN ('Sinhala','All') AND display_order=? AND status='active' ORDER BY (medium='Sinhala') DESC,id LIMIT 1");
     $findUnit = $db->prepare('SELECT id FROM units WHERE grade_id=? AND subject_id=? AND unit_number=? ORDER BY id LIMIT 1');
-    $addUnit = $db->prepare("INSERT IGNORE INTO units(grade_id,subject_id,unit_number,name_en,name_si,name_ta,description_en,display_order,status) VALUES(?,?,?,'Lesson',?,?,'Grade 6 Sinhala textbook lesson.',?,'active')");
+    $addUnit = $db->prepare("INSERT IGNORE INTO units(grade_id,subject_id,unit_number,display_order,status) VALUES(?,?,?,?,'active')");
     $fallbackUnit = $db->prepare('SELECT id FROM units WHERE grade_id=? AND subject_id=? ORDER BY unit_number DESC,id DESC LIMIT 1');
-    $addLesson = $db->prepare("INSERT INTO lessons(grade_id,medium,content_source,subject_id,unit_id,title_si,short_description_si,display_order,status) VALUES(?,'Sinhala','textbook',?,?,?,?,?,'active')");
+    $addLesson = $db->prepare("INSERT INTO lessons(grade_id,medium,subject_id,unit_id,display_order,status) VALUES(?,'Sinhala',?,?,?,'active')");
     $findQuiz = $db->prepare("SELECT id FROM quizzes WHERE lesson_id=? AND status='active' ORDER BY id LIMIT 1");
     $addQuiz = $db->prepare("INSERT INTO quizzes(grade_id,subject_id,unit_id,lesson_id,title_si,timer_minutes,pass_mark,status) VALUES(?,?,?,?,?,30,50,'active')");
 
@@ -47,7 +47,7 @@ try {
             $findUnit->execute();
             $unitRow = $findUnit->get_result()->fetch_assoc();
             if (!$unitRow) {
-                $addUnit->bind_param('iiissi', $gradeId, $subjectId, $order, $title, $title, $order);
+                $addUnit->bind_param('iiii', $gradeId, $subjectId, $order, $order);
                 $addUnit->execute();
                 $findUnit->execute();
                 $unitRow = $findUnit->get_result()->fetch_assoc();
@@ -61,8 +61,7 @@ try {
                 throw new RuntimeException("No usable unit for lesson $order.");
             }
             $unitId = (int) $unitRow['id'];
-            $description = '6 ශ්‍රේණිය සිංහල භාෂාව හා සාහිත්‍යය – ' . $title;
-            $addLesson->bind_param('iiissi', $gradeId, $subjectId, $unitId, $title, $description, $order);
+            $addLesson->bind_param('iiii', $gradeId, $subjectId, $unitId, $order);
             $addLesson->execute();
             $lessonRow = ['id' => $db->insert_id, 'unit_id' => $unitId];
         }
