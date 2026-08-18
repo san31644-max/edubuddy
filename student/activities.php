@@ -8,6 +8,7 @@ if(!$lesson){flash('error','Choose a valid textbook lesson.');redirect('student/
 $quiz=query_one("SELECT id FROM quizzes WHERE lesson_id=? AND status='active' ORDER BY id LIMIT 1",'i',[$lessonId]);$questions=[];
 $available=[];
 if($quiz){$availability=db()->prepare("SELECT activity_type,COUNT(*) total FROM quiz_questions WHERE quiz_id=? AND activity_type IN ('challenge','missing','matching') AND status='active' GROUP BY activity_type");$availability->bind_param('i',$quiz['id']);$availability->execute();foreach($availability->get_result()->fetch_all(MYSQLI_ASSOC) as $row)$available[(string)$row['activity_type']]=(int)$row['total'];}
+if(($lesson['name_en']??'')==='Buddhism'&&(int)($lesson['display_order']??0)===1&&user_grade_number()===6&&user()['medium']==='Sinhala'){unset($available['challenge']);if($mode==='challenge'){flash('warning','Quick Challenge is not available for this lesson.');redirect('student/lesson.php?id='.$lessonId);}}
 if($quiz&&in_array($mode,$allowed,true)){$s=db()->prepare("SELECT * FROM quiz_questions WHERE quiz_id=? AND activity_type=? AND status='active' ORDER BY display_order,id");$s->bind_param('is',$quiz['id'],$mode);$s->execute();$questions=$s->get_result()->fetch_all(MYSQLI_ASSOC);}
 if(in_array($mode,$allowed,true)&&!$questions){flash('warning',$names[$mode].' questions are not available for this lesson yet.');redirect('student/activities.php?lesson_id='.$lessonId);}
 if(in_array($mode,$allowed,true)){
