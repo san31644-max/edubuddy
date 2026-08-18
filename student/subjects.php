@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__.'/../includes/auth.php';require_login();
+// Progress is user-specific and must never be served from a stale browser or
+// proxy cache after a lesson is completed.
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');header('Pragma: no-cache');
 $current=user();$uid=(int)$current['id'];$grade=(int)$current['grade_id'];$gradeNumber=user_grade_number();$medium=(string)$current['medium'];$lang=medium_language($medium);
 $s=db()->prepare("SELECT s.*,(SELECT COUNT(*) FROM lessons l WHERE l.subject_id=s.id AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)) lesson_count,(SELECT COUNT(DISTINCT lp.lesson_id) FROM lesson_progress lp JOIN lessons l ON l.id=lp.lesson_id WHERE lp.user_id=? AND lp.completed_at IS NOT NULL AND l.subject_id=s.id AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)) completed_count FROM subjects s WHERE s.grade_id=? AND s.status='active' HAVING lesson_count>0 ORDER BY s.name_en");
 if(!$s){flash('error','Subjects could not be loaded. Please try again.');redirect('student/dashboard.php');}$s->bind_param('isiisi',$grade,$medium,$uid,$grade,$medium,$grade);$s->execute();$res=$s->get_result();
