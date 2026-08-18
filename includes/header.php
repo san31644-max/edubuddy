@@ -11,6 +11,7 @@ $isReferralPage = str_contains($currentPath, '/referral/');
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<?php if(!empty($pageDescription)):?><meta name="description" content="<?=e($pageDescription)?>"><?php endif;?>
 <meta name="theme-color" content="#5b4bdb">
 <link rel="manifest" href="<?= url('manifest.json') ?>">
 <link rel="apple-touch-icon" href="<?= url('logo/k-transparent.png') ?>">
