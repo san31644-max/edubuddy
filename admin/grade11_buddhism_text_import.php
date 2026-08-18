@@ -4,8 +4,12 @@ $db=db(); $message=''; $error='';
 function parse_mcq_block(string $text):array{
  $chunks=preg_split('/(?=^\s*\d+\.\s)/mu',$text,-1,PREG_SPLIT_NO_EMPTY)?:[]; $out=[];
  foreach($chunks as $chunk){
-  if(!preg_match('/^\s*(\d+)\.\s*(.*?)\R\s*A[.)]\s*(.*?)\R\s*B[.)]\s*(.*?)\R\s*C[.)]\s*(.*?)\R\s*D[.)]\s*(.*?)(?:\R\s*පිළිතුර\s*:\s*([ABCD]))\b/isu',$chunk,$m)) continue;
-  $out[]=['number'=>(int)$m[1],'question'=>trim($m[2]),'a'=>trim($m[3]),'b'=>trim($m[4]),'c'=>trim($m[5]),'d'=>trim($m[6]),'correct'=>strtolower($m[7])];
+  // Find the answer line first. Some questions have an extra sentence after
+  // option D (for example “සැලකේ.”), so it cannot be part of the option regex.
+  if(!preg_match('/(?:^|\R)\s*\p{L}{1,40}\s*:\s*([ABCD])\s*(?:\R|$)/iu',$chunk,$answer,PREG_OFFSET_CAPTURE)) continue;
+  $body=substr($chunk,0,(int)$answer[0][1]);
+  if(!preg_match('/^\s*(\d+)\.\s*(.*?)\R\s*A[.)]\s*(.*?)\R\s*B[.)]\s*(.*?)\R\s*C[.)]\s*(.*?)\R\s*D[.)]\s*(.*)$/isu',$body,$m)) continue;
+  $out[]=['number'=>(int)$m[1],'question'=>trim($m[2]),'a'=>trim($m[3]),'b'=>trim($m[4]),'c'=>trim($m[5]),'d'=>trim($m[6]),'correct'=>strtolower($answer[1][0])];
  }
  return $out;
 }
@@ -16,7 +20,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();try{
  $titles=[2=>'බුදුගුණ අනන්තය',3=>'බුදුකුරු දම් පුරා – දිවිමග ගනිමු සපුරා',4=>'සමාධිගත සිතක මහිම',5=>'ආදර්ශවත් චරිත',6=>'දිවි මඟට එළිය දෙන දහම් පද',7=>'සීලය හා භෞතික සංවර්ධනය',8=>'දියුණුවේ හා පිරිහීමේ දොරටු',9=>'බුදු දහමින් හෙළිවන සිතීමේ හා විමසීමේ නිදහස',10=>'බෞද්ධ අනන්‍යතාව සුරකිමින් සහජීවනයෙන් ක්‍රියා කරමු',11=>'පුද්ගල විෂමතා සහ කර්මය',12=>'සසර දුකත් දුකින් මිදීමත් උගන්වන බෞද්ධ හේතුඵල ධර්මය',13=>'බුදු දහම පදනම් කරගත් ජීවන දැක්මක්',14=>'පරිසර හිතකාමී වෙමු',15=>'බුදුබණ ඇසුරෙන් නිරෝගී දිවියක්',16=>'නිමල දහම රැකුණු අයුරු',17=>'මහින්දාගමනයෙන් ශ්‍රී ලාංකික ජන ජීවිතය ඔපවත් වූ ආකාරය',18=>'හෙළ බොදු කලාවේ අසිරිය',19=>'බුදු සමයෙන් පෝෂණය වූ සිංහල සාහිත්‍යය',20=>'දැහැමි ධනය ගෙනෙයි සැපය',21=>'දැහැමි ව උපයා දැහැමි ව වැය කරමු',22=>'පාලකයන්ට මඟ කියන බුදු දහම',23=>'ලොව්තුරු සුවේ පදනම සම්මා දිට්ඨියයි'];
  $base=$lessons[0];$unitId=(int)$base['unit_id'];foreach($titles as $n=>$title){$found=null;foreach($lessons as $l)if((int)$l['display_order']===$n)$found=$l;if($found)continue;$q=$db->prepare("INSERT INTO lessons(grade_id,medium,content_source,subject_id,unit_id,title_si,short_description_si,display_order,status) VALUES(?,?,'textbook',?,?,?, ?,?,'active')");$desc='Grade 11 Buddhism lesson '.$n;$q->bind_param('isiissi',$base['grade_id'],$base['medium'],$base['subject_id'],$unitId,$title,$desc,$n);$q->execute();$new=$base;$new['id']=$db->insert_id;$new['display_order']=$n;$new['title_si']=$title;$lessons[]=$new;}
  $byOrder=[];foreach($lessons as $l)$byOrder[(int)$l['display_order']]=$l;
- $heads=[];preg_match_all('/^\s*11\s*ශ්‍රේණිය\s*බුද්ධ\s*ධර්මය\s*[–-]\s*(\d+)\s*පාඩම[^\r\n]*/imu',$raw,$hm,PREG_OFFSET_CAPTURE);
+ $heads=[];preg_match_all('/^\s*11\s*ශ්‍රේණිය\s*බුද්ධ\s*ධර්මය\s*(?:\x{2013}|\x{2014}|-)\s*(\d+)\s*පාඩම[^\r\n]*/imu',$raw,$hm,PREG_OFFSET_CAPTURE);
  foreach($hm[1] as $i=>$hit){$heads[]=['n'=>(int)$hit[0],'pos'=>(int)$hit[1],'start'=>strpos($raw,$hm[0][$i][0])];}
  $sections=[];$firstStart=$heads[0]['start']??strlen($raw);$sections[2]=substr($raw,0,$firstStart);
  for($i=0;$i<count($heads);$i++){$n=$heads[$i]['n'];$start=$heads[$i]['start'];$end=$heads[$i+1]['start']??strlen($raw);$sections[$n]=substr($raw,$start,$end-$start);}
