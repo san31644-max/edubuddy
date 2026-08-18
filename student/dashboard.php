@@ -4,7 +4,7 @@ require_login();
 refresh_user();
 $uid=(int)user()['id'];
 $medium=(string)user()['medium'];$gradeNumber=user_grade_number();
-$stats=query_one("SELECT COUNT(*) opened,SUM(lp.completed_at IS NOT NULL) completed FROM lesson_progress lp JOIN lessons l ON l.id=lp.lesson_id WHERE lp.user_id=? AND l.content_source='textbook' AND l.status='active' AND (l.medium='All' OR l.medium=?)",'is',[$uid,user()['medium']])??['opened'=>0,'completed'=>0];
+$stats=query_one("SELECT COUNT(*) opened,SUM(lp.completed_at IS NOT NULL OR EXISTS(SELECT 1 FROM student_points sp WHERE sp.user_id=? AND sp.lesson_id=l.id AND sp.activity_type='lesson_complete')) completed FROM lesson_progress lp JOIN lessons l ON l.id=lp.lesson_id WHERE lp.user_id=? AND l.content_source='textbook' AND l.status='active' AND (l.medium='All' OR l.medium=?)",'iis',[$uid,$uid,user()['medium']])??['opened'=>0,'completed'=>0];
 $total=(int)(query_one("SELECT COUNT(*) n FROM lessons WHERE grade_id=? AND status='active' AND content_source='textbook' AND (medium='All' OR medium=?)",'is',[(int)user()['grade_id'],user()['medium']])['n']??0);
 $completed=(int)($stats['completed']??0);$pct=$total?min(100,round(100*$completed/$total)):0;
 $last=query_one('SELECT qa.score,qa.total_questions,qa.percentage FROM quiz_attempts qa WHERE qa.user_id=? ORDER BY qa.completed_at DESC LIMIT 1','i',[$uid]);

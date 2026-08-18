@@ -5,16 +5,16 @@ require_login();
 $current=user();$uid=(int)$current['id'];$gradeId=(int)$current['grade_id'];$medium=(string)($current['medium']??'English');
 $db=db();
 
-$overall=$db->prepare("SELECT COUNT(*) total,COUNT(lp.completed_at) done FROM lessons l LEFT JOIN lesson_progress lp ON lp.lesson_id=l.id AND lp.user_id=? WHERE l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)");
-$overall->bind_param('iis',$uid,$gradeId,$medium);$overall->execute();$totals=$overall->get_result()->fetch_assoc();
+$overall=$db->prepare("SELECT COUNT(*) total,SUM(CASE WHEN lp.completed_at IS NOT NULL OR EXISTS(SELECT 1 FROM student_points sp WHERE sp.user_id=? AND sp.lesson_id=l.id AND sp.activity_type='lesson_complete') THEN 1 ELSE 0 END) done FROM lessons l LEFT JOIN lesson_progress lp ON lp.lesson_id=l.id AND lp.user_id=? WHERE l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)");
+$overall->bind_param('iiis',$uid,$uid,$gradeId,$medium);$overall->execute();$totals=$overall->get_result()->fetch_assoc();
 $total=(int)$totals['total'];$done=(int)$totals['done'];$percent=$total?(int)round(100*$done/$total):0;
 
 $stats=$db->prepare("SELECT COALESCE((SELECT SUM(points) FROM student_points WHERE user_id=?),0) points,(SELECT COUNT(*) FROM student_emblems WHERE user_id=?) emblems,COALESCE((SELECT ROUND(AVG(best_percentage)) FROM (SELECT MAX(percentage) best_percentage FROM quiz_attempts WHERE user_id=? GROUP BY quiz_id) best),0) quiz_average");
 $stats->bind_param('iii',$uid,$uid,$uid);$stats->execute();$summary=$stats->get_result()->fetch_assoc();
 
-$rows=$db->prepare("SELECT s.id,s.name_en,s.name_si,s.name_ta,s.icon,COUNT(DISTINCT l.id) total,COUNT(DISTINCT CASE WHEN lp.completed_at IS NOT NULL THEN l.id END) done FROM subjects s JOIN lessons l ON l.subject_id=s.id AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?) LEFT JOIN lesson_progress lp ON lp.lesson_id=l.id AND lp.user_id=? WHERE s.grade_id=? GROUP BY s.id,s.name_en,s.name_si,s.name_ta,s.icon ORDER BY s.name_en");
+$rows=$db->prepare("SELECT s.id,s.name_en,s.name_si,s.name_ta,s.icon,COUNT(DISTINCT l.id) total,COUNT(DISTINCT CASE WHEN lp.completed_at IS NOT NULL OR EXISTS(SELECT 1 FROM student_points sp WHERE sp.user_id=? AND sp.lesson_id=l.id AND sp.activity_type='lesson_complete') THEN l.id END) done FROM subjects s JOIN lessons l ON l.subject_id=s.id AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?) LEFT JOIN lesson_progress lp ON lp.lesson_id=l.id AND lp.user_id=? WHERE s.grade_id=? GROUP BY s.id,s.name_en,s.name_si,s.name_ta,s.icon ORDER BY s.name_en");
 if(!$rows)throw new RuntimeException('Could not prepare subject progress: '.$db->error);
-$rows->bind_param('isii',$gradeId,$medium,$uid,$gradeId);$rows->execute();$subjectRows=$rows->get_result();
+$rows->bind_param('iisii',$uid,$gradeId,$medium,$uid,$gradeId);$rows->execute();$subjectRows=$rows->get_result();
 
 $attempts=$db->prepare("SELECT qa.id,qa.score,qa.total_questions,qa.percentage,qa.passed,qa.completed_at,q.title_en,q.title_si,q.title_ta FROM quiz_attempts qa JOIN quizzes q ON q.id=qa.quiz_id JOIN lessons l ON l.id=q.lesson_id WHERE qa.user_id=? AND l.content_source='textbook' ORDER BY qa.completed_at DESC LIMIT 8");
 $attempts->bind_param('i',$uid);$attempts->execute();
