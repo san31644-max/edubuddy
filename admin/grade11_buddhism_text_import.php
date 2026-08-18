@@ -6,7 +6,7 @@ function parse_mcq_block(string $text):array{
  foreach($chunks as $chunk){
   // Find the answer line first. Some questions have an extra sentence after
   // option D (for example “සැලකේ.”), so it cannot be part of the option regex.
-  if(!preg_match('/(?:^|\R)\s*\p{L}{1,40}\s*:\s*([ABCD])\s*(?:\R|$)/iu',$chunk,$answer,PREG_OFFSET_CAPTURE)) continue;
+  if(!preg_match('/(?:^|\R)\s*[^:\r\n]{1,60}:\s*([ABCD])\s*(?:\R|$)/iu',$chunk,$answer,PREG_OFFSET_CAPTURE)) continue;
   $body=substr($chunk,0,(int)$answer[0][1]);
   if(!preg_match('/^\s*(\d+)\.\s*(.*?)\R\s*A[.)]\s*(.*?)\R\s*B[.)]\s*(.*?)\R\s*C[.)]\s*(.*?)\R\s*D[.)]\s*(.*)$/isu',$body,$m)) continue;
   $out[]=['number'=>(int)$m[1],'question'=>trim($m[2]),'a'=>trim($m[3]),'b'=>trim($m[4]),'c'=>trim($m[5]),'d'=>trim($m[6]),'correct'=>strtolower($answer[1][0])];
