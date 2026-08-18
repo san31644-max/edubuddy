@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+ini_set('session.save_path',__DIR__.'/../includes/runtime');
 require_once __DIR__.'/../includes/db.php';
 $sourceFile=__DIR__.'/../uploads/syllabus/textbook-cache/grade-8/en/english/lesson-1.json';
 if(!is_file($sourceFile))throw new RuntimeException('Grade 8 English pupil book cache is missing.');
