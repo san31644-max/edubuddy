@@ -5,7 +5,7 @@ $qid=filter_input(INPUT_POST,'quiz_id',FILTER_VALIDATE_INT);
 $q=$qid?query_one("SELECT q.* FROM quizzes q JOIN lessons l ON l.id=q.lesson_id WHERE q.id=? AND q.grade_id=? AND q.status='active' AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)",'iis',[$qid,user()['grade_id'],user()['medium']]):null;
 if(!$q)redirect('student/quiz.php');
 $questionType=user_grade_number()===8?'challenge':'lesson_quiz';
-$s=db()->prepare("SELECT id,correct_option FROM quiz_questions WHERE quiz_id=? AND activity_type=? AND status='active'");$s->bind_param('is',$qid,$questionType);$s->execute();$qs=$s->get_result()->fetch_all(MYSQLI_ASSOC);
+$s=db()->prepare("SELECT id,correct_option FROM quiz_questions WHERE quiz_id=? AND activity_type=? AND status='active' ORDER BY display_order,id LIMIT 30");$s->bind_param('is',$qid,$questionType);$s->execute();$qs=$s->get_result()->fetch_all(MYSQLI_ASSOC);
 $answers=$_POST['answers']??[];$score=0;foreach($qs as $x)if(($answers[$x['id']]??'')===$x['correct_option'])$score++;
 $total=count($qs);$percent=$total?(int)round($score*100/$total):0;$passed=$percent>=$q['pass_mark']?1:0;$db=db();$db->begin_transaction();
 try{
