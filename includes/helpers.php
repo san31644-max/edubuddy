@@ -54,6 +54,9 @@ function markdown_safe_html(string $value):string{
  // Keep the author's paragraph spacing exactly as entered in the lesson editor.
  // Only trim the outermost blank space; do not collapse internal newlines.
  $value=trim($value);
+ // Rich-text pasted lists often contain an empty line between each item.
+ // Keep lists compact while preserving ordinary paragraph spacing.
+ $value=preg_replace('/(^|\n)([ \t]*[-*+•]\s+[^\n]+)\n+(?=[ \t]*[-*+•]\s+)/mu','$1$2\n',$value)??$value;
  $html=e($value);
  $html=preg_replace('/^######\s+(.+)$/mu','<h6>$1</h6>',$html)??$html;
  $html=preg_replace('/^#####\s+(.+)$/mu','<h5>$1</h5>',$html)??$html;
@@ -68,5 +71,8 @@ function markdown_safe_html(string $value):string{
  $html=preg_replace('/^\s*✓\s*(.+)$/mu','<div class="markdown-list-item">✓ $1</div>',$html)??$html;
  $html=preg_replace('/^\s*(\d+)[.)]\s+(.+)$/mu','<div class="markdown-list-item">$1. $2</div>',$html)??$html;
  $html=nl2br($html,false);
+ // Block elements already provide their own line box; remove the generated
+ // break after them so formatted notes do not show doubled vertical gaps.
+ $html=preg_replace('/(<\/(?:div|h[1-6])>)<br\s*\/?\s*>/i','$1',$html)??$html;
  return $html;
 }
