@@ -50,4 +50,5 @@ const lessonKey='kedu-lesson-<?=$id?>-',tabs=document.querySelectorAll('.lesson-
 <?php if(filter_input(INPUT_GET,'finish',FILTER_VALIDATE_INT)===1):?>document.querySelector('.lesson-tab[data-panel="finish"]')?.click();<?php endif;?>
 const celebration=document.getElementById('celebration');if(celebration){for(let i=0;i<45;i++){const c=document.createElement('i');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=['#6554e8','#21c59b','#ffb638','#ff6584','#2588f6'][i%5];c.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(c)}document.getElementById('closeCelebration').onclick=()=>{celebration.remove();history.replaceState({},'',location.pathname+'?id=<?=$id?>')}}
 </script>
+<?php if(!$quizAvailable):?><script>document.querySelectorAll('#panel-practice a[href^="quiz.php"]').forEach(card=>card.remove());</script><?php endif;?>
 <?php include __DIR__.'/../includes/footer.php';
