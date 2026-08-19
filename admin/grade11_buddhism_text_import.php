@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();try{
  $db->begin_transaction();$total=0;$done=[];
  foreach($sections as $n=>$section){if(!isset($byOrder[$n]))continue;$items=parse_mcq_block($section);if(!$items)continue;foreach($byOrder[$n] as $lesson){$quiz=query_one('SELECT id FROM quizzes WHERE lesson_id=? ORDER BY id LIMIT 1','i',[$lesson['id']]);if($quiz)$qid=(int)$quiz['id'];else{$q=$db->prepare('INSERT INTO quizzes(grade_id,subject_id,unit_id,lesson_id,timer_minutes,pass_mark,status,title_en,title_si,title_ta) VALUES(?,?,?,?,15,50,"active",?,?,?)');$title='Lesson '.$n.' Quiz';$q->bind_param('iiiisss',$lesson['grade_id'],$lesson['subject_id'],$lesson['unit_id'],$lesson['id'],$title,$title,$title);$q->execute();$qid=(int)$db->insert_id;}
   $del=$db->prepare("DELETE FROM quiz_questions WHERE quiz_id=? AND activity_type='lesson_quiz'");$del->bind_param('i',$qid);$del->execute();$ins=$db->prepare('INSERT INTO quiz_questions(quiz_id,activity_type,question_si,option_a_si,option_b_si,option_c_si,option_d_si,correct_option,explanation_si,display_order,status) VALUES(? ,\'lesson_quiz\',?,?,?,?,?,?,?,? ,\'active\')');$ord=0;foreach($items as $x){$ord++;$ex='නිවැරදි පිළිතුර: '.strtoupper($x['correct']);$ins->bind_param('isssssssi',$qid,$x['question'],$x['a'],$x['b'],$x['c'],$x['d'],$x['correct'],$ex,$ord);$ins->execute();}$total+=count($items);$done[]='Lesson '.$n.' ('.count($items).' questions)';}
- }$db->commit();$message='Imported: '.implode(', ',$done).'. Total '.$total.' questions.';}
+  }}$db->commit();$message='Imported: '.implode(', ',$done).'. Total '.$total.' questions.';
 }catch(Throwable $e){if($db instanceof mysqli)@$db->rollback();$error=$e->getMessage();}}
 $pageTitle='Grade 11 MCQ text import';include __DIR__.'/_top.php';
 ?>
