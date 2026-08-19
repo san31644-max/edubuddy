@@ -1,0 +1,5 @@
+<?php
+require_once __DIR__.'/../includes/auth.php';require_login();if(!in_array(user_grade_number(),[10,11],true)){redirect('student/dashboard.php');}$pageTitle='O/L Kuppiya';include __DIR__.'/../includes/header.php';?>
+<style>.maintenance{max-width:680px;margin:38px auto;text-align:center;padding:42px 25px;border-radius:30px;background:linear-gradient(145deg,#171945,#3e3bb0);color:#fff;box-shadow:0 24px 65px rgba(35,32,110,.25)}.maintenance-icon{font-size:4rem;margin-bottom:12px}.maintenance p{color:#c7cff4;line-height:1.7}.maintenance .btn{margin-top:12px}</style>
+<section class="maintenance"><div class="maintenance-icon">🛠️</div><span class="badge">Grade <?=user_grade_number()?> · O/L Kuppiya</span><h1>O/L Kuppiya is under maintenance</h1><p>We are preparing the past-paper workspace, question extraction and AI exam tutor. It will be available here soon.</p><a class="btn warn" href="<?=url('student/dashboard.php')?>">Back to dashboard</a></section>
+<?php include __DIR__.'/../includes/footer.php';?>
