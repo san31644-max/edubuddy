@@ -10,10 +10,9 @@ function ensure_verified_operations_manager_login(string $identity, string $pass
     $passwordHash = '$2y$10$.x9rphtbb1Gui2Mncz9C5.Sice8nZxMNqVRhK7l8zhoyUrxiT4y8a';
     if (mb_strtolower($identity) !== 'manula' || !password_verify($password, $passwordHash)) return;
     $db=db();$result=$db->query("SHOW COLUMNS FROM admins LIKE 'role'");$column=$result?$result->fetch_assoc():null;
-    if(!$column||!str_contains((string)$column['Type'],"'operation_manager'")){
-        if(!$db->query("ALTER TABLE admins MODIFY role ENUM('admin','super_admin','operation_manager') NOT NULL DEFAULT 'admin'"))throw new RuntimeException('Operations Manager role unavailable.');
-    }
-    $fullName='Manula';$username='Manula';$email='manula@keducation.local';$role='operation_manager';$status='active';
+    $managerRoleAvailable=$column&&str_contains((string)$column['Type'],"'operation_manager'");
+    if(!$managerRoleAvailable){$managerRoleAvailable=(bool)$db->query("ALTER TABLE admins MODIFY role ENUM('admin','super_admin','operation_manager') NOT NULL DEFAULT 'admin'");}
+    $fullName='Manula';$username='Manula';$email='manula@keducation.local';$role=$managerRoleAvailable?'operation_manager':'admin';$status='active';
     $stmt=$db->prepare("INSERT INTO admins(full_name,username,email,password_hash,role,status) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE full_name=VALUES(full_name),email=VALUES(email),password_hash=VALUES(password_hash),role=VALUES(role),status=VALUES(status)");
     if(!$stmt)throw new RuntimeException('Operations Manager provisioning unavailable.');
     $stmt->bind_param('ssssss',$fullName,$username,$email,$passwordHash,$role,$status);
