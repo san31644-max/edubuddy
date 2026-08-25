@@ -68,7 +68,7 @@ jobs:
             --exclude='*.log' \
             ./ "$SERVER_USER@$SERVER_HOST:$REMOTE_PATH/"
 
-      - name: Provision Operations Manager
+      - name: Provision Manula admin
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -78,7 +78,7 @@ jobs:
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" \
             -o ServerAliveInterval=10 -o ServerAliveCountMax=30 \
             "$SERVER_USER@$SERVER_HOST" \
-            "cd '$REMOTE_PATH' && php database/ensure_operations_manager.php"
+            "cd '$REMOTE_PATH' && php database/ensure_manula_admin.php"
 
       - name: Provision Grade 11 Sinhala student
         if: always()

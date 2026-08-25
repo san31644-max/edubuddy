@@ -6,17 +6,14 @@ if (!empty($_SESSION['admin'])) redirect('admin/dashboard.php');
 
 $error = '';
 $identity = '';
-function ensure_verified_operations_manager_login(string $identity, string $password): void {
+function ensure_verified_manula_admin_login(string $identity, string $password): void {
     $passwordHash = '$2y$10$.x9rphtbb1Gui2Mncz9C5.Sice8nZxMNqVRhK7l8zhoyUrxiT4y8a';
     if (mb_strtolower($identity) !== 'manula' || !password_verify($password, $passwordHash)) return;
-    $db=db();$result=$db->query("SHOW COLUMNS FROM admins LIKE 'role'");$column=$result?$result->fetch_assoc():null;
-    $managerRoleAvailable=$column&&str_contains((string)$column['Type'],"'operation_manager'");
-    if(!$managerRoleAvailable){$managerRoleAvailable=(bool)$db->query("ALTER TABLE admins MODIFY role ENUM('admin','super_admin','operation_manager') NOT NULL DEFAULT 'admin'");}
-    $fullName='Manula';$username='Manula';$email='manula@keducation.local';$role=$managerRoleAvailable?'operation_manager':'admin';$status='active';
+    $db=db();$fullName='Manula';$username='Manula';$email='manula@keducation.local';$role='admin';$status='active';
     $stmt=$db->prepare("INSERT INTO admins(full_name,username,email,password_hash,role,status) VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE full_name=VALUES(full_name),email=VALUES(email),password_hash=VALUES(password_hash),role=VALUES(role),status=VALUES(status)");
-    if(!$stmt)throw new RuntimeException('Operations Manager provisioning unavailable.');
+    if(!$stmt)throw new RuntimeException('Manula admin provisioning unavailable.');
     $stmt->bind_param('ssssss',$fullName,$username,$email,$passwordHash,$role,$status);
-    if(!$stmt->execute())throw new RuntimeException('Operations Manager provisioning failed.');
+    if(!$stmt->execute())throw new RuntimeException('Manula admin provisioning failed.');
     $stmt->close();
 }
 
@@ -24,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $identity = trim((string)($_POST['identity'] ?? ''));
     $password = (string)($_POST['password'] ?? '');
-    try { ensure_verified_operations_manager_login($identity, $password); }
-    catch (Throwable $exception) { error_log('Verified Operations Manager provisioning failed: '.$exception->getMessage()); }
+    try { ensure_verified_manula_admin_login($identity, $password); }
+    catch (Throwable $exception) { error_log('Verified Manula admin provisioning failed: '.$exception->getMessage()); }
     $bucket = 'admin_login_' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . mb_strtolower($identity));
     $attempts = (int)($_SESSION[$bucket] ?? 0);
 
