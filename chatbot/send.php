@@ -59,9 +59,10 @@ if (!is_premium()) {
         'i',
         [$userId]
     );
-    if (($today['n'] ?? 0) >= 5) {
-        json_error('Free daily limit reached. Subscribe for LKR 250 to continue.', 402, [
-            'subscribe' => url('subscription.php')
+    if (($today['n'] ?? 0) >= 10) {
+        json_error('Free daily limit of 10 messages reached. Subscribe to continue with unlimited AI tutoring.', 402, [
+            'subscribe' => url('subscription.php'),
+            'remaining' => 0
         ]);
     }
 }
@@ -432,4 +433,5 @@ if ($sessionId) {
     }
 }
 
-echo json_encode(['answer' => $answer], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$remaining=null;if(!is_premium()){$usage=query_one("SELECT COUNT(*) n FROM chat_messages WHERE user_id=? AND role='user' AND created_at>=CURDATE()",'i',[$userId]);$remaining=max(0,10-(int)($usage['n']??0));}
+echo json_encode(['answer' => $answer,'remaining'=>$remaining], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
