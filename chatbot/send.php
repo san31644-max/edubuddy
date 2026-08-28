@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/ai_quota.php';
 require_once __DIR__ . '/../includes/gemini_transport.php';
 header('Content-Type: application/json; charset=utf-8');
 
@@ -54,12 +55,8 @@ if ($question === '' || mb_strlen($question) > MAX_CHAT_LENGTH) {
 
 $userId = (int) user()['id'];
 if (!is_premium()) {
-    $today = query_one(
-        "SELECT COUNT(*) n FROM chat_sessions WHERE user_id=? AND created_at>=CURDATE()",
-        'i',
-        [$userId]
-    );
-    if (($today['n'] ?? 0) >= 10) {
+    $usedToday = free_ai_used_today($userId);
+    if ($usedToday >= 10) {
         json_error('Free daily limit of 10 messages reached. Subscribe to continue with unlimited AI tutoring.', 402, [
             'subscribe' => url('subscription.php'),
             'remaining' => 0
@@ -433,5 +430,5 @@ if ($sessionId) {
     }
 }
 
-$remaining=null;if(!is_premium()){$usage=query_one("SELECT COUNT(*) n FROM chat_sessions WHERE user_id=? AND created_at>=CURDATE()",'i',[$userId]);$remaining=max(0,10-(int)($usage['n']??0));}
+$remaining=null;if(!is_premium()){$usedToday=record_free_ai_response($userId);$remaining=max(0,10-$usedToday);}
 echo json_encode(['answer' => $answer,'remaining'=>$remaining], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
