@@ -28,6 +28,7 @@ $isReferralPage = str_contains($currentPath, '/referral/');
 .brandmark.logo-image{display:block;width:50px;height:50px;padding:0;border-radius:15px;object-fit:cover;background:transparent;transform:scale(1.18);transform-origin:center;box-shadow:none}.brand:hover .brandmark.logo-image{transform:scale(1.24)}.brandtext small{text-transform:none;letter-spacing:.04em}
 .pwa-install{position:fixed;z-index:60;right:16px;bottom:92px;min-height:44px;padding:9px 15px;border-radius:999px;background:linear-gradient(135deg,#19aa85,var(--mint));box-shadow:0 12px 30px rgba(25,170,133,.3)}.pwa-install[hidden]{display:none}@media(min-width:720px){.pwa-install{right:24px;bottom:24px}}
 .nav-ai-robot{display:block;width:31px;height:31px;margin:-5px auto -1px;object-fit:contain}
+@media(max-width:700px){html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}.wrap{height:auto;min-height:0;max-height:none;overflow:visible;touch-action:pan-y}}
 </style>
 </head>
 <body>
