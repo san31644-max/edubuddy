@@ -55,7 +55,7 @@ if ($question === '' || mb_strlen($question) > MAX_CHAT_LENGTH) {
 $userId = (int) user()['id'];
 if (!is_premium()) {
     $today = query_one(
-        "SELECT COUNT(*) n FROM student_activity_events WHERE user_id=? AND event_type='search' AND event_time>=CURDATE()",
+        "SELECT COUNT(*) n FROM chat_sessions WHERE user_id=? AND created_at>=CURDATE()",
         'i',
         [$userId]
     );
@@ -433,5 +433,5 @@ if ($sessionId) {
     }
 }
 
-$remaining=null;if(!is_premium()){$usage=query_one("SELECT COUNT(*) n FROM student_activity_events WHERE user_id=? AND event_type='search' AND event_time>=CURDATE()",'i',[$userId]);$remaining=max(0,10-(int)($usage['n']??0));}
+$remaining=null;if(!is_premium()){$usage=query_one("SELECT COUNT(*) n FROM chat_sessions WHERE user_id=? AND created_at>=CURDATE()",'i',[$userId]);$remaining=max(0,10-(int)($usage['n']??0));}
 echo json_encode(['answer' => $answer,'remaining'=>$remaining], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
