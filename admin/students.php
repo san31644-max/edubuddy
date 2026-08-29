@@ -1,5 +1,20 @@
 <?php
-$pageTitle='Students';include __DIR__.'/_top.php';$db=db();$q=trim((string)($_GET['q']??''));$medium=(string)($_GET['medium']??'');$grade=filter_input(INPUT_GET,'grade',FILTER_VALIDATE_INT);$school=trim((string)($_GET['school']??''));
+require_once __DIR__.'/../includes/auth.php';require_admin();$db=db();
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ verify_csrf();
+ try{
+  $id=filter_input(INPUT_POST,'student_id',FILTER_VALIDATE_INT);$action=(string)($_POST['action']??'');
+  if(!$id||!in_array($action,['enable_premium','set_free'],true))throw new RuntimeException('Invalid subscription update.');
+  $student=query_one('SELECT id,full_name FROM users WHERE id=?','i',[$id]);if(!$student)throw new RuntimeException('Student not found.');
+  if($action==='enable_premium'){$s=$db->prepare('UPDATE users SET subscription_expires_at=DATE_ADD(GREATEST(NOW(),COALESCE(subscription_expires_at,NOW())),INTERVAL 30 DAY),updated_at=NOW() WHERE id=?');$message=$student['full_name'].' now has Premium access for 30 days.';}
+  else{$s=$db->prepare('UPDATE users SET subscription_expires_at=NULL,updated_at=NOW() WHERE id=?');$message=$student['full_name'].' has been moved to the Free plan.';}
+  $s->bind_param('i',$id);if(!$s->execute())throw new RuntimeException('The plan could not be updated.');flash('success',$message);
+ }catch(Throwable $e){flash('error',$e->getMessage());}
+ $return=[];$returnQ=trim((string)($_POST['return_q']??''));$returnMedium=(string)($_POST['return_medium']??'');$returnGrade=filter_input(INPUT_POST,'return_grade',FILTER_VALIDATE_INT);$returnSchool=trim((string)($_POST['return_school']??''));
+ if($returnQ!=='')$return['q']=$returnQ;if(in_array($returnMedium,['English','Sinhala','Tamil'],true))$return['medium']=$returnMedium;if($returnGrade)$return['grade']=$returnGrade;if($returnSchool!=='')$return['school']=$returnSchool;
+ redirect('admin/students.php'.($return?'?'.http_build_query($return):''));
+}
+$pageTitle='Students';include __DIR__.'/_top.php';$q=trim((string)($_GET['q']??''));$medium=(string)($_GET['medium']??'');$grade=filter_input(INPUT_GET,'grade',FILTER_VALIDATE_INT);$school=trim((string)($_GET['school']??''));
 $sql="SELECT u.id,u.full_name,u.username,u.email,u.school_name,u.medium,u.subscription_expires_at,u.status,u.created_at,g.grade_number,(SELECT COALESCE(SUM(points),0) FROM student_points WHERE user_id=u.id) points,(SELECT COUNT(*) FROM lesson_progress WHERE user_id=u.id AND completed_at IS NOT NULL) completed,(SELECT COUNT(*) FROM quiz_attempts WHERE user_id=u.id) attempts,(SELECT MAX(event_time) FROM student_activity_events WHERE user_id=u.id) last_active FROM users u JOIN grades g ON g.id=u.grade_id WHERE 1";$types='';$args=[];
 if($q!==''){$sql.=' AND (u.full_name LIKE ? OR u.username LIKE ? OR u.email LIKE ?)';$like='%'.$q.'%';$types.='sss';array_push($args,$like,$like,$like);}if(in_array($medium,['English','Sinhala','Tamil'],true)){$sql.=' AND u.medium=?';$types.='s';$args[]=$medium;}if($grade){$sql.=' AND g.grade_number=?';$types.='i';$args[]=$grade;}if($school!==''){$sql.=' AND u.school_name=?';$types.='s';$args[]=$school;}$sql.=' ORDER BY u.id DESC';$s=$db->prepare($sql);if($types)$s->bind_param($types,...$args);$s->execute();$rows=$s->get_result()->fetch_all(MYSQLI_ASSOC);$grades=$db->query('SELECT grade_number FROM grades WHERE status="active" ORDER BY grade_number')->fetch_all(MYSQLI_ASSOC);$schools=$db->query("SELECT DISTINCT school_name FROM users WHERE school_name IS NOT NULL AND school_name<>'' ORDER BY school_name")->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -7,4 +22,19 @@ if($q!==''){$sql.=' AND (u.full_name LIKE ? OR u.username LIKE ? OR u.email LIKE
 <section class="students-head"><div><span class="badge">Student management</span><h1>Every student</h1><p class="muted"><?=count($rows)?> matching student accounts</p></div><a class="btn alt" href="dashboard.php">← Dashboard</a></section>
 <form class="card student-filters"><label>Search<input name="q" value="<?=e($q)?>" placeholder="Name, username, or email"></label><label>Medium<select name="medium"><option value="">All mediums</option><?php foreach(['English','Sinhala','Tamil'] as $m):?><option<?=$medium===$m?' selected':''?>><?=$m?></option><?php endforeach;?></select></label><label>Grade<select name="grade"><option value="">All grades</option><?php foreach($grades as $g):?><option value="<?=$g['grade_number']?>"<?=$grade===$g['grade_number']?' selected':''?>>Grade <?=$g['grade_number']?></option><?php endforeach;?></select></label><label>School<select name="school"><option value="">All schools</option><?php foreach($schools as $x):?><option<?=$school===$x['school_name']?' selected':''?>><?=e($x['school_name'])?></option><?php endforeach;?></select></label><button>Apply filters</button></form>
 <section class="card scroll"><table class="student-table"><tr><th>Student</th><th>School</th><th>Grade / Medium</th><th>Learning</th><th>Last active</th><th>Plan</th><th></th></tr><?php foreach($rows as $r):?><tr><td><span class="student-name"><i class="student-avatar"><?=e(mb_strtoupper(mb_substr($r['full_name'],0,1)))?></i><span><strong><?=e($r['full_name'])?></strong><small>@<?=e($r['username'])?> · <?=e($r['email'])?></small></span></span></td><td><?=e($r['school_name']?:'Not provided')?></td><td>Grade <?=intval($r['grade_number'])?><small><?=e($r['medium'])?></small></td><td><strong><?=intval($r['points'])?> points</strong><small><?=intval($r['completed'])?> lessons · <?=intval($r['attempts'])?> quizzes</small></td><td><?=e($r['last_active']?date('d M Y, g:i A',strtotime($r['last_active'])):'Never')?></td><td><?=$r['subscription_expires_at']&&strtotime($r['subscription_expires_at'])>time()?'<span class="badge">⭐ Premium</span>':'Free'?></td><td><a class="btn alt" href="student.php?id=<?=intval($r['id'])?>">View</a></td></tr><?php endforeach;?></table><?php if(!$rows):?><p class="muted" style="text-align:center;padding:25px">No students match these filters.</p><?php endif;?></section>
+<script>
+document.querySelectorAll('.student-table tr').forEach(row=>{
+ const cells=row.querySelectorAll('td');if(cells.length<7)return;
+ const planCell=cells[5],view=cells[6].querySelector('a');if(!view)return;
+ const id=new URL(view.href,location.href).searchParams.get('id'),premium=planCell.textContent.includes('Premium');
+ const form=document.createElement('form');form.method='post';form.className='plan-action';
+ const hidden=(name,value)=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)};
+ hidden('csrf',<?=json_encode(csrf_token())?>);hidden('student_id',id);hidden('action',premium?'set_free':'enable_premium');
+ hidden('return_q',<?=json_encode($q)?>);hidden('return_medium',<?=json_encode($medium)?>);hidden('return_grade',<?=json_encode($grade?:'')?>);hidden('return_school',<?=json_encode($school)?>);
+ const button=document.createElement('button');button.type='submit';button.className=premium?'danger':'good';button.textContent=premium?'Set Free':'Enable Premium';form.appendChild(button);
+ form.addEventListener('submit',event=>{if(!confirm(premium?'Move this student to the Free plan now?':'Enable Premium for this student for 30 days?'))event.preventDefault()});
+ planCell.classList.add('plan-cell');planCell.appendChild(form);
+});
+</script>
+<style>.plan-cell{min-width:155px}.plan-action{margin-top:7px}.plan-action button{min-height:34px;padding:7px 10px;font-size:.72rem;white-space:nowrap}</style>
 <?php include __DIR__.'/../includes/footer.php';
