@@ -12,6 +12,7 @@ if(!$subscription||empty($subscription['receipt_path'])){
 
 $relative=str_replace('\\','/',ltrim((string)$subscription['receipt_path'],'/'));
 $allowedPrefixes=['uploads/receipts/','includes/runtime/receipts/'];
+if(str_starts_with($relative,'receipt-db/')){$blob=query_one('SELECT mime_type,image_data FROM subscription_receipt_blobs WHERE receipt_key=?','s',[$relative]);if(!$blob){http_response_code(404);exit('Receipt file not found.');}$blobMime=(string)$blob['mime_type'];if(!in_array($blobMime,['image/jpeg','image/png','image/webp'],true)){http_response_code(415);exit('Unsupported receipt file.');}header('Content-Type: '.$blobMime);header('Content-Length: '.strlen((string)$blob['image_data']));header('Content-Disposition: inline; filename="receipt-'.($id?:(int)sprintf('%u',crc32($relative))).'"');header('Cache-Control: private, no-store, max-age=0');header('X-Content-Type-Options: nosniff');echo $blob['image_data'];exit;}
 $allowedRoot=null;
 foreach($allowedPrefixes as $prefix)if(str_starts_with($relative,$prefix)){$candidateRoot=realpath(__DIR__.'/../'.rtrim($prefix,'/'));if($candidateRoot!==false)$allowedRoot=$candidateRoot;break;}
 if($allowedRoot===null){

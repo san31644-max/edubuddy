@@ -66,9 +66,9 @@ $rows = db()->query('SELECT s.*,u.full_name,u.username,p.name,r.referral_code FR
 <?php while($r=$rows->fetch_assoc()):?><tr><td><?=e($r['full_name'])?> (@<?=e($r['username'])?>)</td><td><?=e($r['payment_method'])?><br><?=e($r['payment_reference'])?><?php if(!empty($r['receipt_path'])):?><br><a href="<?=url($r['receipt_path'])?>" target="_blank" rel="noopener">View receipt photo</a><?php endif;?></td><td>LKR <?=e($r['amount_lkr'])?><?php if((float)$r['discount_lkr']>0):?><br><small>Rs. <?=e($r['discount_lkr'])?> discount</small><?php endif;?></td><td><?=e($r['referral_code']?:'—')?></td><td><?=e($r['status'])?></td><td><?php if($r['status']==='pending'):?><div class="row"><form method="post"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="approve"><button type="submit" class="good">Approve</button></form><form method="post" onsubmit="return confirm('Reject this payment?')"><?=csrf_field()?><input type="hidden" name="id" value="<?=$r['id']?>"><input type="hidden" name="action" value="reject"><button type="submit" class="danger">Reject</button></form></div><?php endif;?></td></tr><?php endwhile;?>
 </table></section>
 <script>
-document.querySelectorAll('a[href*=/receipts/]').forEach(link=>{
+document.querySelectorAll('a[href*="/receipts/"],a[href*="/receipt-db/"]').forEach(link=>{
  const pathname=new URL(link.href,location.href).pathname.replace(/\\/g,'/');
- const marker=pathname.includes('/includes/runtime/receipts/')?'includes/runtime/receipts/':'uploads/receipts/';
+ const marker=pathname.includes('/receipt-db/')?'receipt-db/':(pathname.includes('/includes/runtime/receipts/')?'includes/runtime/receipts/':'uploads/receipts/');
  const index=pathname.indexOf(marker);if(index>=0)link.href='receipt.php?path='+encodeURIComponent(pathname.slice(index));
 });
 </script>
