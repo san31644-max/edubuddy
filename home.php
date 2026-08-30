@@ -15,7 +15,20 @@ body{background:#030c15}.top{background:rgba(3,12,21,.86);border-color:rgba(78,2
 @media(max-width:700px){.scroll-stage{width:100vw;height:calc(100vh - 70px);min-height:650px}.scroll-content{left:21%;right:21%;top:21%;bottom:17%}.scroll-links{grid-template-columns:1fr;gap:5px}.scroll-link.primary{grid-column:auto}.scroll-content .intro{margin-bottom:8px}.scroll-tag{display:none}.replay-scroll{right:8px;bottom:8px;font-size:.72rem}}
 @media(max-width:390px){.scroll-content{left:20%;right:20%}.scroll-logo{width:125px;height:125px}.scroll-content h1{font-size:1.45rem}.scroll-link{min-height:34px;padding:5px;font-size:.65rem}}
 @media(prefers-reduced-motion:reduce){.scroll-half,.scroll-content{transition-duration:.01ms!important}.scroll-prompt button,.dust{animation:none!important}}
-</style>
+/* Raised 3D homepage controls */
+.scroll-links{gap:10px}
+.scroll-link{position:relative;isolation:isolate;min-height:41px;padding:8px 10px;border:1px solid #caa66f;border-radius:10px;background:linear-gradient(180deg,#fff9df 0%,#ead19c 100%);text-shadow:0 1px rgba(255,255,255,.75);box-shadow:0 5px 0 #9a6b36,0 8px 13px rgba(61,34,13,.28),inset 0 1px rgba(255,255,255,.95);transform:translateY(-2px);transition:transform .14s ease,box-shadow .14s ease,filter .14s ease}
+.scroll-link:before{content:"";position:absolute;z-index:-1;inset:1px 3px 52%;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.75),transparent);pointer-events:none}
+.scroll-link:hover{transform:translateY(-4px);filter:brightness(1.06);background:linear-gradient(180deg,#fff9df 0%,#ead19c 100%);box-shadow:0 7px 0 #9a6b36,0 12px 17px rgba(61,34,13,.3),inset 0 1px rgba(255,255,255,.95)}
+.scroll-link:active{transform:translateY(3px);box-shadow:0 1px 0 #815526,0 3px 5px rgba(61,34,13,.24),inset 0 2px 5px rgba(86,49,20,.16)}
+.scroll-link.primary{background:linear-gradient(180deg,#725cf0 0%,#3322a0 100%);border:1px solid #8878f4;text-shadow:0 2px 2px rgba(18,10,75,.5);box-shadow:0 6px 0 #21156f,0 10px 16px rgba(34,21,112,.38),inset 0 1px rgba(255,255,255,.45)}
+.scroll-link.primary:hover{background:linear-gradient(180deg,#806cf5 0%,#3a27ac 100%);box-shadow:0 8px 0 #21156f,0 14px 20px rgba(34,21,112,.4),inset 0 1px rgba(255,255,255,.5)}
+.scroll-link.primary:active{box-shadow:0 1px 0 #21156f,0 3px 6px rgba(34,21,112,.32),inset 0 3px 7px rgba(16,8,68,.35)}
+.scroll-prompt button{border-color:#ffe3a0;background:linear-gradient(180deg,#524129,#15101c);box-shadow:0 6px 0 #050308,0 11px 25px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.25)}
+.scroll-prompt button:active{transform:translateY(5px);box-shadow:0 1px 0 #050308,0 4px 10px rgba(0,0,0,.45)}
+.replay-scroll{background:linear-gradient(180deg,#19394c,#07141e);border-color:rgba(123,211,255,.55);box-shadow:0 5px 0 #02080d,0 9px 18px rgba(0,0,0,.38)}
+.replay-scroll:active{transform:translateY(4px);box-shadow:0 1px 0 #02080d,0 3px 7px rgba(0,0,0,.35)}
+@media(prefers-reduced-motion:reduce){.scroll-link{transition:none}}</style>
 <section class="scroll-hero">
 <div class="city-glow"></div>
 <div class="scroll-stage" id="scrollStage" aria-label="K Education opening welcome scroll">

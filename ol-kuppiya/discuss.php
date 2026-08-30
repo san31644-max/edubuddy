@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/../includes/auth.php';require_once __DIR__.'/../includes/gemini_transport.php';
-require_login();require_premium();if(!in_array(user_grade_number(),[10,11],true))redirect('student/dashboard.php');
+require_once __DIR__.'/../includes/auth.php';require_once __DIR__.'/../includes/ol_schema.php';require_once __DIR__.'/../includes/gemini_transport.php';
+require_login();require_premium();ensure_ol_schema();if(!in_array(user_grade_number(),[10,11],true))redirect('student/dashboard.php');
 $id=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT)?:filter_input(INPUT_POST,'paper_id',FILTER_VALIDATE_INT);
 $p=$id?query_one('SELECT p.*,s.name_en,s.name_si,s.name_ta FROM ol_papers p JOIN subjects s ON s.id=p.subject_id WHERE p.id=? AND p.status=1','i',[$id]):null;if(!$p)redirect('ol-kuppiya/index.php');
 $qnum=trim((string)($_GET['q']??$_POST['question_number']??''));$q=$qnum!==''?query_one('SELECT * FROM ol_paper_questions WHERE paper_id=? AND question_number=?','is',[$id,$qnum]):null;

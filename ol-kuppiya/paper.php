@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../includes/auth.php';require_once __DIR__.'/../includes/ol_schema.php';require_once __DIR__.'/../includes/ol_pdf.php';require_login();require_premium();
+require_once __DIR__.'/../includes/auth.php';require_once __DIR__.'/../includes/ol_schema.php';require_once __DIR__.'/../includes/ol_pdf.php';require_login();require_premium();ensure_ol_schema();
 if(!in_array(user_grade_number(),[10,11],true)){redirect('student/dashboard.php');}
 $sid=filter_input(INPUT_GET,'subject_id',FILTER_VALIDATE_INT);$year=filter_input(INPUT_GET,'year',FILTER_VALIDATE_INT);$medium=medium_language((string)user()['medium']);
 $paper=query_one('SELECT p.*,s.name_en,s.name_si,s.name_ta FROM ol_papers p JOIN subjects s ON s.id=p.subject_id WHERE p.subject_id=? AND p.year=? AND p.medium=? AND p.status=1','iis',[$sid,$year,$medium]);if(!$paper){flash('warning','This paper is not available.');redirect('ol-kuppiya/papers.php?subject_id='.$sid);}
