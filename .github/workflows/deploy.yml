@@ -49,6 +49,7 @@ jobs:
             --exclude='includes/runtime/' \
             --include='uploads/' \
             --include='uploads/ol-papers/' \
+            --include='uploads/ol-papers/.htaccess' \
             --include='uploads/ol-papers/35/' \
             --include='uploads/ol-papers/35/2025/' \
             --include='uploads/ol-papers/35/2025/si/' \

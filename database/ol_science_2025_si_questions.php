@@ -1,3 +1,7 @@
+<?php
+declare(strict_types=1);
+if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
+return json_decode(<<<'JSON'
 [
     {
         "number": "1",
@@ -970,3 +974,4 @@
         "display_order": "194"
     }
 ]
+JSON, true, 512, JSON_THROW_ON_ERROR);

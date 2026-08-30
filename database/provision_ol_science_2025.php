@@ -1,18 +1,19 @@
 <?php
 declare(strict_types=1);
+if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
 require_once __DIR__.'/../includes/db.php';
 require_once __DIR__.'/../includes/helpers.php';
 require_once __DIR__.'/../includes/ol_schema.php';
 
 ensure_ol_schema();
 $db=db();
-$dataFile=__DIR__.'/ol_science_2025_si_questions.json';
+$dataFile=__DIR__.'/ol_science_2025_si_questions.php';
 $paperPath='uploads/ol-papers/35/2025/si/paper_4d17c15dcf3b34b4.pdf';
 $answerPath='uploads/ol-papers/35/2025/si/answers_d0f7291add0e7026.pdf';
 
 if(!is_file(__DIR__.'/../'.$paperPath))throw new RuntimeException('Deployed O/L Science question paper is missing.');
 if(!is_file(__DIR__.'/../'.$answerPath))throw new RuntimeException('Deployed O/L Science answer paper is missing.');
-$questions=json_decode((string)file_get_contents($dataFile),true,512,JSON_THROW_ON_ERROR);
+$questions=require $dataFile;
 if(!is_array($questions)||count($questions)!==194)throw new RuntimeException('Expected 194 prepared O/L Science questions.');
 
 $subject=query_one("SELECT id FROM subjects WHERE status='active' AND LOWER(name_en)='science' ORDER BY id LIMIT 1");
