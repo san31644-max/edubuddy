@@ -5,12 +5,12 @@ require_once __DIR__.'/db.php';
 
 function normalize_referral_code(string $code): string
 {
-    return strtoupper(trim($code));
+    return strtoupper((string)preg_replace('/\s+/u', ' ', trim($code)));
 }
 
 function referral_code_is_valid_format(string $code): bool
 {
-    return (bool)preg_match('/^[A-Z0-9][A-Z0-9-]{3,23}$/', $code);
+    return (bool)preg_match('/^(?=.{4,24}$)[A-Z0-9][A-Z0-9 -]*[A-Z0-9]$/D', $code);
 }
 
 function active_referral_promoter(string $code): ?array
