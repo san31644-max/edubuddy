@@ -35,7 +35,7 @@ body{background:#030c15}.top{background:rgba(3,12,21,.86);border-color:rgba(78,2
  <div class="scroll-image" aria-hidden="true"><div class="scroll-half left"></div><div class="scroll-half right"></div><div class="scroll-seam"></div></div>
  <?php for($i=0;$i<18;$i++):?><i class="dust" style="left:<?=10+($i*5)%80?>%;top:<?=18+($i*11)%62?>%;--x:<?=($i%2?1:-1)*(30+$i*4)?>px;--y:<?=-60-($i%6)*25?>px;--d:<?=($i%5)*.1?>s"></i><?php endfor;?>
  <div class="scroll-content">
-  <img class="scroll-logo" src="<?=url('logo/k-transparent.png')?>" alt="K Education">
+  <img class="scroll-logo" src="<?=url('logo/k-landing-transparent.png')?>" alt="K Education">
   <p class="tiny">Your journey begins here</p><h1>Welcome to <span>K Education</span></h1>
   <p class="intro">Open the door to lessons, quizzes, AI guidance and a brighter future.</p>
   <nav class="scroll-links" aria-label="K Education menu">
