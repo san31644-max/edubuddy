@@ -31,14 +31,14 @@ body{background:#030c15}.top{background:rgba(3,12,21,.86);border-color:rgba(78,2
 @media(prefers-reduced-motion:reduce){.scroll-link{transition:none}}
 /* Keep the complete welcome experience inside the parchment writing area. */
 .scroll-content{top:8%;bottom:12%;justify-content:center}
-.scroll-logo{width:clamp(82px,10vw,112px);height:clamp(82px,10vw,112px);margin:0 0 2px;transform:none;border-radius:14px;filter:drop-shadow(0 4px 5px rgba(60,31,10,.2))}
+.scroll-logo{width:clamp(82px,10vw,112px);height:clamp(82px,10vw,112px);margin:0 0 2px;transform:translateY(6px);border-radius:14px;filter:drop-shadow(0 4px 5px rgba(60,31,10,.2))}
 .scroll-content .tiny{font-size:.58rem;line-height:1.2;letter-spacing:.15em}
 .scroll-content h1{margin:2px 0 3px;font-size:clamp(1.35rem,3.4vw,2.45rem);line-height:.98}
 .scroll-content .intro{margin:0 auto 8px;font-size:clamp(.68rem,1.25vw,.88rem);line-height:1.25}
 .scroll-links{gap:7px}
 .scroll-link{min-height:36px;padding:6px 9px}
 .scroll-tag{margin-top:6px;font-size:.62rem;line-height:1.2}
-@media(max-width:700px){.scroll-content{left:21%;right:21%;top:8%;bottom:10%}.scroll-logo{width:86px;height:86px;margin-bottom:1px}.scroll-content h1{font-size:1.35rem}.scroll-content .intro{margin-bottom:5px;font-size:.7rem}.scroll-links{gap:4px}.scroll-link{min-height:31px;padding:4px 6px;font-size:.64rem}}
+@media(max-width:700px){.scroll-content{left:21%;right:21%;top:8%;bottom:10%}.scroll-logo{width:86px;height:86px;margin-bottom:1px;transform:translateY(4px)}.scroll-content h1{font-size:1.35rem}.scroll-content .intro{margin-bottom:5px;font-size:.7rem}.scroll-links{gap:4px}.scroll-link{min-height:31px;padding:4px 6px;font-size:.64rem}}
 @media(max-width:390px){.scroll-content{left:20%;right:20%;top:7%;bottom:9%}.scroll-logo{width:76px;height:76px}.scroll-content h1{font-size:1.22rem}.scroll-content .tiny{font-size:.52rem}.scroll-content .intro{font-size:.64rem}}
 </style>
 <section class="scroll-hero">
