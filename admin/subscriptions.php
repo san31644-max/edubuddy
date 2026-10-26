@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $start = date('Y-m-d H:i:s');
             $end = date('Y-m-d H:i:s', strtotime('+30 days', $base));
 
-            $s = $db->prepare("UPDATE subscriptions SET status='active',starts_at=?,expires_at=? WHERE id=? AND status='pending'");
-            $s->bind_param('ssi', $start, $end, $id);
+            $s = $db->prepare("UPDATE subscriptions SET status='active',starts_at=?,expires_at=?,reviewed_by=? WHERE id=? AND status='pending'");
+            $adminId=(int)$_SESSION['admin']['id'];$s->bind_param('ssii', $start, $end, $adminId, $id);
             if (!$s->execute() || $s->affected_rows !== 1) throw new RuntimeException('Payment status was not updated.');
 
             $u = $db->prepare('UPDATE users SET subscription_expires_at=? WHERE id=?');
@@ -42,11 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$u->execute() || $u->affected_rows < 1) throw new RuntimeException('Student Premium access was not updated.');
             $message = 'Payment approved. Premium is active for 30 days.';
         } else {
-            $s = $db->prepare("UPDATE subscriptions SET status='rejected' WHERE id=? AND status='pending'");
-            $s->bind_param('i', $id);
+            $s = $db->prepare("UPDATE subscriptions SET status='rejected',reviewed_by=? WHERE id=? AND status='pending'");
+            $adminId=(int)$_SESSION['admin']['id'];$s->bind_param('ii', $adminId, $id);
             if (!$s->execute() || $s->affected_rows !== 1) throw new RuntimeException('Payment status was not updated.');
             $message = 'Payment rejected.';
         }
+        record_student_account_event((int)$sub['user_id'],$action==='approve'?'payment_approved':'payment_rejected','Payment #'.$id.' · Reference '.$sub['payment_reference'].' · '.$message,(int)$_SESSION['admin']['id']);
         $db->commit();
         flash('success', $message);
     } catch (Throwable $e) {

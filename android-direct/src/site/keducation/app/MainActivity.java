@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public final class MainActivity extends Activity {
-    private static final String HOME_URL = "https://keducation.site/index.php?source=direct";
+    private static final String HOME_URL = "https://keducation.site/index.php?source=play&app_version=1.0.2";
     private static final int FILE_PICKER_REQUEST = 1201;
     private WebView webView;
     private ProgressBar progress;
@@ -42,10 +42,11 @@ public final class MainActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " KEducationAndroid/1.0");
+        settings.setUserAgentString(settings.getUserAgentString() + " KEducationAndroid/1.0.2");
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
@@ -77,6 +78,7 @@ public final class MainActivity extends Activity {
         });
 
         if (savedInstanceState == null) {
+            webView.clearCache(true);
             Uri deepLink = getIntent().getData();
             webView.loadUrl(deepLink != null && isTrustedHost(deepLink) ? deepLink.toString() : HOME_URL);
         } else webView.restoreState(savedInstanceState);

@@ -1,8 +1,8 @@
 param([switch]$Unsigned)
 $ErrorActionPreference='Stop'
 $Sdk='C:\Users\CHAMA COMPUTERS\AppData\Local\Android\Sdk'
-$BuildTools=Join-Path $Sdk 'build-tools\35.0.1'
-$PlatformSource=Join-Path $Sdk 'platforms\android-35\android.jar'
+$BuildTools=Join-Path $Sdk 'build-tools\36.0.0'
+$PlatformSource=Join-Path $Sdk 'platforms\android-36\android.jar'
 $JavaHome='C:\Program Files\JetBrains\PyCharm 2023.3.4\jbr'
 $JavaTools='C:\Program Files\Android\Android Studio\jbr'
 $Root=$PSScriptRoot
@@ -10,7 +10,7 @@ $Build=Join-Path $Root 'build'
 $Deploy=Join-Path $Root 'signing'
 $UnsignedApk=Join-Path $Build 'k-education-unsigned.apk'
 $AlignedApk=Join-Path $Build 'k-education-aligned.apk'
-$SignedApk=Join-Path $Build 'K-Education-1.0.0.apk'
+$SignedApk=Join-Path $Build 'K-Education-1.0.2.apk'
 
 New-Item -ItemType Directory -Force -Path (Join-Path $Build 'classes'),(Join-Path $Build 'dex'),(Join-Path $Build 'res'),(Join-Path $Root 'res\drawable'),$Deploy | Out-Null
 $oldArtifacts=@($UnsignedApk,$AlignedApk,$SignedApk,(Join-Path $Build 'classes.jar'),(Join-Path $Build 'compiled.zip'),(Join-Path $Build 'dex\classes.dex'));foreach($artifact in $oldArtifacts){if(Test-Path -LiteralPath $artifact){Remove-Item -LiteralPath $artifact -Force}}
@@ -20,7 +20,7 @@ Copy-Item -LiteralPath (Join-Path (Split-Path $Root -Parent) 'logo\k-transparent
 
 & (Join-Path $BuildTools 'aapt2.exe') compile --dir (Join-Path $Root 'res') -o (Join-Path $Build 'compiled.zip')
 if($LASTEXITCODE){throw 'Android resource compilation failed.'}
-& (Join-Path $BuildTools 'aapt2.exe') link -o $UnsignedApk -I $Platform --manifest (Join-Path $Root 'AndroidManifest.xml') --java (Join-Path $Build 'generated') --min-sdk-version 23 --target-sdk-version 35 --version-code 1 --version-name '1.0.0' (Join-Path $Build 'compiled.zip')
+& (Join-Path $BuildTools 'aapt2.exe') link -o $UnsignedApk -I $Platform --manifest (Join-Path $Root 'AndroidManifest.xml') --java (Join-Path $Build 'generated') --min-sdk-version 23 --target-sdk-version 36 --version-code 3 --version-name '1.0.2' (Join-Path $Build 'compiled.zip')
 if($LASTEXITCODE){throw 'Android resource linking failed.'}
 
 $Sources=Get-ChildItem -LiteralPath (Join-Path $Root 'src') -Recurse -Filter '*.java' | Select-Object -ExpandProperty FullName

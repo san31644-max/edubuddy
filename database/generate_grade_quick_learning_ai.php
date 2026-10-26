@@ -9,8 +9,8 @@ require_once __DIR__.'/../includes/helpers.php';
 require_once __DIR__.'/../includes/gemini_transport.php';
 
 if(PHP_SAPI!=='cli'){http_response_code(403);exit("Run from the command line.\n");}
-$gradeNumber=(int)($argv[1]??0);$limit=max(0,(int)($argv[2]??0));$force=in_array('--force',$argv,true);
-if(!in_array($gradeNumber,[6,7,9,10],true))throw new RuntimeException('Usage: php generate_grade_quick_learning_ai.php 6 [limit] [--force]');
+$gradeNumber=(int)($argv[1]??0);$limit=max(0,(int)($argv[2]??0));$force=in_array('--force',$argv,true);$requestedMedium='';$lessonId=0;foreach($argv as $arg){if(str_starts_with($arg,'--medium='))$requestedMedium=substr($arg,9);if(str_starts_with($arg,'--lesson='))$lessonId=(int)substr($arg,9);}if($requestedMedium!==''&&!in_array($requestedMedium,['English','Sinhala','Tamil'],true))throw new RuntimeException('Invalid medium.');
+if(!in_array($gradeNumber,[6,7,8,9,10],true))throw new RuntimeException('Usage: php generate_grade_quick_learning_ai.php 6 [limit] [--force] [--medium=English] [--lesson=ID]');
 if(!defined('GEMINI_API_KEYS')||!GEMINI_API_KEYS)throw new RuntimeException('Gemini API keys are not configured.');
 
 function quick_language(string $medium,string $subject):array{
@@ -24,6 +24,7 @@ function quick_json(string $text):?array{
  $decoded=json_decode(substr($text,$start,$end-$start+1),true);return is_array($decoded)?$decoded:null;
 }
 function quick_clean(string $text):string{return trim(preg_replace('/^```(?:markdown)?\s*|\s*```$/iu','',$text)??$text);}
+function quick_normalize(array $data):array{foreach(['description','notes','objectives','terms','examples','summary'] as $key){if(is_array($data[$key]??null)){$separator=$key==='terms'?', ':"\n";$data[$key]=implode($separator,array_map(static fn($item):string=>is_scalar($item)?trim((string)$item):'',array_filter($data[$key],static fn($item):bool=>is_scalar($item))));}}return $data;}
 function quick_valid(array $data):bool{
  foreach(['description','notes','objectives','terms','examples','summary','questions'] as $key)if(!isset($data[$key]))return false;
  if(mb_strlen(trim((string)$data['notes']))<350||count((array)$data['questions'])!==5)return false;
@@ -32,16 +33,16 @@ function quick_valid(array $data):bool{
 }
 
 $db=db();$grade=query_one('SELECT id FROM grades WHERE grade_number=?','i',[$gradeNumber]);if(!$grade)throw new RuntimeException("Grade $gradeNumber is missing.");$gradeId=(int)$grade['id'];
-$sql="SELECT l.*,s.subject_code,s.name_en subject FROM lessons l JOIN subjects s ON s.id=l.subject_id WHERE l.grade_id=? AND l.status='active' AND l.content_source='textbook' ORDER BY l.medium,s.name_en,l.display_order,l.id";$s=$db->prepare($sql);$s->bind_param('i',$gradeId);$s->execute();$lessons=$s->get_result()->fetch_all(MYSQLI_ASSOC);
+$sql="SELECT l.*,s.subject_code,s.name_en subject FROM lessons l JOIN subjects s ON s.id=l.subject_id WHERE l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (?='' OR l.medium=? OR (?='English' AND l.medium='All')) AND (?=0 OR l.id=?) ORDER BY l.medium,s.name_en,l.display_order,l.id";$s=$db->prepare($sql);$s->bind_param('isssii',$gradeId,$requestedMedium,$requestedMedium,$requestedMedium,$lessonId,$lessonId);$s->execute();$lessons=$s->get_result()->fetch_all(MYSQLI_ASSOC);
 $done=$skipped=$failed=0;
 foreach($lessons as $lesson){
  if($limit>0&&$done>=$limit)break;[$field,$language]=quick_language((string)$lesson['medium'],(string)$lesson['subject']);$id=(int)$lesson['id'];
  $existing=(int)(query_one("SELECT COUNT(*) total FROM quiz_questions qq JOIN quizzes q ON q.id=qq.quiz_id WHERE q.lesson_id=? AND q.status='active' AND qq.activity_type='challenge' AND qq.status='active'",'i',[$id])['total']??0);
  if(!$force&&$existing===5&&mb_strlen(trim((string)($lesson['short_notes_'.$field]??'')))>=350){$skipped++;continue;}
  $title=trim((string)($lesson['title_'.$field]?:$lesson['title_en']?:('Lesson '.$lesson['display_order'])));$content=trim((string)($lesson['content_'.$field]?:$lesson['short_notes_'.$field]?:$lesson['content_en']?:''));if($content===''){echo "FAILED $id: empty source\n";$failed++;continue;}
- $source=mb_substr($content,0,3500);$prompt="Return compact JSON only in $language for a Grade $gradeNumber Sri Lankan lesson, using only the extract. Keys: description; notes (opening + 8 specific bullets + 3-item checklist); objectives (4 lines); terms (8 comma items); examples (3 lines); summary (5 bullets); questions (exactly 5 objects: question,a,b,c,d,correct,explanation). Make it clear, warm and lesson-specific. Test different key ideas; plausible wrong options. Ignore OCR noise.\nSubject: {$lesson['subject']}\nLesson: $title\nEXTRACT:\n$source";
+ $source=mb_substr($content,0,6500);$prompt="Return compact JSON only in $language for a Grade $gradeNumber Sri Lankan lesson, using only the extract. Keys: description; notes (opening + 8 specific bullets + 3-item checklist); objectives (4 lines); terms (8 comma items); examples (3 lines); summary (5 bullets); questions (exactly 5 objects: question,a,b,c,d,correct,explanation). Make it clear, warm and lesson-specific. Test different key ideas; plausible wrong options. Ignore OCR noise.\nSubject: {$lesson['subject']}\nLesson: $title\nEXTRACT:\n$source";
  $payload=json_encode(['contents'=>[['parts'=>[['text'=>$prompt]]]],'generationConfig'=>['temperature'=>0.15,'maxOutputTokens'=>3000,'responseMimeType'=>'application/json']],JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);$data=null;$problem='';
- for($attempt=1;$attempt<=3;$attempt++){$response=gemini_http_json(GEMINI_API_BASE.rawurlencode(GEMINI_MODEL).':generateContent?key='.rawurlencode(GEMINI_API_KEY),['Content-Type: application/json'],$payload);if($response['status']===200){$body=json_decode($response['body'],true);$text='';foreach($body['candidates'][0]['content']['parts']??[] as $part)$text.=(string)($part['text']??'');$candidate=quick_json($text);if($candidate&&quick_valid($candidate)){$data=$candidate;break;}$problem='Gemini returned incomplete lesson JSON.';}else $problem=(string)($response['error']?:('HTTP '.$response['status']));if($attempt<3)sleep(4);}
+ for($attempt=1;$attempt<=3;$attempt++){$response=gemini_http_json(GEMINI_API_BASE.rawurlencode(GEMINI_MODEL).':generateContent?key='.rawurlencode(GEMINI_API_KEY),['Content-Type: application/json'],$payload);if($response['status']===200){$body=json_decode($response['body'],true);$text='';foreach($body['candidates'][0]['content']['parts']??[] as $part)$text.=(string)($part['text']??'');$candidate=quick_json($text);if($candidate)$candidate=quick_normalize($candidate);if($candidate&&quick_valid($candidate)){$data=$candidate;break;}$problem='Gemini returned incomplete lesson JSON.';}else $problem=(string)($response['error']?:('HTTP '.$response['status']));if($attempt<3)sleep(4);}
  if(!$data){echo "FAILED {$lesson['medium']} / {$lesson['subject']} / $title: $problem\n";$failed++;continue;}
  $db->begin_transaction();try{
   foreach(['description','notes','objectives','terms','examples','summary'] as $key)$data[$key]=quick_clean((string)$data[$key]);

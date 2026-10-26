@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/../includes/auth.php';require_login();require_premium();
 require_once __DIR__.'/../includes/auth.php';require_login();$qid=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);$lesson=filter_input(INPUT_GET,'lesson_id',FILTER_VALIDATE_INT);$grade=(int)user()['grade_id'];$gradeNumber=user_grade_number();$medium=(string)user()['medium'];$questionType=in_array($gradeNumber,[6,7,8,9,10],true)?'challenge':'lesson_quiz';$quizLabel=$questionType==='challenge'?'Quick Challenge':'Lesson Quiz';
 if(!$qid&&$lesson&&$questionType==='challenge'){$availableQuiz=query_one("SELECT q.id FROM quizzes q WHERE q.lesson_id=? AND q.grade_id=? AND q.status='active' AND EXISTS(SELECT 1 FROM quiz_questions qq WHERE qq.quiz_id=q.id AND qq.activity_type=? AND qq.status='active') LIMIT 1",'iis',[$lesson,$grade,$questionType]);if(!$availableQuiz){flash('warning','This lesson has no Quick Challenge available.');redirect('student/lesson.php?id='.$lesson);}}
 if(!$qid){

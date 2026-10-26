@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+ <key>CFBundleDisplayName</key><string>K Education</string>
+ <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
+ <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+ <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+ <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
+ <key>CFBundlePackageType</key><string>APPL</string>
+ <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
+ <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
+ <key>CFBundleURLTypes</key><array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>site.keducation.app</string><key>CFBundleURLSchemes</key><array><string>keducation</string></array></dict></array>
+ <key>ITSAppUsesNonExemptEncryption</key><false/>
+ <key>LSRequiresIPhoneOS</key><true/>
+ <key>NSCameraUsageDescription</key><string>K Education uses the camera only when you choose to upload a profile photo or learning document.</string>
+ <key>NSMicrophoneUsageDescription</key><string>K Education uses the microphone only when you choose a voice-enabled learning activity.</string>
+ <key>NSPhotoLibraryUsageDescription</key><string>K Education lets you select a profile photo or learning document from your library.</string>
+ <key>UIApplicationSceneManifest</key><dict><key>UIApplicationSupportsMultipleScenes</key><false/><key>UISceneConfigurations</key><dict><key>UIWindowSceneSessionRoleApplication</key><array><dict><key>UISceneConfigurationName</key><string>Default Configuration</string><key>UISceneDelegateClassName</key><string>$(PRODUCT_MODULE_NAME).SceneDelegate</string></dict></array></dict></dict>
+ <key>UILaunchScreen</key><dict><key>UIColorName</key><string>LaunchBackground</string><key>UIImageName</key><string>LaunchLogo</string><key>UIImageRespectsSafeAreaInsets</key><true/></dict>
+ <key>UIRequiredDeviceCapabilities</key><array><string>arm64</string></array>
+ <key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string></array>
+ <key>UISupportedInterfaceOrientations~ipad</key><array><string>UIInterfaceOrientationPortrait</string><string>UIInterfaceOrientationPortraitUpsideDown</string><string>UIInterfaceOrientationLandscapeLeft</string><string>UIInterfaceOrientationLandscapeRight</string></array>
+</dict></plist>

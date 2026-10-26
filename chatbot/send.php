@@ -56,8 +56,8 @@ if ($question === '' || mb_strlen($question) > MAX_CHAT_LENGTH) {
 $userId = (int) user()['id'];
 if (!is_premium()) {
     $usedToday = free_ai_used_today($userId);
-    if ($usedToday >= 10) {
-        json_error('Free daily limit of 10 messages reached. Subscribe to continue with unlimited AI tutoring.', 402, [
+    if ($usedToday >= FREE_AI_DAILY_LIMIT) {
+        json_error('Your one free AI message for today has been used. Subscribe to continue with unlimited AI tutoring.', 402, [
             'subscribe' => url('subscription.php'),
             'remaining' => 0
         ]);
@@ -69,6 +69,15 @@ $subjectId = filter_var($data['subject_id'] ?? null, FILTER_VALIDATE_INT) ?: nul
 $textbookLesson = filter_var($data['textbook_lesson'] ?? null, FILTER_VALIDATE_INT, ['options'=>['min_range'=>1,'max_range'=>100]]) ?: null;
 $textbookSubject = strtolower(trim((string)($data['textbook_subject'] ?? '')));
 if (!preg_match('/^[a-z0-9-]+$/', $textbookSubject)) $textbookSubject = '';
+if (!is_premium() && $textbookLesson && $subjectId) {
+    $preview=free_subject_lesson((int)$subjectId);
+    if (!$preview || (int)$preview['display_order']!==$textbookLesson) {
+        json_error('This lesson requires Premium.',402,['subscribe'=>url('subscription.php')]);
+    }
+}
+if ($lessonId && !can_access_lesson((int)$lessonId)) {
+    json_error('This lesson requires Premium.',402,['subscribe'=>url('subscription.php')]);
+}
 $sourceId = null;
 $context = null;
 $textbookContext = '';
@@ -262,6 +271,11 @@ foreach ($history as $turn) {
 }
 $input[] = ['role' => 'user', 'content' => [['type' => 'input_text', 'text' => $modelQuestion]]];
 
+if (!is_premium()) {
+    try { $allowed=reserve_free_ai_message($userId); }
+    catch (Throwable $error) { json_error('AI usage tracking is temporarily unavailable. Please try again later.',503); }
+    if (!$allowed) json_error('Your one free AI message for today has been used. Unlock Premium to continue.',402,['subscribe'=>url('subscription.php'),'remaining'=>0]);
+}
 $answer = '';
 $apiProblem = '';
 $status = 0;
@@ -430,5 +444,5 @@ if ($sessionId) {
     }
 }
 
-$remaining=null;if(!is_premium()){$usedToday=record_free_ai_response($userId);$remaining=max(0,10-$usedToday);}
+$remaining=is_premium()?null:0;
 echo json_encode(['answer' => $answer,'remaining'=>$remaining], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

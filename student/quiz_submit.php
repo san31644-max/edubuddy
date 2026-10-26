@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../includes/auth.php';require_login();
+require_premium();
 if($_SERVER['REQUEST_METHOD']!=='POST')redirect('student/quiz.php');verify_csrf();
 $qid=filter_input(INPUT_POST,'quiz_id',FILTER_VALIDATE_INT);
 $q=$qid?query_one("SELECT q.* FROM quizzes q JOIN lessons l ON l.id=q.lesson_id WHERE q.id=? AND q.grade_id=? AND q.status='active' AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)",'iis',[$qid,user()['grade_id'],user()['medium']]):null;

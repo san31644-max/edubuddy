@@ -1,0 +1,2596 @@
+{
+  "source": "https://dmb.moe.gov.lk/2024/01/01_Excel/Tbl20240101.xlsx",
+  "year": 2024,
+  "schools": [
+    {
+      "census_number": 23,
+      "name": "KOTAHENA M.M.V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1001,
+      "name": "ST. ANTHONY'S NATIONAL SCHOOL, WATTALA",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2001,
+      "name": "WADDUWA M M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3004,
+      "name": "GALAGEDARA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4003,
+      "name": "RANGIRI DAMBULLA CENTRAL COLLEGE",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5001,
+      "name": "NUWARA ELIYA GAMINI CENTRAL COLLEGE",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6001,
+      "name": "BALAPITIYA REWATHA NATIONAL COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7017,
+      "name": "MORAWKA KEERTHI ABEYWICKRAMA NATIONAL SCHOOL",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8001,
+      "name": "WALASMULLA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9166,
+      "name": "MANIPAY HINDU COLLEGE (NATIONAL SCHOOL)",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 10001,
+      "name": "KILINOCHCHI MADHYA MAHA VIDYALAYAM",
+      "district": "Kilinochchi",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 11001,
+      "name": "SITHIVINAYAGAR HINDU COLLEGE",
+      "district": "Mannar",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 12003,
+      "name": "MULLIYAWALAI VIDYANANDA COLLEGE",
+      "district": "Mullaitivu",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 13001,
+      "name": "VAVUNIYA RAMBAIKULAM GIRLS MAHA VIDYALAYAM",
+      "district": "Vavuniya",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14018,
+      "name": "ODDAMAVADI CENTERL COLLEGE",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15002,
+      "name": "PADIYATHALAWA NATIONAL SCHOOL",
+      "district": "Ampara",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 16031,
+      "name": "MAHADIWULWEWA M.V.",
+      "district": "Trincomalee",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 17001,
+      "name": "POLGAHAWELA PARAKRAMABAHU MADYA MAHA VIDYALAYA",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18072,
+      "name": "PUTTALAM ANANDA NATIONAL SCHOOL",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 19001,
+      "name": "MAITHRIPALA SENANAYAKA CENTRAL COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20001,
+      "name": "MINNERIYA NATIONAL SCHOOL",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 21001,
+      "name": "ANDAULPOTHA NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22001,
+      "name": "BIBILE WELLASSA NATIONAL SCHOOL",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23001,
+      "name": "EHELIYAGODA M.M.V.",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24042,
+      "name": "YATIYANTOTA DR. N.M. PERERA M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 45,
+      "name": "COLOMBO ROYAL COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1028,
+      "name": "MIRIGAMA D.S.SENANAYAKA M.M.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2003,
+      "name": "PANADURA ST. JOHN'S M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3010,
+      "name": "GALAGEDARA SUJATHA BALIKA.M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 4093,
+      "name": "NAULA SRI NAGA NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5035,
+      "name": "HATTON ST. GABRIEL'S GIRLS' COLLEGE",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 6035,
+      "name": "AMBALANGODA SRI DEVANANDA COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7029,
+      "name": "KOTAPOLA NATIONAL SCHOOL",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 8002,
+      "name": "KATUWANA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9269,
+      "name": "NELLIADY CENTRAL COLLEGE",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 10011,
+      "name": "MULANKAVIL MAHA VIDYALAYAM",
+      "district": "Kilinochchi",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 11002,
+      "name": "MANNAR ST. XAVIERS BOYS COLLEGE",
+      "district": "Mannar",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 12048,
+      "name": "MALLAVI CENTRAL COLLEGE",
+      "district": "Mullaitivu",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 13002,
+      "name": "VAVUNIYA TAMIL M.M.V.",
+      "district": "Vavuniya",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14022,
+      "name": "VALAICHEANAI AN-NOOR MAHA VIDYALAYAM",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15037,
+      "name": "UHANA MAHA VIDYALAYA",
+      "district": "Ampara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16054,
+      "name": "TRINCOMALEE SRI SHANMUGA HINDU LADIES' COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17003,
+      "name": "UHUMEEYA D.S SENANAYAKA MADYA MAHA VIDYALAYA",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18073,
+      "name": "PUTTALAM ZAHIRA COLLEGE",
+      "district": "Puttalam",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19176,
+      "name": "ANURADHAPURA CENTRAL COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20002,
+      "name": "HINGURAKGODA ANANDA BALIKA NATIONAL SCHOOL",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21026,
+      "name": "MAHIYANGANA NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22005,
+      "name": "MEDAGAMA NATIONAL SCHOOL",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23060,
+      "name": "RATNAPURA FERGUSION HIGH SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24066,
+      "name": "DEHIOWITA NATIONAL SCHOOL",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 46,
+      "name": "COLOMBO ANANDA COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1083,
+      "name": "VEYANGODA BANDARANAYAKE CENTRAL COLLEGE",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2004,
+      "name": "PANADURA SRI SUMANGALA COLLEGE",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3011,
+      "name": "HATHARALIYADDA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4172,
+      "name": "MATALE SRI SANGAMITHTHA BALIKA NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5070,
+      "name": "PUNDALUOYA JAYAHELA NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 6036,
+      "name": "AMBALANGODA DHARMASHOKA COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7041,
+      "name": "URUBOKKA NATIONAL SCHOOL",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8038,
+      "name": "WEERAKETIYA RAJAPAKSHA CENTTAL COLLEGE",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9333,
+      "name": "POINT PEDRO METHODIST GIRLS' HIGH SCHOOL",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 10038,
+      "name": "PALLAI CENTRAL COLLEGE",
+      "district": "Kilinochchi",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 11003,
+      "name": "MANNAR ST. XAVIER'S GIRLS' COLLEGE",
+      "district": "Mannar",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19097,
+      "name": "SAMPATH NUWARA NATIONAL SCHOOL",
+      "district": "Mullaitivu",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 13004,
+      "name": "VAVUNIYA MUSLIM MAHA VIDYALAYAM",
+      "district": "Vavuniya",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 14031,
+      "name": "VALAICHENAI HINDU COLLEGE",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 15067,
+      "name": "AMPARA D.S.SENANAYAKA MADYA MAHA VIDYALAYA",
+      "district": "Ampara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16057,
+      "name": "TRINCOMALEE SINHALA MADYA MAHA VIDYALAYA",
+      "district": "Trincomalee",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 17094,
+      "name": "MAWATHAGAMA M.M.V.",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18091,
+      "name": "AL AQSA NATIOAL SCHOOL, KALPITY",
+      "district": "Puttalam",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 19177,
+      "name": "ANURADHAPURA SWARNAPALI GIRLS COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20035,
+      "name": "MEDIRIGIRIYA NATIONAL SCHOOL",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21071,
+      "name": "KANDEGEDARA NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 22069,
+      "name": "MONARAGALA MAHANAMA M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23061,
+      "name": "RATHNAPURA SUMANA BALIKA V.",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24112,
+      "name": "DERANIYAGALA SIRISAMAN NATIONAL SCHOOL",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 47,
+      "name": "COLOMBO NALANDA COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1084,
+      "name": "NITTAMBUWA SANGABODHI M.M.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2005,
+      "name": "PANADURA SRI SUMANGALA BALIKA M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3045,
+      "name": "POOJAPITIYA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4173,
+      "name": "MATALE VIJAYA NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5071,
+      "name": "KOTHMALE GAMINI DISSANAYAKE NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6068,
+      "name": "KARANDENIYA CENTRAL COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7055,
+      "name": "DENIYAYA CENTRAL COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8073,
+      "name": "TANGALLE BOYS NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9353,
+      "name": "CHAVAKACHCHERI HINDU COLLEGE",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 11025,
+      "name": "MANNAR AL-AZHAR M.V.",
+      "district": "Mannar",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 13110,
+      "name": "VAVUNIYA GAMINI NATIONAL SCHOOL",
+      "district": "Vavuniya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14081,
+      "name": "ERAVUR ALIGHAR CENTRAL COLLEGE",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15080,
+      "name": "AMPARA BANDARANAYAKA BALIKA MAHA VIDYALAYA",
+      "district": "Ampara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16059,
+      "name": "TRINCOMALEE RAJAKEEYA VIDYALOKA M.V. (NATIONAL SCHOOL)",
+      "district": "Trincomalee",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 17095,
+      "name": "INDULGODAKANDA SRI NISHSHANKA M.M.V. (NATIONAL SCHOOL)",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 18199,
+      "name": "CHILAW ANANDA NATIONAL SCHOOL",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19296,
+      "name": "THAMBUTTEGAMA CENTRAL COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20036,
+      "name": "DIVULANKADAWALA CENTRAL COLLEGE",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21102,
+      "name": "VIYALUWA D.S.SENANAYAKE NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 22073,
+      "name": "SIYAMBALANDUWA M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 23062,
+      "name": "RATHNAPURA ST. ALOYSIUS NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24158,
+      "name": "PINDENIYA M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 48,
+      "name": "COLOMBO THURSTAN COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1131,
+      "name": "GALAHITIYAWA CENTRAL COLLEGE",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2040,
+      "name": "BANDARAGAMA M.M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3046,
+      "name": "ANKUMBURA PARAKRAMA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4175,
+      "name": "MATALE ST. THOMES COLLEGE",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5111,
+      "name": "NILDANDAHINNA SRI SUMANGALA NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6116,
+      "name": "BENTHOTA GAMINI M.M.V.",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 7071,
+      "name": "THELIJJAWILA CENTRAL COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8074,
+      "name": "TANGALLE BALIKA VIDYALAYA",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9416,
+      "name": "JAFFNA HINDU COLLEGE",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 11035,
+      "name": "MUSALI NATIONAL SCHOOL",
+      "district": "Mannar",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 13111,
+      "name": "MADUKANDA MAHA VIDYALAYA",
+      "district": "Vavuniya",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 14087,
+      "name": "ERAVUR MACAN MARKAR MAHA VIDYALAYA",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 15152,
+      "name": "DEHIATTAKANDIYA M.M.V.",
+      "district": "Ampara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16068,
+      "name": "TRINCOMALEE ST. MARY'S COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17141,
+      "name": "WARIYAPOLA SRI SUMANGALA M.M.V.",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18218,
+      "name": "MADAMPE SENANAYAKA NATIONAL SCHOOL",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19361,
+      "name": "EPPAWALA SRI SIDDARTHA MAHA VIDYALAYA",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20069,
+      "name": "POLONNARUWA ROYAL CENTRAL COLLEGE",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21105,
+      "name": "MEEGAHAKIULA NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 22086,
+      "name": "MONARAGALA RAJAKEEYA V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23068,
+      "name": "RATHNAPURA CONVENT OF THE CHILD JESUS NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24228,
+      "name": "RUWANWELLA RAJASINGHE M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 50,
+      "name": "COLOMBO ANANDA B.V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1136,
+      "name": "GAMPAHA BANDARANAYAKE M.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2083,
+      "name": "HORANA TAXILA M.M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3048,
+      "name": "ALAWATHUGODA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4189,
+      "name": "MATALE CHRIST CHURCH COLLEGE",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5344,
+      "name": "NAWALAPITIYA AL-MINHAJ NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6141,
+      "name": "ELPITIYA ANANDA M.V.",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7104,
+      "name": "GODAPITIYA NATIONAL SCHOOL",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8106,
+      "name": "HUNGAMA VIJAYABA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9456,
+      "name": "JAFFNA CENTRAL COLLEGE",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14115,
+      "name": "BATTICALOA VINCENT GIRLS' HIGH SCHOOL",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15161,
+      "name": "SAMMANTHURAI MUSLIM MADYA MAHA VIDYALAYAM",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16070,
+      "name": "TRINCOMALEE R.K.M.SRI KONESWARA HINDU COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17199,
+      "name": "IBBAGAMUWA CENTRAL COLLEGE",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18243,
+      "name": "WENNAPPUWA ST. JOSEPH VAZ COLLEGE",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19429,
+      "name": "KEKIRAWA CENTRAL COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20073,
+      "name": "THOPAWEWA MAHA VIDYALAYA",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21125,
+      "name": "PASSARA M.M.V.",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22111,
+      "name": "BADALKUMBURA NISHSHANKA M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23092,
+      "name": "RATNAPURA SEEVALEE CENTRAL COLLEGE",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24321,
+      "name": "PINNAWALA M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 51,
+      "name": "COLOMBO GOTHAMI B.V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1137,
+      "name": "GAMPAHA RATHNAWALEE BALIKA V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2085,
+      "name": "HORANA SRIPALEE M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3075,
+      "name": "NUGAWELA M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4260,
+      "name": "MATALE ZAHIRA COLLEGE",
+      "district": "Matale",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5428,
+      "name": "PORAMADULLA NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6180,
+      "name": "NELUWA NATIONAL SCHOOL",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7146,
+      "name": "NARANDENIYA M.M.V.",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8112,
+      "name": "ANGUNAKOLAPELESSA MAHANAGA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9457,
+      "name": "JAFFNA HOLY FAMILY CONVENT",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14117,
+      "name": "BATTICALOA ST. MICHAELS' COLLEGE",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15169,
+      "name": "SAMMANTHURAI AL-MARJAN MUSLIM LADIES COLLEGE",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16073,
+      "name": "TRINCOMALEE ST. JOSEPH'S COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17234,
+      "name": "GANEWATHTHA S.B.HERATH M.M.V.",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 18282,
+      "name": "LUNUWILA BUDDHIST GIRLS' COLLEGE",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19457,
+      "name": "KEKIRAWA VIDYARTHA M.V.",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20103,
+      "name": "ARALAGANWILA VILAYAYA CENTRAL COLLEGE",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21172,
+      "name": "BADULLA DHARMADUTHA COLLEGE",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22146,
+      "name": "MALWATTAWALA M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23094,
+      "name": "KURUWITA CENTRAL COLLEGE",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24343,
+      "name": "MAWANELLA ZAHIRA COLLEGE",
+      "district": "Kegalle",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 60,
+      "name": "COLOMBO D.S.SENANAYAKE COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1183,
+      "name": "HENEGAMA CENTRAL COLLEGE",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2110,
+      "name": "HORANA RAJAKEEYA M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3108,
+      "name": "PANWILA RAJASINGHE M.M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 4261,
+      "name": "MATALE AMINA NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 5429,
+      "name": "VICTORIA NATIONAL SCHOOL",
+      "district": "Nuwara Eliya",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6182,
+      "name": "THAWALAMA VIDYARAJA NATIONAL SCHOOL",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7162,
+      "name": "THIHAGODA M.M.V.",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8144,
+      "name": "GATAMANNA VIJAYA MAHA VIDYALAYA",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 9465,
+      "name": "JAFFNA VEMBADY GIRLS HIGH SCHOOL",
+      "district": "Jaffna",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14118,
+      "name": "BATTICALOA ST. CECILIA'S GIRLS' COLLEGE",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15200,
+      "name": "KALMUNAI ZAHIRA COLLEGE",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16121,
+      "name": "KANTHALE AGRABODHI NATIONAL SCHOOL",
+      "district": "Trincomalee",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17265,
+      "name": "NARAMMALA MAYURAPADA NATIONAL SCHOOL",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 18302,
+      "name": "NATHTHANDIYA DHAMMISSARA NATIONAL SCHOOL",
+      "district": "Puttalam",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 19487,
+      "name": "ANURADHAPURA ZAHIRA COLLEGE",
+      "district": "Anuradhapura",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20154,
+      "name": "POLONNARUWA MUSLIM CENTRAL COLLEGE",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 21173,
+      "name": "BADULLA MADYA MAHA VIDYALAYA",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22149,
+      "name": "BUTTALA DUTUGEMUNU M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23123,
+      "name": "PELMADULLA GANKANDA CENTRAL COLLEGE",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24355,
+      "name": "MAWANELLA MAYURAPADA M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 66,
+      "name": "COLOMBO DEVI B.V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1228,
+      "name": "SIYANE NATIONAL SCHOOL",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2133,
+      "name": "BULATHSINGHALA M.M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3169,
+      "name": "HASALAKA RANASINGHE PREMADASA NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4262,
+      "name": "PAKKIYAM NATIONAL COLLEGE",
+      "district": "Matale",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6218,
+      "name": "NAGODA ROYAL NATIONAL SCHOOL",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 7181,
+      "name": "PUHULWELLA MADYA MAHA VIDYALAYA",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8154,
+      "name": "PUWAKDANDAWA DHAMMAPALA BALIKA VIDYALAYA",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14129,
+      "name": "KALLADY SHIVANANDA VIDYALAYA (NATIONAL SCHOOL)",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15202,
+      "name": "KALMUNAI CARMEL FATIMA COLLEGE (NATIONAL SCHOOL)",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16175,
+      "name": "MUTTUR CENTRAL COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17292,
+      "name": "KURUNEGALA MALIYADEVA BALIKA VIDYALAYA",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 20176,
+      "name": "BAKAMUNA MAHASEN MADYA MAHA VIDYALAYA",
+      "district": "Polonnaruwa",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 21174,
+      "name": "BADULLA VISHAKA GIRLS HIGH SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22184,
+      "name": "KATHARAGAMA M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23209,
+      "name": "BALANGODA ANANDA MAITHRIYA M.M.V.",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24381,
+      "name": "MAWATHAGODA RIVISANDA M.M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 74,
+      "name": "COLOMBO SIRIMAVO BANDARANAYAKE BALIKA VIDYALAYA",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1300,
+      "name": "KELANIYA GURUKULA M.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2180,
+      "name": "MATUGAMA C.W.W. KANNANGARA M.M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3181,
+      "name": "AMUPITIYA NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 4263,
+      "name": "UKUWELA AJMEER NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6254,
+      "name": "WANDURAMBA CENTRAL COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7225,
+      "name": "DEYIYANDARA NATIONAL SCHOOL",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8229,
+      "name": "DEBARAWEWA CENTRAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14145,
+      "name": "KATTANKUDY MADYA MAHA VIDYALAYA",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15203,
+      "name": "KALMUNAI MAHMUD LADIES COLLEGE",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16182,
+      "name": "KINNIYA AL-AQSA NATIONAL COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17293,
+      "name": "KURUNEGALA MALIYADEVA COLLEGE",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21191,
+      "name": "ETTAMPITIYA NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22187,
+      "name": "THANAMALVILA M.M.V.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23247,
+      "name": "GODAKAWELA RAHULA NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24489,
+      "name": "KEGALU BALIKA M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 77,
+      "name": "COLOMBO ISIPATHANA COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1301,
+      "name": "KELANIYA SRI DHARMALOKA M.M.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2181,
+      "name": "MATUGAMA ANANDA SASTRALAYA",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3184,
+      "name": "TELDENIYA NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4266,
+      "name": "MATALE HINDU NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6258,
+      "name": "BADDEGAMA CHRIST CHURCH BOY'S COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7258,
+      "name": "WELIGAMA SIDDARTHA COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8275,
+      "name": "AMBALANTOTA THERAPUTHTHA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14147,
+      "name": "KATTANKUDY MEERA BALIKA MAHA VIDYALAYAM",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15231,
+      "name": "AKKARAIPATTU MUSLIM CENTRAL COLLEGE (NATIONAL SCHOOL)",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 16186,
+      "name": "KINNIYA MUSLIM GIRLS' M.VIDYALAYAM",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17352,
+      "name": "PARAGAHADENIYA NATIONAL SCHOOL",
+      "district": "Kurunegala",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 21192,
+      "name": "HALIELA MAHA VIDYALAYA",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 22270,
+      "name": "YASHODHARA G.C.",
+      "district": "Moneragala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23319,
+      "name": "KARAWITA NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24490,
+      "name": "KEGALU VIDYALAYA",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 78,
+      "name": "COLOMBO LUMBINI VIDYALAYA",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1319,
+      "name": "KIRIBATHGODA VIHARAMAHADEVI B.V.",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2187,
+      "name": "DODANGODA MIRISWATTA NATIONAL SCHOOL",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3217,
+      "name": "KUNDASALE S.W.R.D.BANDARANAYAKE NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 4316,
+      "name": "AKURAMBODA WEERA KEPPETIPOLA NATIONAL SCHOOL",
+      "district": "Matale",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6259,
+      "name": "BADDEGAMA CHRIST CHURCH GIRLS' COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7272,
+      "name": "WELIGAMA SRI SUMANGALA BALIKA VIDYALAYA",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8276,
+      "name": "HAMBANTOTA ST. MARY'S COLLEGE",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 14180,
+      "name": "KALUTHAVALAI MAHA VIDYALAYAM",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15233,
+      "name": "IRAKKAMAM ASHRAF CENTRAL COLLEGE",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 16187,
+      "name": "KINNIYA CENTRAL COLLEGE",
+      "district": "Trincomalee",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17361,
+      "name": "ALAWWA SRI RAHULA NATIONAL SCHOOL",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21233,
+      "name": "BANDARAWELA M.M.V.",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23400,
+      "name": "KALAWANA NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24493,
+      "name": "KEGALLE SWARNAJAYANTHI M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 79,
+      "name": "COLOMBO MAHANAMA COLLEGE",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1336,
+      "name": "MALWANA AL-MUBARAK NATIONAL SCHOOL",
+      "district": "Gampaha",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2241,
+      "name": "KALUTARA TISSA M.M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3256,
+      "name": "RAJAWELLA HINDU NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6317,
+      "name": "HIKKADUWA SRI SUMANGALA M.M.V.",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7283,
+      "name": "WELIGAMA ARAFA CENTRAL COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8280,
+      "name": "HAMABANTOTA ZAHIRA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 14185,
+      "name": "PADDIRUPPU MADHYA MAHA VIDYALAYAM",
+      "district": "Batticaloa",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15248,
+      "name": "ADDALAICENAI M.M.V.",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17391,
+      "name": "BINGIRIYA SRI SARANANKARA NATIONAL SCHOOL",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21234,
+      "name": "BANDARAWELA VISHAKA B.M.M.V.",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23431,
+      "name": "KOLONNA NATIONAL SCHOOL",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24504,
+      "name": "KEGALLE ST. MARYS COLLEGE",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 80,
+      "name": "MILAGIRIYA ST. PAUL'S GIRL'S SCHOOL",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1340,
+      "name": "NEGOMBO NEWSTEAD GIRLS COLLEGE",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2242,
+      "name": "KALUTARA BALIKA M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3263,
+      "name": "MADAWALA MADINA NATIONAL SCHOOL",
+      "district": "Kandy",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6318,
+      "name": "RATHGAMA DEVAPATHIRAJA COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 7305,
+      "name": "MATARA RAHULA COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8289,
+      "name": "SOORIYAWEWA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15265,
+      "name": "NINTAVUR AL-ASHRAQ MADYA MAHA VIDYALAYA (NATIONAL SCHOOL)",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17420,
+      "name": "NAKKAWATTHA M.M.V.",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 21235,
+      "name": "NAULLA M.M.V.",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 23465,
+      "name": "EMBILPITIYA PRESIDENT'S COLLEGE",
+      "district": "Ratnapura",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 24505,
+      "name": "KEGALLE ST. JOSEPH'S BALIKA M.V.",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 81,
+      "name": "COLOMBO VISAKHA V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1341,
+      "name": "NEGOMBO HARISHCHANDRA NATIONAL SCHOOL",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2243,
+      "name": "KALUTARA M.V.",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3284,
+      "name": "AKURANA AZHAR MUSLIM M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6366,
+      "name": "GALLE MAHINDA COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7306,
+      "name": "MATARA SUJATHA VIDYALAYA",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 8339,
+      "name": "BELIATTA RUHUNU VIJAYABA NATIONAL SCHOOL",
+      "district": "Hambantota",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 15290,
+      "name": "AKKARAIPATTU SRI RAMAKRISHNA COLLEGE",
+      "district": "Ampara",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 17464,
+      "name": "DUMMALASOORIYA J.R.JAYAWARDANA M.M.V.",
+      "district": "Kurunegala",
+      "mediums": [
+        "Sinhala"
+      ]
+    },
+    {
+      "census_number": 21236,
+      "name": "BANDARAWELA ST. JOSEPH'S NATIONAL SCHOOL",
+      "district": "Badulla",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 23544,
+      "name": "RAKWANA ST. JOHN'S TAMIL MAHA VIDYALAYA",
+      "district": "Ratnapura",
+      "mediums": [
+        "Tamil"
+      ]
+    },
+    {
+      "census_number": 24577,
+      "name": "THOLANGAMUWA DUDLEY SENANAYAKA CENTRAL COLLEGE",
+      "district": "Kegalle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 98,
+      "name": "DEHIWALA PRESBYTEERIAN B.V.",
+      "district": "Colombo",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 1379,
+      "name": "RADDOLUWA SRI PANGNANANDA NATIONAL COLLEGE",
+      "district": "Gampaha",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 2276,
+      "name": "ALUTHGAMA NATIONAL SCHOOL",
+      "district": "Kalutara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 3285,
+      "name": "GALHINNA AL-MANAR MUSLIM M.V.",
+      "district": "Kandy",
+      "mediums": [
+        "Tamil",
+        "English"
+      ]
+    },
+    {
+      "census_number": 6367,
+      "name": "GALLE RICHMOND COLLEGE",
+      "district": "Galle",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    },
+    {
+      "census_number": 7309,
+      "name": "MATARA CENTRAL COLLEGE",
+      "district": "Matara",
+      "mediums": [
+        "Sinhala",
+        "English"
+      ]
+    }
+  ]
+}

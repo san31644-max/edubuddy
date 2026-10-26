@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/../includes/auth.php';require_admin();$pageTitle=$pageTitle??'Administration';include __DIR__.'/../includes/header.php';
 $adminNav=['dashboard'=>['▦','Overview'],'curriculum_manager'=>['✦','Curriculum'],'subjects'=>['▤','Catalog'],'assessment_manager'=>['✓','Assessments'],'students'=>['♟','Students'],'chatbot_logs'=>['◉','AI activity'],'subscriptions'=>['◇','Billing']];$adminFile=pathinfo($_SERVER['SCRIPT_NAME']??'',PATHINFO_FILENAME);
+$adminNav['student_history']=['◷','Student history'];
 $adminNav=['lesson_editor'=>['✎','Lesson Content']]+$adminNav;
 $adminNav['mcq']=['MCQ','MCQ'];$adminNav['referral_promoters']=['R','Referrals'];$adminNav['grade11_buddhism_text_import']=['✦','G11 MCQ Import'];
 ?>

@@ -2,8 +2,8 @@
 <?php if(!$isAdminPage):?><button type="button" id="pwaInstall" class="pwa-install" hidden>⬇ Install app</button><?php endif;?>
 <?php if (!$isAdminPage && function_exists('user') && user()): ?>
 <nav class="bottom" aria-label="Student navigation">
-<?php foreach ([['student/dashboard.php','🏠',tr('home')],['student/subjects.php','📚',tr('learn')],['chatbot/chat.php','robot',tr('chat')],['student/progress.php','📈',tr('progress')],['profile.php','👤',tr('profile')]] as $nav): $active=str_ends_with($currentPath,'/'.basename($nav[0])); ?>
-<a class="<?= $active?'active':'' ?>" href="<?= url($nav[0]) ?>"><b><?php if($nav[1]==='robot'):?><img class="nav-ai-robot" src="<?=url('assets/images/ai-robot.png')?>" alt=""><?php else:?><?= $nav[1] ?><?php endif;?></b><?= e($nav[2]) ?></a>
+<?php foreach ([['student/dashboard.php','🏠',tr('home')],['student/subjects.php','📚',tr('learn')],['chatbot/chat.php','robot',tr('chat')],['student/progress.php','📈',tr('progress')],['profile.php','👤',tr('profile')]] as $nav): $active=$isStudentApp?game_nav_active($nav[0],$gameScreen):str_ends_with($currentPath,'/'.basename($nav[0])); ?>
+<a class="<?= $active?'active':'' ?>" href="<?= url($nav[0]) ?>"><b><?php if($isStudentApp):?><?=game_icon(['student/dashboard.php'=>'home','student/subjects.php'=>'book','chatbot/chat.php'=>'chat','student/progress.php'=>'chart','profile.php'=>'user'][$nav[0]])?><?php elseif($nav[1]==='robot'):?><img class="nav-ai-robot" src="<?=url('assets/images/ai-robot.png')?>" alt=""><?php else:?><?= $nav[1] ?><?php endif;?></b><?= e($nav[2]) ?></a>
 <?php endforeach; ?>
 </nav>
 <?php endif; ?>
@@ -25,5 +25,6 @@ addEventListener('appinstalled',()=>{deferredInstall=null;if(installButton)insta
 </script>
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{scale:1,matchFontHeight:true}};</script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<?php if($isStudentApp):?><script src="<?=url('assets/js/student-sounds.js')?>?v=<?=filemtime(__DIR__.'/../assets/js/student-sounds.js')?>" defer></script><script src="<?=url('assets/js/student-app.js')?>?v=<?=filemtime(__DIR__.'/../assets/js/student-app.js')?>" defer></script><?php endif;?>
 <script src="<?= url('assets/js/app.js') ?>?v=<?=filemtime(__DIR__.'/../assets/js/app.js')?>"></script>
 </body></html>

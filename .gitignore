@@ -7,6 +7,9 @@ includes/config.production.php
 includes/runtime/gemini-secret.php
 includes/runtime/textlk-secret.php
 includes/runtime/database-secret.php
+includes/runtime/sess_*
+includes/runtime/*.tmp
+admin/real-db.php
 
 # Runtime/user-generated and large curriculum data (persistent on the server)
 # Keep user uploads and large source PDFs off Git, but version the compact
@@ -25,6 +28,7 @@ backups/
 
 # Local deployment and packaged artifacts
 .deploy/
+*.pem
 .bubblewrap-home/
 android-direct/build/
 android-direct/local.properties
@@ -34,6 +38,9 @@ downloads/*.apk
 !downloads/.gitkeep
 cloudflared.exe
 K-Education-Share-Package.zip
+K-Education-iOS-Codemagic-Package.zip
+.tmp/
+includes/ElevenLabs_*.mp3
 
 # Editor and operating-system files
 .idea/
@@ -42,6 +49,7 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+~$*
 
 # Separate third-party working tree
 tools/AnyTaFont2UTF8/

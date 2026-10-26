@@ -1,0 +1,62 @@
+workflows:
+  ios-keducation-testflight:
+    name: K Education iOS - TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: keducation_app_store
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: site.keducation.app
+      vars:
+        XCODE_PROJECT: "ios/KEducation.xcodeproj"
+        XCODE_SCHEME: "KEducation"
+      xcode: latest
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+    scripts:
+      - name: Verify project files
+        script: |
+          test -f "$CM_BUILD_DIR/$XCODE_PROJECT/project.pbxproj"
+          test -f "$CM_BUILD_DIR/ios/KEducation/PrivacyInfo.xcprivacy"
+          test -f "$CM_BUILD_DIR/ios/KEducation/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
+      - name: Set up App Store code signing
+        script: xcode-project use-profiles --project "$XCODE_PROJECT"
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --archive-xcargs "CURRENT_PROJECT_VERSION=$BUILD_NUMBER"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  ios-keducation-build-only:
+    name: K Education iOS - Unsigned Simulator Check
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      xcode: latest
+    scripts:
+      - name: Compile for iOS Simulator
+        script: |
+          xcodebuild \
+            -project ios/KEducation.xcodeproj \
+            -scheme KEducation \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+    artifacts:
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
+      - /tmp/xcodebuild_logs/*.log

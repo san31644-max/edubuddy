@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__.'/../includes/auth.php';
 require_login();
+require_premium();
 $lessonId=filter_input(INPUT_GET,'lesson_id',FILTER_VALIDATE_INT);$mode=(string)($_GET['mode']??'');$allowed=['challenge','missing','matching'];$names=['challenge'=>'Quick Challenge','missing'=>'Fill the Missing Answer','matching'=>'Matching Mission'];
 $lesson=$lessonId?query_one("SELECT l.*,s.name_en,s.name_si,s.name_ta FROM lessons l JOIN subjects s ON s.id=l.subject_id WHERE l.id=? AND l.grade_id=? AND l.status='active' AND l.content_source='textbook' AND (l.medium='All' OR l.medium=?)",'iis',[$lessonId,user()['grade_id'],user()['medium']]):null;
 if(!$lesson){flash('error','Choose a valid textbook lesson.');redirect('student/subjects.php');}

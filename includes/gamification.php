@@ -15,6 +15,19 @@ function award_emblem(int $userId,int $gradeId,int $subjectId,int $lessonId,stri
     if($s){$s->bind_param('iiiis',$userId,$gradeId,$subjectId,$lessonId,$tier);$s->execute();$s->close();}
 }
 
+function sync_completion_emblems(int $userId):int
+{
+    // Keep trophies consistent even when lesson progress is imported, restored,
+    // or completed by an administrator instead of the normal lesson form.
+    $s=db()->prepare("INSERT IGNORE INTO student_emblems(user_id,grade_id,subject_id,lesson_id,tier,earned_at)
+        SELECT lp.user_id,l.grade_id,l.subject_id,l.id,'bronze',COALESCE(lp.completed_at,NOW())
+        FROM lesson_progress lp JOIN lessons l ON l.id=lp.lesson_id
+        WHERE lp.user_id=? AND lp.completed_at IS NOT NULL");
+    if(!$s)return 0;
+    $s->bind_param('i',$userId);$s->execute();$added=$s->affected_rows;$s->close();
+    return max(0,$added);
+}
+
 function reward_lesson_completion(int $userId,array $lesson):int
 {
     $earned=award_points($userId,(int)$lesson['grade_id'],(int)$lesson['subject_id'],(int)$lesson['id'],null,'lesson_complete',20,'lesson:'.$lesson['id'].':complete','Lesson completed')?20:0;

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+const FREE_AI_DAILY_LIMIT = 1;
 
 function ensure_ai_daily_usage_table(): bool
 {
@@ -21,26 +22,32 @@ function ensure_ai_daily_usage_table(): bool
 function free_ai_used_today(int $userId): int
 {
     if (!ensure_ai_daily_usage_table()) return 0;
-    $statement = db()->prepare('SELECT response_count FROM ai_daily_usage WHERE user_id=? AND usage_date=CURDATE()');
+    $statement = db()->prepare('SELECT response_count FROM ai_daily_usage WHERE user_id=? AND usage_date=?');
     if (!$statement) return 0;
-    $statement->bind_param('i', $userId);
+    $day=date('Y-m-d');
+    $statement->bind_param('is', $userId, $day);
     $statement->execute();
     $row = $statement->get_result()->fetch_assoc();
     $statement->close();
     return (int) ($row['response_count'] ?? 0);
 }
 
-function record_free_ai_response(int $userId): int
+/** Atomically claim today's free message before contacting a provider. */
+function reserve_free_ai_message(int $userId): bool
 {
-    if (!ensure_ai_daily_usage_table()) return free_ai_used_today($userId);
-    $statement = db()->prepare(
-        'INSERT INTO ai_daily_usage(user_id,usage_date,response_count) VALUES(?,CURDATE(),1)
-         ON DUPLICATE KEY UPDATE response_count=response_count+1'
-    );
-    if ($statement) {
-        $statement->bind_param('i', $userId);
-        $statement->execute();
-        $statement->close();
-    }
-    return free_ai_used_today($userId);
+    if (!ensure_ai_daily_usage_table()) throw new RuntimeException('AI usage tracking is unavailable.');
+    $day=date('Y-m-d');
+    $insert=db()->prepare('INSERT IGNORE INTO ai_daily_usage(user_id,usage_date,response_count) VALUES(?,?,0)');
+    if(!$insert)throw new RuntimeException('AI usage tracking is unavailable.');
+    $insert->bind_param('is',$userId,$day);
+    if(!$insert->execute())throw new RuntimeException('AI usage tracking is unavailable.');
+    $insert->close();
+    $claim=db()->prepare('UPDATE ai_daily_usage SET response_count=response_count+1 WHERE user_id=? AND usage_date=? AND response_count<?');
+    if(!$claim)throw new RuntimeException('AI usage tracking is unavailable.');
+    $limit=FREE_AI_DAILY_LIMIT;
+    $claim->bind_param('isi',$userId,$day,$limit);
+    if(!$claim->execute())throw new RuntimeException('AI usage tracking is unavailable.');
+    $allowed=$claim->affected_rows===1;
+    $claim->close();
+    return $allowed;
 }

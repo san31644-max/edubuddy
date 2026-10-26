@@ -21,6 +21,9 @@ function is_premium(?array $u=null):bool
             if ($row) {
                 $u['subscription_expires_at'] = $row['subscription_expires_at'];
                 $_SESSION['user']['subscription_expires_at'] = $row['subscription_expires_at'];
+            } else {
+                $u['subscription_expires_at'] = null;
+                $_SESSION['user']['subscription_expires_at'] = null;
             }
         }
     }
@@ -40,6 +43,7 @@ function repair_legacy_text(string $value):string{
 function locale_value(array $row,string $base):string{$value=repair_legacy_text((string)($row[$base.'_'.($_SESSION['lang']??'en')]??$row[$base.'_en']??''));return $base==='short_description'?markdown_plain_text($value):$value;}
 function markdown_plain_text(string $value):string{
  $value=repair_legacy_text($value);
+ $value=str_replace(['\\r\\n','\\n','\\r'],"\n",$value);
  $value=preg_replace('/```.*?```/su',' ',$value)??$value;
  $value=preg_replace('/!?\[([^\]]*)\]\([^)]*\)/u','$1',$value)??$value;
  $value=preg_replace('/^\s{0,3}#{1,6}\s*/mu','',$value)??$value;
@@ -51,12 +55,13 @@ function markdown_plain_text(string $value):string{
 }
 function markdown_safe_html(string $value):string{
  $value=repair_legacy_text($value);
+ $value=str_replace(['\\r\\n','\\n','\\r'],"\n",$value);
  // Keep the author's paragraph spacing exactly as entered in the lesson editor.
  // Only trim the outermost blank space; do not collapse internal newlines.
  $value=trim($value);
  // Rich-text pasted lists often contain an empty line between each item.
  // Keep lists compact while preserving ordinary paragraph spacing.
- $value=preg_replace('/(^|\n)([ \t]*[-*+•]\s+[^\n]+)\n+(?=[ \t]*[-*+•]\s+)/mu','$1$2\n',$value)??$value;
+ $value=preg_replace('/(^|\n)([ \t]*[-*+•]\s+[^\n]+)\n+(?=[ \t]*[-*+•]\s+)/mu',"$1$2\n",$value)??$value;
  $html=e($value);
  $html=preg_replace('/^######\s+(.+)$/mu','<h6>$1</h6>',$html)??$html;
  $html=preg_replace('/^#####\s+(.+)$/mu','<h5>$1</h5>',$html)??$html;

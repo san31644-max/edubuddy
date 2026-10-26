@@ -5,6 +5,11 @@ $f = take_flash();
 $currentPath = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
 $isAdminPage = str_contains($currentPath, '/admin/');
 $isReferralPage = str_contains($currentPath, '/referral/');
+$isParentPage = str_contains($currentPath, '/parent/');
+$gameScreen=pathinfo($currentPath,PATHINFO_FILENAME);
+$isStudentApp=!$isAdminPage&&!$isReferralPage&&!$isParentPage&&(user()||in_array($gameScreen,['home','index','login','register','forgot-password','download','privacy-policy'],true));
+if($isStudentApp)require_once __DIR__.'/game_ui.php';
+
 ?>
 <!doctype html>
 <html lang="<?= e($_SESSION['lang'] ?? 'en') ?>">
@@ -30,11 +35,15 @@ $isReferralPage = str_contains($currentPath, '/referral/');
 .nav-ai-robot{display:block;width:31px;height:31px;margin:-5px auto -1px;object-fit:contain}
 @media(max-width:700px){html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}.wrap{height:auto;min-height:0;max-height:none;overflow:visible;touch-action:pan-y}}
 </style>
+<?php if($isStudentApp):?><link rel="stylesheet" href="<?=url('assets/css/student-app.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-app.css')?>"><?php endif;?>
 </head>
-<body>
+<body<?=$isStudentApp?' class="student-game-app game-screen-'.e($gameScreen).'"':''?>>
 <?php if(!$isAdminPage):?><header class="top"><div class="topin">
 <a class="brand" href="<?= url(user() ? 'student/dashboard.php' : ($isReferralPage&&referral_promoter_user()?'referral/dashboard.php':'home.php')) ?>"><img class="brandmark logo-image" src="<?= url('logo/k-transparent.png') ?>" alt="K Education logo"><span class="brandtext"><?= e(APP_NAME) ?><small><?=($_SESSION['lang']??'en')==='si'?'අලුත් සර්':($isReferralPage?'Referral partner portal':'Your AI learning companion')?></small></span></a>
+<?php if($isStudentApp&&user()):?><nav class="game-top-nav" aria-label="Main learning navigation"><?php foreach([['home','Base camp','student/dashboard.php'],['book','Subjects','student/subjects.php'],['chat','AI Tutor','chatbot/chat.php'],['trophy','Leaderboard','student/leaderboard.php']] as $item):?><a href="<?=url($item[2])?>" class="<?=game_nav_active($item[2],$gameScreen)?'active':''?>"><?=game_icon($item[0])?><?=e($item[1])?></a><?php endforeach;?></nav><?php endif;?>
 <span class="status-pill"><i class="status-dot"></i><?= is_premium() ? '⭐ ' . tr('premium') : (user()?'Grade '.user_grade_number():($isReferralPage?'Referral portal':(function_exists('parent_user')&&parent_user()?'Parent portal':'Grades 6–11'))) ?></span>
 </div></header><?php endif;?>
 <main class="wrap">
+<?php if($isStudentApp&&user()&&$gameScreen!=='dashboard'):?><div class="game-routebar"><a href="<?=url('student/dashboard.php')?>"><?=game_icon('home')?> Base camp</a><span><?=e($pageTitle)?></span><a href="<?=url('profile.php')?>" aria-label="My profile"><?=game_icon('user')?></a></div><?php endif;?>
+
 <?php if ($f): ?><div class="alert <?= e($f[0]) ?>"><?= e($f[1]) ?></div><?php endif; ?>
