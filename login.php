@@ -1,4 +1,6 @@
 <?php
+ob_start();
+register_shutdown_function(static function (): void {$html=ob_get_clean();if(!is_string($html))return;$css='<link rel="stylesheet" href="assets/css/auth-readability-v2.css?v=20261026e">';$js='<script>document.body.classList.add("auth-page")</script>';$html=stripos($html,'</head>')!==false?preg_replace('/<\/head>/i',$css.'</head>',$html,1):$css.$html;$html=stripos($html,'</body>')!==false?preg_replace('/<\/body>/i',$js.'</body>',$html,1):$html.$js;echo $html;});
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 require_once __DIR__.'/includes/auth.php';require_once __DIR__.'/includes/textlk.php';require_guest();$error='';

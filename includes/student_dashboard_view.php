@@ -23,6 +23,7 @@ $pageTitle='Your learning adventure';include __DIR__.'/header.php';
 <link rel="stylesheet" href="<?=url('assets/css/student-dashboard.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-dashboard.css')?>">
 <link rel="stylesheet" href="<?=url('assets/css/student-dashboard-game.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-dashboard-game.css')?>">
 <link rel="stylesheet" href="<?=url('assets/css/student-dashboard-motion.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-dashboard-motion.css')?>">
+<link rel="stylesheet" href="<?=url('assets/css/student-quest-hero.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-quest-hero.css')?>">
 <link rel="stylesheet" href="<?=url('assets/css/student-subject-wheel.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-subject-wheel.css')?>">
 <link rel="stylesheet" href="<?=url('assets/css/student-trail-3d.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-trail-3d.css')?>">
 <link rel="stylesheet" href="<?=url('assets/css/student-trophy-celebration.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-trophy-celebration.css')?>">
@@ -42,7 +43,7 @@ $pageTitle='Your learning adventure';include __DIR__.'/header.php';
    <div class="qd-main">
     <section class="qd-hero" id="quest-world">
      <div class="qd-hero-copy"><span class="qd-world-label"><i></i> GRADE <?=$gradeNumber?> · <?=e($medium)?> MEDIUM</span><h2>Your next quest<br><span>starts here.</span></h2><p>Step into a world of discovery. Master a lesson, collect real rewards, and turn curiosity into your next superpower.</p><a class="qd-button qd-button-lime" href="<?=$nextUrl?>"><?=$game['next']&&!empty($game['next']['opened_at'])?'Continue adventure':'Start your adventure'?> <?=qd_icon('arrow')?></a><div class="qd-hero-note"><?=qd_icon('shield')?> Your textbook. Your pace. Your potential.</div></div>
-     <div class="qd-hero-art" aria-hidden="true"><img src="<?=url('assets/images/learning-world-v2.webp')?>" alt="" fetchpriority="high" decoding="async"><span class="qd-art-tag qd-art-tag-one"><?=qd_icon('star')?> THE KNOWLEDGE REALM</span><span class="qd-art-tag qd-art-tag-two"><?=qd_icon('book')?> YOUR ADVENTURE AWAITS</span></div>
+     <div class="qd-hero-art qd-quest-art" aria-hidden="true"><img src="<?=url('assets/images/dashboard-quest-students-v3.png')?>" alt="" width="1672" height="941" fetchpriority="high" decoding="async"><div class="qd-quest-meteors"><i></i><i></i><i></i></div><div class="qd-star-shower"><?php for($spark=0;$spark<12;$spark++):?><i style="--sx:<?=38+($spark*17)%57?>%;--sd:<?=7+$spark%5?>s;--sl:-<?=($spark*1.7)?>s;--ss:<?=$spark%3===0?4:2?>px"></i><?php endfor;?></div><span class="qd-art-tag qd-art-tag-one"><?=qd_icon('star')?> THE KNOWLEDGE REALM</span></div>
     </section>
     <section class="qd-stats" aria-label="Your learning stats">
      <a class="qd-stat" href="<?=url('student/leaderboard.php')?>"><span class="qd-icon qd-icon-purple"><?=qd_icon('bolt')?></span><div><strong><?=number_format($game['points'])?> <small>XP</small></strong><span>Learning points</span></div><span class="qd-stat-arrow">↗</span></a>
@@ -55,6 +56,8 @@ $pageTitle='Your learning adventure';include __DIR__.'/header.php';
      <?php if($game['trail']):?>
      <div class="qd-trail-3d" data-trail-3d>
       <div class="qd-trail-stage" role="listbox" aria-label="Your lesson journey" tabindex="0">
+       <div class="qd-trail-scenery" aria-hidden="true"><span class="qd-trail-sun"></span><span class="qd-trail-cloud cloud-one"></span><span class="qd-trail-cloud cloud-two"></span><span class="qd-trail-hills hills-back"></span><span class="qd-trail-hills hills-front"></span><span class="qd-trail-crystals"></span></div>
+       <div class="qd-trail-butterflies" aria-hidden="true"><i class="butterfly butterfly-one"><b></b></i><i class="butterfly butterfly-two"><b></b></i><i class="butterfly butterfly-three"><b></b></i><i class="butterfly butterfly-four"><b></b></i></div>
        <div class="qd-trail-road" aria-hidden="true"><i></i><i></i><i></i></div>
        <?php $trailStart=0;foreach($game['trail'] as $index=>$lesson){$isCurrent=$game['next']&&(int)$lesson['id']===(int)$game['next']['id'];if($isCurrent)$trailStart=$index;}foreach($game['trail'] as $index=>$lesson):$current=$game['next']&&(int)$lesson['id']===(int)$game['next']['id'];$state=$lesson['locked']?'locked':($lesson['completed']?'completed':($current?'current':'available'));$lessonUrl=url($lesson['locked']?'subscription.php':'student/lesson.php?id='.(int)$lesson['id']);$lessonTitle=locale_value($lesson,'title');?>
        <button class="qd-trail-orb is-<?=$state?>" id="qd-trail-lesson-<?=(int)$lesson['id']?>" type="button" role="option" aria-selected="<?=$index===$trailStart?'true':'false'?>" tabindex="-1" data-index="<?=$index?>" data-title="<?=e($lessonTitle)?>" data-url="<?=e($lessonUrl)?>" data-order="<?=(int)$lesson['display_order']?>" data-state="<?=$state?>">

@@ -71,6 +71,13 @@
     if (Math.abs(x) > 42 && Math.abs(x) > Math.abs(y) * 1.2) move(x < 0 ? 1 : -1);
   });
   stage.addEventListener('pointercancel', () => { pointerStart = null; });
+  stage.addEventListener('pointermove', event => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const rect = stage.getBoundingClientRect();
+    stage.style.setProperty('--trail-look-x', `${((event.clientX - rect.left) / rect.width - .5) * 12}px`);
+    stage.style.setProperty('--trail-look-y', `${((event.clientY - rect.top) / rect.height - .5) * 8}px`);
+  }, {passive:true});
+  stage.addEventListener('pointerleave', () => { stage.style.setProperty('--trail-look-x','0px');stage.style.setProperty('--trail-look-y','0px'); });
   addEventListener('resize', paint, {passive:true});
   select(selected);
 })();

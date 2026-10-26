@@ -1,0 +1,17 @@
+(()=>{'use strict';
+ if(!/\/student\/units\.php$/i.test(location.pathname))return;
+ const links=[...document.querySelectorAll('a[href*="lesson.php?id="]')];
+ const cards=[];
+ links.forEach(link=>{let card=link.closest('article,.lesson-card,.unit-card,.chapter-card,li');if(!card){let node=link.parentElement;while(node&&node!==document.body){const unique=new Set([...node.querySelectorAll('a[href*="lesson.php?id="]')].map(a=>a.href));if(unique.size===1&&node.textContent.trim().length>35){card=node;break}node=node.parentElement}}if(card&&!cards.includes(card))cards.push(card)});
+ if(cards.length<2)return;
+ let list=cards[0].parentElement;while(list&&list!==document.body&&!cards.every(c=>list.contains(c)))list=list.parentElement;
+ if(!list||list===document.body)return;
+ document.body.classList.add('ke-lesson-journey-page');list.classList.add('ke-journey-list');
+ const scene=document.createElement('section');scene.className='ke-journey-scene';scene.setAttribute('aria-label','3D lesson journey');list.parentNode.insertBefore(scene,list);
+ const heading=document.createElement('div');heading.className='ke-journey-heading';heading.innerHTML='<span class="ke-journey-kicker">Your learning adventure</span><h2>Choose your next challenge</h2><p>Scroll through the trail. Each chapter is another step towards mastery.</p>';
+ const meter=document.createElement('div');meter.className='ke-journey-progress';meter.setAttribute('aria-hidden','true');meter.innerHTML='<i></i>';
+ scene.append(heading,meter,list);['',' b2',' b3'].forEach(c=>{const b=document.createElement('i');b.className='ke-butterfly'+c;scene.appendChild(b)});
+ cards.forEach((card,i)=>{card.classList.add('ke-journey-card');card.dataset.journeyNumber=String(i+1).padStart(2,'0');if(/completed|mastered|සම්පූර්ණ/i.test(card.textContent))card.classList.add('is-complete')});
+ const paint=()=>{const vh=innerHeight,focus=vh*.52;let best=null,bestD=Infinity;cards.forEach(card=>{const r=card.getBoundingClientRect(),d=Math.abs(r.top+r.height/2-focus);card.classList.toggle('is-near',d<vh*.48);if(d<bestD){bestD=d;best=card}});cards.forEach(c=>c.classList.toggle('is-focus',c===best));const r=scene.getBoundingClientRect();scene.style.setProperty('--journey-progress',Math.max(0,Math.min(1,(-r.top+vh*.35)/Math.max(1,r.height-vh*.4))).toFixed(3));ticking=false};
+ let ticking=false;const requestPaint=()=>{if(!ticking){ticking=true;requestAnimationFrame(paint)}};addEventListener('scroll',requestPaint,{passive:true});addEventListener('resize',requestPaint,{passive:true});paint();
+})();

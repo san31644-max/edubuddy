@@ -1,4 +1,25 @@
 <?php
+/* Add the immersive lesson journey without changing lesson access or completion logic. */
+ob_start();
+register_shutdown_function(static function (): void {
+    $page = ob_get_clean();
+    if (!is_string($page)) {
+        return;
+    }
+    $style = '<link rel="stylesheet" href="../assets/css/lesson-carousel-3d.css?v=20261026c"><link rel="stylesheet" href="../assets/css/lesson-carousel-mobile-fix.css?v=20261026c">';
+    $script = '<script src="../assets/js/lesson-carousel-3d.js?v=20261026c" defer></script>';
+    if (stripos($page, '</head>') !== false) {
+        $page = preg_replace('/<\/head>/i', $style . '</head>', $page, 1);
+    } else {
+        $page = $style . $page;
+    }
+    if (stripos($page, '</body>') !== false) {
+        $page = preg_replace('/<\/body>/i', $script . '</body>', $page, 1);
+    } else {
+        $page .= $script;
+    }
+    echo $page;
+});
 require_once __DIR__.'/../includes/auth.php';require_login();$sid=filter_input(INPUT_GET,'subject_id',FILTER_VALIDATE_INT);$grade=(int)user()['grade_id'];$gradeNumber=user_grade_number();$medium=(string)user()['medium'];$uid=(int)user()['id'];
 $subject=$sid?query_one("SELECT s.* FROM subjects s WHERE s.id=? AND s.grade_id=? AND s.status='active' AND EXISTS(SELECT 1 FROM lessons l WHERE l.subject_id=s.id AND l.content_source='textbook' AND l.status='active' AND (l.medium='All' OR l.medium=?))",'iis',[$sid,$grade,$medium]):null;if(!$subject){flash('error','No verified textbook lessons are available for this subject and medium.');redirect('student/subjects.php');}
 $s=db()->prepare("SELECT l.id,l.display_order,l.title_en,l.title_si,l.title_ta,l.short_description_en,l.short_description_si,l.short_description_ta,u.unit_number,lp.opened_at,COALESCE(lp.completed_at,(SELECT MIN(sp.awarded_at) FROM student_points sp WHERE sp.user_id=? AND sp.lesson_id=l.id AND sp.activity_type='lesson_complete'),(SELECT MIN(se.earned_at) FROM student_emblems se WHERE se.user_id=? AND se.lesson_id=l.id)) completed_at,(SELECT q.id FROM quizzes q WHERE q.lesson_id=l.id AND q.status='active' LIMIT 1) quiz_id FROM lessons l JOIN units u ON u.id=l.unit_id LEFT JOIN lesson_progress lp ON lp.lesson_id=l.id AND lp.user_id=? WHERE l.subject_id=? AND l.grade_id=? AND l.content_source='textbook' AND l.status='active' AND (l.medium='All' OR l.medium=?) ORDER BY l.display_order,u.unit_number");$s->bind_param('iiiiis',$uid,$uid,$uid,$sid,$grade,$medium);$s->execute();$res=$s->get_result();$pageTitle=locale_value($subject,'name');include __DIR__.'/../includes/header.php';?>

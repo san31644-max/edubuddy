@@ -1,0 +1,8 @@
+DirectoryIndex login.php index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^index\.php$ login.php [R=302,L,NC]
+    RewriteRule ^maintenance(?:\.php)?$ login.php [R=302,L,NC]
+</IfModule>
+

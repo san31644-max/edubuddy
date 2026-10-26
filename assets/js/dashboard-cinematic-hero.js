@@ -1,0 +1,5 @@
+(()=>{'use strict';
+ const heading=[...document.querySelectorAll('h1,h2')].find(el=>/your next quest/i.test(el.textContent));if(!heading)return;
+ let hero=heading.parentElement;while(hero&&hero!==document.body){const style=getComputedStyle(hero);if(style.backgroundImage!=='none'||hero.offsetWidth>600&&hero.offsetHeight>320)break;hero=hero.parentElement}if(!hero||hero===document.body)return;
+ hero.classList.add('ke-cinema-hero');const heroImages=[...hero.querySelectorAll('img')].filter(img=>!/logo|icon|avatar/i.test(`${img.className} ${img.alt}`));if(heroImages.length){heroImages.sort((a,b)=>(b.naturalWidth*b.naturalHeight||b.width*b.height)-(a.naturalWidth*a.naturalHeight||a.width*a.height));heroImages[0].classList.add('ke-cinema-backdrop')}const sky=document.createElement('div');sky.className='ke-cinema-sky';sky.setAttribute('aria-hidden','true');sky.innerHTML='<i class="ke-cinema-stars"></i><i class="ke-meteor m1"></i><i class="ke-meteor m2"></i><i class="ke-meteor m3"></i><i class="ke-cinema-glow"></i>';hero.prepend(sky);
+})();

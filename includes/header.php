@@ -36,6 +36,10 @@ if($isStudentApp)require_once __DIR__.'/game_ui.php';
 @media(max-width:700px){html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}.wrap{height:auto;min-height:0;max-height:none;overflow:visible;touch-action:pan-y}}
 </style>
 <?php if($isStudentApp):?><link rel="stylesheet" href="<?=url('assets/css/student-app.css')?>?v=<?=filemtime(__DIR__.'/../assets/css/student-app.css')?>"><?php endif;?>
+    <link rel="stylesheet" href="<?= url('assets/css/auth-readability-v2.css?v=20261026h') ?>">
+    <script>document.addEventListener('DOMContentLoaded',function(){if(document.querySelector('input[type="password"]'))document.body.classList.add('auth-page')})</script>
+    <link rel="stylesheet" href="<?= url('assets/css/dashboard-cinematic-hero.css?v=20261026c') ?>">
+    <script src="<?= url('assets/js/dashboard-cinematic-hero.js?v=20261026c') ?>" defer></script>
 </head>
 <body<?=$isStudentApp?' class="student-game-app game-screen-'.e($gameScreen).'"':''?>>
 <?php if(!$isAdminPage):?><header class="top"><div class="topin">
