@@ -49,6 +49,7 @@ workflows:
     scripts:
       - name: Compile for iOS Simulator
         script: |
+          set +e
           xcodebuild \
             -project ios/KEducation.xcodeproj \
             -scheme KEducation \
@@ -56,7 +57,16 @@ workflows:
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
-            clean build
+            clean build > /tmp/keducation-xcodebuild.log 2>&1
+          BUILD_STATUS=$?
+          if [ "$BUILD_STATUS" -ne 0 ]; then
+            echo "===== XCODE COMPILER ERRORS ====="
+            grep -n -B 5 -A 12 -E 'error:|fatal error:' /tmp/keducation-xcodebuild.log || tail -n 250 /tmp/keducation-xcodebuild.log
+          else
+            tail -n 80 /tmp/keducation-xcodebuild.log
+          fi
+          exit "$BUILD_STATUS"
     artifacts:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
       - /tmp/xcodebuild_logs/*.log
+      - /tmp/keducation-xcodebuild.log
