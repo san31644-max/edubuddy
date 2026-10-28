@@ -1,0 +1,13 @@
+.game-screen-chat .starter-grid{grid-template-columns:repeat(2,minmax(0,1fr));width:min(460px,100%);gap:12px}
+.game-screen-chat .starter{min-height:76px;padding:12px 14px}
+.game-screen-chat .starter:after{content:none}
+.game-screen-chat .tutor-followups{margin:0 0 8px}
+.game-screen-chat .tutor-followups>summary{display:flex;align-items:center;gap:8px;width:max-content;max-width:100%;min-height:34px;padding:6px 10px;border:1px solid #93acd32c;border-radius:10px;background:#1b2a43;color:#aebfdb;font-size:10px;font-weight:750;cursor:pointer;list-style:none;user-select:none}
+.game-screen-chat .tutor-followups>summary::-webkit-details-marker{display:none}
+.game-screen-chat .tutor-followups>summary:after{content:'+';display:grid;place-items:center;width:17px;height:17px;border-radius:6px;background:#ffffff0c;color:#d7e5fa;font-size:14px;line-height:1}
+.game-screen-chat .tutor-followups[open]>summary{border-color:#78b8d64d;color:#e1f5ff}
+.game-screen-chat .tutor-followups[open]>summary:after{content:'−'}
+.game-screen-chat .tutor-followups .suggestions{display:flex;flex-wrap:wrap;gap:7px;padding:9px 2px 7px}
+.game-screen-chat .tutor-followups .suggestions button{min-height:34px;padding:7px 10px;border-radius:10px;font-size:10px}
+@media(max-width:800px){.game-screen-chat .starter-grid{width:min(420px,100%);gap:9px}.game-screen-chat .starter{min-height:62px;padding:9px 10px}.game-screen-chat .tutor-followups>summary{min-height:32px;font-size:10px}.game-screen-chat .tutor-followups .suggestions button{min-height:38px;font-size:10px}}
+@media(max-width:400px){.game-screen-chat .starter-grid{grid-template-columns:1fr;width:min(310px,100%)}.game-screen-chat .starter{min-height:55px;align-items:center}.game-screen-chat .starter>span:first-child{width:34px;height:34px;flex-basis:34px}.game-screen-chat .starter small{font-size:9px}}
