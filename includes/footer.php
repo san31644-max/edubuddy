@@ -1,4 +1,5 @@
 </main>
+<nav class="site-help-links" aria-label="Helpful links" style="display:flex;justify-content:center;gap:10px;padding:14px 12px 26px;color:var(--muted);font-size:.82rem"><a href="<?=url('support.php')?>">Help &amp; Support</a><span aria-hidden="true">&middot;</span><a href="<?=url('privacy-policy.php')?>">Privacy</a></nav>
 <?php if(!$isAdminPage):?><button type="button" id="pwaInstall" class="pwa-install" hidden>⬇ Install app</button><?php endif;?>
 <?php if (!$isAdminPage && function_exists('user') && user()): ?>
 <nav class="bottom" aria-label="Student navigation">
