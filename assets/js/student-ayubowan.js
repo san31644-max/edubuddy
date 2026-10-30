@@ -1,12 +1,19 @@
 (() => {
   const welcome=document.getElementById('ayubowanWelcome');if(!welcome)return;
-  const skip=document.getElementById('ayubowanSkip'),voiceButton=document.getElementById('ayubowanVoice');const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let timer=0,closed=false;const greeting=new Audio(welcome.dataset.voiceSrc);greeting.preload='auto';document.body.style.overflow='hidden';
-  const close=()=>{if(closed)return;closed=true;clearTimeout(timer);greeting.pause();greeting.currentTime=0;welcome.classList.add('is-leaving');document.body.style.removeProperty('overflow');setTimeout(()=>{welcome.remove();document.dispatchEvent(new CustomEvent('kedu:ayubowan-complete'))},reduce?0:680)};
+  const skip=document.getElementById('ayubowanSkip'),voiceButton=document.getElementById('ayubowanVoice');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const greeting=welcome.dataset.voiceSrc?new Audio(welcome.dataset.voiceSrc):null;
+  const voiceText=welcome.dataset.voiceText||'',voiceLanguage=welcome.dataset.language||'en-GB';
+  if(greeting)greeting.preload='auto';
+  let timer=0,closed=false;document.body.style.overflow='hidden';
+  const stopVoice=()=>{if(greeting){greeting.pause();greeting.currentTime=0}window.speechSynthesis?.cancel()};
+  const close=()=>{if(closed)return;closed=true;clearTimeout(timer);stopVoice();welcome.classList.add('is-leaving');document.body.style.removeProperty('overflow');setTimeout(()=>{welcome.remove();document.dispatchEvent(new CustomEvent('kedu:ayubowan-complete'))},reduce?0:680)};
+  const showVoiceHint=()=>{voiceButton.hidden=false;voiceButton.setAttribute('aria-pressed','false');voiceButton.querySelector('b').textContent=welcome.dataset.voiceHint||'';timer=setTimeout(close,6500)};
+  const finishVoice=()=>{voiceButton.setAttribute('aria-pressed','false');timer=setTimeout(close,1200)};
+  const speakWelcome=()=>{if(!('speechSynthesis'in window)||!voiceText.trim()){showVoiceHint();return}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(voiceText);utterance.lang=voiceLanguage;utterance.rate=.9;utterance.pitch=1.03;utterance.onend=finishVoice;utterance.onerror=showVoiceHint;window.speechSynthesis.speak(utterance)};
+  const playGreeting=async()=>{clearTimeout(timer);voiceButton.setAttribute('aria-pressed','true');if(!greeting){speakWelcome();return}try{await greeting.play()}catch{showVoiceHint()}};
   skip.addEventListener('click',close);welcome.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close()}});skip.focus();
-  const playGreeting=async()=>{clearTimeout(timer);voiceButton.setAttribute('aria-pressed','true');try{await greeting.play()}catch{voiceButton.hidden=false;voiceButton.setAttribute('aria-pressed','false');voiceButton.querySelector('b').textContent='හඬ ඇසීමට ඔබන්න';timer=setTimeout(close,6500)}};
   voiceButton.addEventListener('click',()=>{voiceButton.hidden=true;playGreeting()});
-  greeting.addEventListener('ended',()=>{voiceButton.setAttribute('aria-pressed','false');timer=setTimeout(close,1300)});
-  greeting.addEventListener('error',()=>{voiceButton.hidden=false;voiceButton.setAttribute('aria-pressed','false');voiceButton.querySelector('b').textContent='නැවත උත්සාහ කරන්න'});
-  timer=setTimeout(close,reduce?5000:10000);setTimeout(playGreeting,reduce?250:1050);
+  if(greeting){greeting.addEventListener('ended',finishVoice);greeting.addEventListener('error',showVoiceHint);timer=setTimeout(close,reduce?7000:12000);setTimeout(playGreeting,reduce?250:1050)}
+  else{timer=setTimeout(close,reduce?7000:12000);setTimeout(playGreeting,reduce?250:1050)}
 })();
