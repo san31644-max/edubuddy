@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $phone=normalize_sri_lankan_phone($key)??$key;
         $u=query_one('SELECT id,full_name,username,email,phone,phone_verified_at,school_name,district,password_hash,grade_id,medium,preferred_language,profile_image,subscription_expires_at,referral_promoter_id,referral_code_used,status FROM users WHERE (username=? OR email=? OR phone=?) LIMIT 1','sss',[$key,$key,$phone]);
         if($u&&$u['status']==='active'&&password_verify((string)($_POST['password']??''),$u['password_hash'])){
-            unset($u['password_hash'],$_SESSION[$bucket]);session_regenerate_id(true);$u['preferred_language']=medium_language((string)$u['medium']);$_SESSION['user']=$u;$_SESSION['lang']=$u['preferred_language'];$_SESSION['show_ayubowan']=true;$_SESSION['show_dashboard_guide']=true;if((int)($_SESSION['onboarding_user_id']??0)===(int)$u['id'])$_SESSION['new_student_onboarding']=true;unset($_SESSION['onboarding_user_id']);record_student_account_event((int)$u['id'],'login','Student signed in');unset($_SESSION['student_visit']);redirect('student/dashboard.php');
+            unset($u['password_hash'],$_SESSION[$bucket]);session_regenerate_id(true);$u['preferred_language']=medium_language((string)$u['medium']);$_SESSION['user']=$u;$_SESSION['lang']=$u['preferred_language'];unset($_SESSION['show_ayubowan'],$_SESSION['show_dashboard_guide'],$_SESSION['new_student_onboarding'],$_SESSION['onboarding_user_id']);record_student_account_event((int)$u['id'],'login','Student signed in');unset($_SESSION['student_visit']);redirect('student/dashboard.php');
         }
         $tries=['n'=>$tries['n']+1,'at'=>time()];$_SESSION[$bucket]=$tries;$error='Incorrect phone number or password.';
     }
